@@ -87,7 +87,7 @@ app.post("/commitment", (req, res) => {
 // });
 
 const chunkify = <T>(array: T[], n_workers: number): T[][] => {
-  let chunks: T[][] = [];
+  const chunks: T[][] = [];
   for (let i = n_workers; i > 0; i--) {
     chunks.push(array.splice(0, Math.ceil(array.length / i)));
   }
