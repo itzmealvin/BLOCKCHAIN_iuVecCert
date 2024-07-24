@@ -26,7 +26,7 @@ const schema = (mode: "CREATE" | "VERIFY") => {
         (file) => (mode === "CREATE" ? file?.length >= 2 : file?.length === 1),
         mode === "CREATE"
           ? "At least 2 certificates are required!"
-          : "At most 1 certificate is allowed!"
+          : "At most 1 certificate is allowed!",
       ),
   });
 };
@@ -74,7 +74,7 @@ const CertsForm = ({ mode }: Props) => {
 
   const onVerifySubmit = (data: InputSchema) => {
     const resultPromise: Promise<MetaDataObj> = FilesServices.getMetaObj(
-      data.certificates[0]
+      data.certificates[0],
     );
     toast
       .promise(resultPromise, {

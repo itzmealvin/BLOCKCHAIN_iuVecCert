@@ -49,7 +49,7 @@ const schema = z.object({
       {
         message:
           "Description not match: [S.AY....] where S only goes with 1,2,3; and AY only goes with 2 consecutive year (i.e.,  2223)!",
-      }
+      },
     ),
 });
 
@@ -88,8 +88,8 @@ const DeployBlockchain = () => {
       setCoeffsCommit(
         hashAsBigInt(
           HashType.SHA1,
-          Buffer.from(commitObj.values.toString())
-        ).toString()
+          Buffer.from(commitObj.values.toString()),
+        ).toString(),
       );
       setContractToDeploy((existingContract) => ({
         ...existingContract,
@@ -104,7 +104,7 @@ const DeployBlockchain = () => {
     if (currentDeployer) {
       const promiseResult = BlockchainServices.deployContract(
         currentDeployer,
-        contractToDeploy
+        contractToDeploy,
       );
       toast
         .promise(promiseResult, {

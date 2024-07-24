@@ -5,7 +5,7 @@ import { genProof, genVerifierContractParams } from "../libs/lib-kzg";
 function genProofs(
   coeffs: bigint[],
   chunks: FileParamsDto[],
-  commit: bigint[]
+  commit: bigint[],
 ) {
   const results: FileParamsDto[] = [];
   for (let i = 0; i < chunks.length; i++) {
@@ -15,7 +15,7 @@ function genProofs(
       commit,
       proof,
       parseInt(fileIndex),
-      BigInt(fileHash)
+      BigInt(fileHash),
     );
     results.push({
       commitment: params.commitment,
@@ -28,5 +28,5 @@ function genProofs(
 }
 
 parentPort!.postMessage(
-  genProofs(workerData.coeffs, workerData.chunks, workerData.commit)
+  genProofs(workerData.coeffs, workerData.chunks, workerData.commit),
 );

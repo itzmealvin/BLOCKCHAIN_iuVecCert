@@ -4,7 +4,7 @@ import useWeb3AuthStore from "./Web3Auth/useWeb3AuthStore";
 
 const RevokeCerts = () => {
   const { connectedAddress } = useWeb3AuthStore();
-  
+
   return (
     <>
       <Box padding={10}>

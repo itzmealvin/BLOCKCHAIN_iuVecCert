@@ -35,7 +35,7 @@ class FilesServices {
         const bufferContent = await files[i].arrayBuffer();
         const hashContent = hashAsBigInt(
           HashType.KECCAK224,
-          Buffer.from(bufferContent)
+          Buffer.from(bufferContent),
         ).toString();
         results.push({
           fileIndex: i,
@@ -72,7 +72,9 @@ class FilesServices {
           resolve(metaObj);
         } else {
           reject(
-            new Error("Embedded certificate is missing some required field(s).")
+            new Error(
+              "Embedded certificate is missing some required field(s).",
+            ),
           );
         }
       } catch (error) {
@@ -102,7 +104,7 @@ class FilesServices {
 
   async embedAndZip(
     filesDetails: FileDetails[],
-    metadataObjects: MetaDataObj
+    metadataObjects: MetaDataObj,
   ): Promise<Uint8Array> {
     const zip = new JSZip();
     for (let i = 0; i < filesDetails.length; i++) {

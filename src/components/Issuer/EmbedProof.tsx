@@ -45,7 +45,7 @@ const EmbedProof = () => {
           fileDownload(res, `${coeffs.commitHash}_embedded.zip`);
           fileDownload(
             FilesServices.objectToUint8Array(coeffs),
-            `coefficient_${coeffs.commitHash}.json`
+            `coefficient_${coeffs.commitHash}.json`,
           );
         });
       setDisabled(!disabled);

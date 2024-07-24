@@ -48,7 +48,7 @@ const CalculateCoeffs = () => {
               resultObj &&
                 Object.fromEntries(Object.entries(resultObj).slice(0, 10)),
               null,
-              2
+              2,
             )}
           </pre>
         </div>

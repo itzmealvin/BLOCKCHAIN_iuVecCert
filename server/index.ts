@@ -97,7 +97,7 @@ const chunkify = <T>(array: T[], n_workers: number): T[][] => {
 app.post("/proof", async (req, res) => {
   try {
     console.log(
-      "Receive request to calculate Proof! May take a long time to processing..."
+      "Receive request to calculate Proof! May take a long time to processing...",
     );
     const { coeffs, files, commit } = req.body as ProofsDto;
     if (
@@ -131,7 +131,7 @@ app.post("/proof", async (req, res) => {
         worker.on("message", (resultFiles) => {
           console.log(`Worker ${i} completed!`);
           resultFiles.forEach((file: FileParamsDto) =>
-            resultProofs.files.push(file)
+            resultProofs.files.push(file),
           );
           resolve();
         });
@@ -158,7 +158,7 @@ const readCoefficient = (commitHash: string): string[] | undefined => {
     const coefficientsFilePath = path.join(
       __dirname,
       "coefficients",
-      coefficientsFilename
+      coefficientsFilename,
     );
     const coefficientsJson = fs.readFileSync(coefficientsFilePath, "utf-8");
     const { calculatedCoeffs } = JSON.parse(coefficientsJson);
@@ -172,7 +172,7 @@ const readCoefficient = (commitHash: string): string[] | undefined => {
 app.post("/verify", (req, res) => {
   try {
     console.log(
-      "Receive request to verify the Coefficients using random number! Processing..."
+      "Receive request to verify the Coefficients using random number! Processing...",
     );
     const { commit, value, commitHash } = req.body as ChallengeDto;
     const coeffsString = readCoefficient(commitHash);
@@ -202,7 +202,7 @@ app.post("/verify", (req, res) => {
 app.post("/verifyRandom", (req, res) => {
   try {
     console.log(
-      "Receive request to verify the Coefficients using random number! Processing..."
+      "Receive request to verify the Coefficients using random number! Processing...",
     );
     const { commit, value, commitHash } = req.body as ChallengeDto;
     const coeffsString = readCoefficient(commitHash);
@@ -233,5 +233,5 @@ app.post("/verifyRandom", (req, res) => {
 });
 
 app.listen(port, () =>
-  console.log(`Server is listening at http://localhost:${port}`)
+  console.log(`Server is listening at http://localhost:${port}`),
 );

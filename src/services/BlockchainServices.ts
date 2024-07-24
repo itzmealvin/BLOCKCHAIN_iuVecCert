@@ -67,7 +67,7 @@ class BlockchainServices {
 
   async deployContract(
     deployer: ethers.Signer,
-    contractDetails: ContractProps
+    contractDetails: ContractProps,
   ): Promise<string> {
     const { abi, bytecode, parameters } = contractDetails;
     const factory = new ethers.ContractFactory(abi, bytecode, deployer);
@@ -80,7 +80,7 @@ class BlockchainServices {
 
   getContract(
     issuer: ethers.Signer,
-    contractDetails: ContractDetails
+    contractDetails: ContractDetails,
   ): ethers.Contract | undefined {
     const { abi, address } = contractDetails;
     if (address) {

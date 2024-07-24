@@ -21,9 +21,8 @@ const ConnectWeb3Menu = () => {
       if (!(await BlockchainServices.isOnRightNetwork(browserWallet))) {
         await BlockchainServices.switchNetwork(browserWallet);
       }
-      const { signer, address } = await BlockchainServices.performSignIn(
-        browserWallet
-      );
+      const { signer, address } =
+        await BlockchainServices.performSignIn(browserWallet);
       setDeployer(signer);
       setConnectedAddress(address);
       signIn();

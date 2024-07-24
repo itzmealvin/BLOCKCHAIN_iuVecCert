@@ -50,13 +50,13 @@ const ConfigsForm = () => {
         setIssuerCN(ConfigsServices.getField(cert, "CN"));
         if (res.account === connectedAddress) {
           toast.success(
-            "Verification completed! You may proceed to next step!"
+            "Verification completed! You may proceed to next step!",
           );
           reset();
           toggleDone();
         } else {
           toast.error(
-            "Verification failed! Upload another valid configuration, and ensure the right account is connected!"
+            "Verification failed! Upload another valid configuration, and ensure the right account is connected!",
           );
           reset();
         }

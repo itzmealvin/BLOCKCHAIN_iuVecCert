@@ -22,7 +22,7 @@ const MAX_G1_SOL_POINTS = 128;
 const G1 = ffjavascript.bn128.G1;
 const G2 = ffjavascript.bn128.G2;
 const FIELD_SIZE = BigInt(
-  "21888242871839275222246405745257275088548364400416034343698204186575808495617"
+  "21888242871839275222246405745257275088548364400416034343698204186575808495617",
 );
 const srsg1DataRaw = require("@libkzg/taug1_65536.json");
 const srsg2DataRaw = require("@libkzg/taug2_65536.json");
@@ -115,7 +115,7 @@ const commit = (coefficients: bigint[]): Commitment => {
 const polyCommit = (
   coefficients: bigint[],
   G: G1Point | G2Point,
-  srs: G1Point[] | G2Point[]
+  srs: G1Point[] | G2Point[],
 ): G1Point | G2Point => {
   let result = G.zero;
   for (let i = 0; i < coefficients.length; i++) {
@@ -145,7 +145,7 @@ const polyCommit = (
 const genQuotientPolynomial = (
   coefficients: Coefficient[],
   xVal: bigint,
-  p: bigint = FIELD_SIZE
+  p: bigint = FIELD_SIZE,
 ): Coefficient[] => {
   const field = galois.createPrimeField(p);
   const poly = field.newVectorFrom(coefficients);
@@ -165,7 +165,7 @@ const genQuotientPolynomial = (
 const evaluateAt = (
   coefficients: Coefficient[],
   xVal: bigint,
-  p: bigint = FIELD_SIZE
+  p: bigint = FIELD_SIZE,
 ): bigint => {
   const field = galois.createPrimeField(p);
   return field.evalPolyAt(field.newVectorFrom(coefficients), xVal);
@@ -181,7 +181,7 @@ const evaluateAt = (
 const genProof = (
   coefficients: Coefficient[],
   index: number | bigint,
-  p: bigint = FIELD_SIZE
+  p: bigint = FIELD_SIZE,
 ): Proof => {
   const quotient = genQuotientPolynomial(coefficients, BigInt(index), p);
   return commit(quotient);
@@ -189,7 +189,7 @@ const genProof = (
 
 const genZeroPoly = (
   field: galois.FiniteField,
-  indices: number[] | bigint[]
+  indices: number[] | bigint[],
 ): galois.Vector => {
   let zPoly = field.newVectorFrom([
     // @ts-ignore
@@ -200,7 +200,7 @@ const genZeroPoly = (
   for (let i = 1; i < indices.length; i++) {
     zPoly = field.mulPolys(
       zPoly,
-      field.newVectorFrom([BigInt(-1) * BigInt(indices[i]), BigInt(1)])
+      field.newVectorFrom([BigInt(-1) * BigInt(indices[i]), BigInt(1)]),
     );
   }
 
@@ -210,7 +210,7 @@ const genZeroPoly = (
 const genInterpolatingPoly = (
   field: galois.FiniteField,
   poly: galois.Vector,
-  indices: number[] | bigint[]
+  indices: number[] | bigint[],
 ): galois.Vector => {
   const x: bigint[] = [];
   const values: bigint[] = [];
@@ -235,7 +235,7 @@ const genInterpolatingPoly = (
 const genMultiProof = (
   coefficients: Coefficient[],
   indices: number[] | bigint[],
-  p: bigint = FIELD_SIZE
+  p: bigint = FIELD_SIZE,
 ): MultiProof => {
   assert(coefficients.length > indices.length);
 
@@ -260,7 +260,7 @@ const verifyMulti = (
   proof: MultiProof,
   indices: number[] | bigint[],
   values: bigint[],
-  p: bigint = FIELD_SIZE
+  p: bigint = FIELD_SIZE,
 ) => {
   const field = galois.createPrimeField(p);
   const xVals: bigint[] = [];
@@ -271,7 +271,7 @@ const verifyMulti = (
   }
   const iPoly = field.interpolate(
     field.newVectorFrom(xVals),
-    field.newVectorFrom(values)
+    field.newVectorFrom(values),
   );
   const zPoly = genZeroPoly(field, indices);
 
@@ -284,7 +284,7 @@ const verifyMulti = (
 
   const rhs = ffjavascript.bn128.pairing(
     G1.affine(G1.sub(commitment, iCommit)),
-    G2.g
+    G2.g,
   );
 
   return ffjavascript.bn128.F12.eq(lhs, rhs);
@@ -300,7 +300,7 @@ const verify = (
   proof: Proof,
   index: number | bigint,
   value: bigint,
-  p: bigint = FIELD_SIZE
+  p: bigint = FIELD_SIZE,
 ): boolean => {
   // To verify the proof, use the following equation:
   // (p - a) == proof * (x - z)
@@ -324,15 +324,15 @@ const verify = (
     G1.affine(
       G1.add(
         G1.mulScalar(proof, index), // index * proof
-        G1.sub(commitment, aCommit) // commitment - aCommit
-      )
+        G1.sub(commitment, aCommit), // commitment - aCommit
+      ),
     ),
-    G2.g
+    G2.g,
   );
 
   const rhs = ffjavascript.bn128.pairing(
     G1.affine(proof),
-    srs[1] // xCommit
+    srs[1], // xCommit
   );
 
   return ffjavascript.bn128.F12.eq(lhs, rhs);
@@ -343,7 +343,7 @@ const verifyViaEIP197 = (
   proof: Proof,
   index: number | bigint,
   value: bigint,
-  p: bigint = FIELD_SIZE
+  p: bigint = FIELD_SIZE,
 ) => {
   // Check that:
   // e(commitment - aCommitment, G2.g) == e(proof, xCommit - yCommit)
@@ -366,7 +366,7 @@ const verifyViaEIP197 = (
   const inputs = [
     {
       G1: G1.affine(
-        G1.add(G1.mulScalar(proof, index), G1.sub(commitment, aCommit))
+        G1.add(G1.mulScalar(proof, index), G1.sub(commitment, aCommit)),
       ),
       G2: G2.g,
     },
@@ -383,7 +383,7 @@ const genVerifierContractParams = (
   commitment: Commitment,
   proof: Proof,
   index: number | bigint,
-  value: bigint
+  value: bigint,
 ) => {
   return {
     commitment: [
@@ -401,7 +401,7 @@ const genMultiVerifierContractParams = (
   proof: MultiProof,
   indices: number[] | bigint[],
   values: bigint[],
-  p: bigint = FIELD_SIZE
+  p: bigint = FIELD_SIZE,
 ) => {
   assert(indices.length <= MAX_G1_SOL_POINTS);
 
@@ -413,7 +413,7 @@ const genMultiVerifierContractParams = (
 
   const iPoly = field.interpolate(
     field.newVectorFrom(xVals),
-    field.newVectorFrom(values)
+    field.newVectorFrom(values),
   );
   const zPoly = genZeroPoly(field, indices);
 
@@ -446,7 +446,7 @@ const genMultiVerifierContractParams = (
  */
 const genCoefficients = (
   values: bigint[],
-  p: bigint = FIELD_SIZE
+  p: bigint = FIELD_SIZE,
 ): Coefficient[] => {
   // Check the inputs
   for (let value of values) {
