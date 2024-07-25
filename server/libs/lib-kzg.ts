@@ -3,33 +3,33 @@ import * as galois from "@guildofweavers/galois";
 import assert from "assert";
 import { ec } from "elliptic";
 import * as ffjavascript from "ffjavascript";
-import * as bn128 from "rustbn.js";
+// import * as bn128 from "rustbn.js";
 
 type G1Point = ec;
 type G2Point = ec;
 type Coefficient = bigint;
-type Polynomial = Coefficient[];
+// type Polynomial = Coefficient[];
 type Commitment = G1Point;
 type Proof = G1Point;
-type MultiProof = G2Point;
+// type MultiProof = G2Point;
 
-interface PairingInputs {
-  G1: G1Point;
-  G2: G2Point;
-}
+// interface PairingInputs {
+//   G1: G1Point;
+//   G2: G2Point;
+// }
 
-const MAX_G1_SOL_POINTS = 128;
+// const MAX_G1_SOL_POINTS = 128;
 const G1 = ffjavascript.bn128.G1;
-const G2 = ffjavascript.bn128.G2;
+// const G2 = ffjavascript.bn128.G2;
 const FIELD_SIZE = BigInt(
   "21888242871839275222246405745257275088548364400416034343698204186575808495617",
 );
 const srsg1DataRaw = require("@libkzg/taug1_65536.json");
-const srsg2DataRaw = require("@libkzg/taug2_65536.json");
+// const srsg2DataRaw = require("@libkzg/taug2_65536.json");
 
-const genBabyJubField = () => {
-  return galois.createPrimeField(FIELD_SIZE);
-};
+// const genBabyJubField = () => {
+//   return galois.createPrimeField(FIELD_SIZE);
+// };
 /*
  * @return Up to 65536 G1 values of the structured reference string.
  * These values were taken from challenge file #46 of the Perpetual Powers of
@@ -78,27 +78,27 @@ const srsG1 = (depth: number): G1Point[] => {
  * They were taken from challenge file #46 of the Perpetual Powers of
  * Tau ceremony as described above.
  */
-const srsG2 = (depth: number): G2Point[] => {
-  assert(depth > 0);
-  assert(depth <= 65536);
-
-  const g2: G2Point[] = [];
-  for (let i = 0; i < depth; i++) {
-    g2.push([
-      [srsg2DataRaw[i][0], srsg2DataRaw[i][1]].map(BigInt),
-      [srsg2DataRaw[i][2], srsg2DataRaw[i][3]].map(BigInt),
-      [BigInt(1), BigInt(0)],
-    ]);
-  }
-  assert(g2[0][0][0] === G2.g[0][0]);
-  assert(g2[0][0][1] === G2.g[0][1]);
-  assert(g2[0][1][0] === G2.g[1][0]);
-  assert(g2[0][1][1] === G2.g[1][1]);
-  assert(g2[0][2][0] === G2.g[2][0]);
-  assert(g2[0][2][1] === G2.g[2][1]);
-
-  return g2;
-};
+// const srsG2 = (depth: number): G2Point[] => {
+//   assert(depth > 0);
+//   assert(depth <= 65536);
+//
+//   const g2: G2Point[] = [];
+//   for (let i = 0; i < depth; i++) {
+//     g2.push([
+//       [srsg2DataRaw[i][0], srsg2DataRaw[i][1]].map(BigInt),
+//       [srsg2DataRaw[i][2], srsg2DataRaw[i][3]].map(BigInt),
+//       [BigInt(1), BigInt(0)],
+//     ]);
+//   }
+//   assert(g2[0][0][0] === G2.g[0][0]);
+//   assert(g2[0][0][1] === G2.g[0][1]);
+//   assert(g2[0][1][0] === G2.g[1][0]);
+//   assert(g2[0][1][1] === G2.g[1][1]);
+//   assert(g2[0][2][0] === G2.g[2][0]);
+//   assert(g2[0][2][1] === G2.g[2][1]);
+//
+//   return g2;
+// };
 
 /*
  * @return A KZG commitment to a polynomial.
@@ -162,14 +162,14 @@ const genQuotientPolynomial = (
     .toValues();
 };
 
-const evaluateAt = (
-  coefficients: Coefficient[],
-  xVal: bigint,
-  p: bigint = FIELD_SIZE,
-): bigint => {
-  const field = galois.createPrimeField(p);
-  return field.evalPolyAt(field.newVectorFrom(coefficients), xVal);
-};
+// const evaluateAt = (
+//   coefficients: Coefficient[],
+//   xVal: bigint,
+//   p: bigint = FIELD_SIZE,
+// ): bigint => {
+//   const field = galois.createPrimeField(p);
+//   return field.evalPolyAt(field.newVectorFrom(coefficients), xVal);
+// };
 
 /*
  * @return A KZG commitment proof of evaluation at a single point.
@@ -187,43 +187,44 @@ const genProof = (
   return commit(quotient);
 };
 
-const genZeroPoly = (
-  field: galois.FiniteField,
-  indices: number[] | bigint[],
-): galois.Vector => {
-  let zPoly = field.newVectorFrom([
-    // @ts-ignore
-    field.mod(BigInt(-1) * BigInt(indices[0])),
-    BigInt(1),
-  ]);
 
-  for (let i = 1; i < indices.length; i++) {
-    zPoly = field.mulPolys(
-      zPoly,
-      field.newVectorFrom([BigInt(-1) * BigInt(indices[i]), BigInt(1)]),
-    );
-  }
+// const genZeroPoly = (
+//   field: galois.FiniteField,
+//   indices: number[] | bigint[],
+// ): galois.Vector => {
+//   let zPoly = field.newVectorFrom([
+//     // @ts-ignore
+//     field.mod(BigInt(-1) * BigInt(indices[0])),
+//     BigInt(1),
+//   ]);
 
-  return zPoly;
-};
+//   for (let i = 1; i < indices.length; i++) {
+//     zPoly = field.mulPolys(
+//       zPoly,
+//       field.newVectorFrom([BigInt(-1) * BigInt(indices[i]), BigInt(1)]),
+//     );
+//   }
 
-const genInterpolatingPoly = (
-  field: galois.FiniteField,
-  poly: galois.Vector,
-  indices: number[] | bigint[],
-): galois.Vector => {
-  const x: bigint[] = [];
-  const values: bigint[] = [];
+//   return zPoly;
+// };
 
-  for (let i = 0; i < indices.length; i++) {
-    const index = BigInt(indices[i]);
-    const yVal = field.evalPolyAt(poly, index);
-    x.push(index);
-    values.push(yVal);
-  }
+// const genInterpolatingPoly = (
+//   field: galois.FiniteField,
+//   poly: galois.Vector,
+//   indices: number[] | bigint[],
+// ): galois.Vector => {
+//   const x: bigint[] = [];
+//   const values: bigint[] = [];
 
-  return field.interpolate(field.newVectorFrom(x), field.newVectorFrom(values));
-};
+//   for (let i = 0; i < indices.length; i++) {
+//     const index = BigInt(indices[i]);
+//     const yVal = field.evalPolyAt(poly, index);
+//     x.push(index);
+//     values.push(yVal);
+//   }
+
+//   return field.interpolate(field.newVectorFrom(x), field.newVectorFrom(values));
+// };
 
 /*
  * @return A KZG commitment proof of evaluation at multiple points.
@@ -232,152 +233,152 @@ const genInterpolatingPoly = (
  * @param indices The x-values for the polynomial evaluation proof.
  * @param p The field size. Defaults to the BabyJub field size.
  */
-const genMultiProof = (
-  coefficients: Coefficient[],
-  indices: number[] | bigint[],
-  p: bigint = FIELD_SIZE,
-): MultiProof => {
-  assert(coefficients.length > indices.length);
+// const genMultiProof = (
+//   coefficients: Coefficient[],
+//   indices: number[] | bigint[],
+//   p: bigint = FIELD_SIZE,
+// ): MultiProof => {
+//   assert(coefficients.length > indices.length);
 
-  const field = galois.createPrimeField(p);
-  const poly = field.newVectorFrom(coefficients);
+//   const field = galois.createPrimeField(p);
+//   const poly = field.newVectorFrom(coefficients);
 
-  const iPoly = genInterpolatingPoly(field, poly, indices);
-  const zPoly = genZeroPoly(field, indices);
-  const qPoly = field.divPolys(field.subPolys(poly, iPoly), zPoly);
+//   const iPoly = genInterpolatingPoly(field, poly, indices);
+//   const zPoly = genZeroPoly(field, indices);
+//   const qPoly = field.divPolys(field.subPolys(poly, iPoly), zPoly);
 
-  const qPolyCoeffs = qPoly.toValues();
-  return polyCommit(qPolyCoeffs, G2, srsG2(qPolyCoeffs.length));
-};
+//   const qPolyCoeffs = qPoly.toValues();
+//   return polyCommit(qPolyCoeffs, G2, srsG2(qPolyCoeffs.length));
+// };
 
 /*
  * Returns true if the proof (that for the polynomial committed to, the
  * evaluation at the given indices equals the respective value) is valid, and
  * false otherwise.
  */
-const verifyMulti = (
-  commitment: Commitment,
-  proof: MultiProof,
-  indices: number[] | bigint[],
-  values: bigint[],
-  p: bigint = FIELD_SIZE,
-) => {
-  const field = galois.createPrimeField(p);
-  const xVals: bigint[] = [];
+// const verifyMulti = (
+//   commitment: Commitment,
+//   proof: MultiProof,
+//   indices: number[] | bigint[],
+//   values: bigint[],
+//   p: bigint = FIELD_SIZE,
+// ) => {
+//   const field = galois.createPrimeField(p);
+//   const xVals: bigint[] = [];
 
-  for (let i = 0; i < indices.length; i++) {
-    const index = BigInt(indices[i]);
-    xVals.push(index);
-  }
-  const iPoly = field.interpolate(
-    field.newVectorFrom(xVals),
-    field.newVectorFrom(values),
-  );
-  const zPoly = genZeroPoly(field, indices);
+//   for (let i = 0; i < indices.length; i++) {
+//     const index = BigInt(indices[i]);
+//     xVals.push(index);
+//   }
+//   const iPoly = field.interpolate(
+//     field.newVectorFrom(xVals),
+//     field.newVectorFrom(values),
+//   );
+//   const zPoly = genZeroPoly(field, indices);
 
-  // e(proof, commit(zPoly)) = e(commitment - commit(iPoly), g)
+//   // e(proof, commit(zPoly)) = e(commitment - commit(iPoly), g)
 
-  const zCommit = commit(zPoly.toValues());
-  const iCommit = commit(iPoly.toValues());
+//   const zCommit = commit(zPoly.toValues());
+//   const iCommit = commit(iPoly.toValues());
 
-  const lhs = ffjavascript.bn128.pairing(G1.affine(zCommit), G2.affine(proof));
+//   const lhs = ffjavascript.bn128.pairing(G1.affine(zCommit), G2.affine(proof));
 
-  const rhs = ffjavascript.bn128.pairing(
-    G1.affine(G1.sub(commitment, iCommit)),
-    G2.g,
-  );
+//   const rhs = ffjavascript.bn128.pairing(
+//     G1.affine(G1.sub(commitment, iCommit)),
+//     G2.g,
+//   );
 
-  return ffjavascript.bn128.F12.eq(lhs, rhs);
-};
+//   return ffjavascript.bn128.F12.eq(lhs, rhs);
+// };
 
 /*
  * Returns true if the proof (that for the polynomial committed to, the
  * evaluation at the given index equals the given value) is valid, and false
  * otherwise.
  */
-const verify = (
-  commitment: Commitment,
-  proof: Proof,
-  index: number | bigint,
-  value: bigint,
-  p: bigint = FIELD_SIZE,
-): boolean => {
-  // To verify the proof, use the following equation:
-  // (p - a) == proof * (x - z)
-  // (p - a) / (x - z) == proof
+// const verify = (
+//   commitment: Commitment,
+//   proof: Proof,
+//   index: number | bigint,
+//   value: bigint,
+//   // p: bigint = FIELD_SIZE,
+// ): boolean => {
+//   // To verify the proof, use the following equation:
+//   // (p - a) == proof * (x - z)
+//   // (p - a) / (x - z) == proof
+//
+//   // Check that
+//   // e(commitment - aCommit, G2.g) == e(proof, xCommit - zCommit)
+//   //
+//   // xCommit = commit([0, 1]) = SRS_G2_1
+//   // zCommit = commit([_index]) = SRS_G2_1 * _index
+//   // e((index * proof) + (commitment - aCommit), G2.g) == e(proof, xCommit)
+//   //
+//   index = BigInt(index);
+//   // const field = galois.createPrimeField(p);
+//   const srs = srsG2(2);
+//
+//   const aCommit = commit([BigInt(value)]);
+//   // const xCommit = srs[1]; // polyCommit(x.toValues(), G2, srs)
+//
+//   const lhs = ffjavascript.bn128.pairing(
+//     G1.affine(
+//       G1.add(
+//         G1.mulScalar(proof, index), // index * proof
+//         G1.sub(commitment, aCommit), // commitment - aCommit
+//       ),
+//     ),
+//     G2.g,
+//   );
+//
+//   const rhs = ffjavascript.bn128.pairing(
+//     G1.affine(proof),
+//     srs[1], // xCommit
+//   );
+//
+//   return ffjavascript.bn128.F12.eq(lhs, rhs);
+// };
 
-  // Check that
-  // e(commitment - aCommit, G2.g) == e(proof, xCommit - zCommit)
-  //
-  // xCommit = commit([0, 1]) = SRS_G2_1
-  // zCommit = commit([_index]) = SRS_G2_1 * _index
-  // e((index * proof) + (commitment - aCommit), G2.g) == e(proof, xCommit)
-  //
-  index = BigInt(index);
-  const field = galois.createPrimeField(p);
-  const srs = srsG2(2);
-
-  const aCommit = commit([BigInt(value)]);
-  const xCommit = srs[1]; // polyCommit(x.toValues(), G2, srs)
-
-  const lhs = ffjavascript.bn128.pairing(
-    G1.affine(
-      G1.add(
-        G1.mulScalar(proof, index), // index * proof
-        G1.sub(commitment, aCommit), // commitment - aCommit
-      ),
-    ),
-    G2.g,
-  );
-
-  const rhs = ffjavascript.bn128.pairing(
-    G1.affine(proof),
-    srs[1], // xCommit
-  );
-
-  return ffjavascript.bn128.F12.eq(lhs, rhs);
-};
-
-const verifyViaEIP197 = (
-  commitment: Commitment,
-  proof: Proof,
-  index: number | bigint,
-  value: bigint,
-  p: bigint = FIELD_SIZE,
-) => {
-  // Check that:
-  // e(commitment - aCommitment, G2.g) == e(proof, xCommit - yCommit)
-  // which is equivalent to
-  // e(commitment - aCommitment, G2.g) * e(-proof, xCommit) * e(index * proof, G2.g) == 1
-  // which is equivalent to
-  // e((index * proof) + (commitment - aCommitment), G2.g) * e(-proof, xCommit) == 1
-  // as this is what the Solidity verifier needs to check
-  const field = galois.createPrimeField(p);
-  const srs = srsG2(2);
-
-  const a = field.newVectorFrom([value].map(BigInt));
-  const aCommit = commit(a.toValues());
-  const x = field.newVectorFrom([0, 1].map(BigInt));
-  const xCommit = polyCommit(x.toValues(), G2, srs);
-
-  const z = field.newVectorFrom([index].map(BigInt));
-  const zCommit = polyCommit(z.toValues(), G2, srs);
-
-  const inputs = [
-    {
-      G1: G1.affine(
-        G1.add(G1.mulScalar(proof, index), G1.sub(commitment, aCommit)),
-      ),
-      G2: G2.g,
-    },
-    {
-      G1: G1.affine(G1.neg(proof)),
-      G2: xCommit,
-    },
-  ];
-
-  return isValidPairing(inputs);
-};
+// const verifyViaEIP197 = (
+//   commitment: Commitment,
+//   proof: Proof,
+//   index: number | bigint,
+//   value: bigint,
+//   p: bigint = FIELD_SIZE,
+// ) => {
+//   // Check that:
+//   // e(commitment - aCommitment, G2.g) == e(proof, xCommit - yCommit)
+//   // which is equivalent to
+//   // e(commitment - aCommitment, G2.g) * e(-proof, xCommit) * e(index * proof, G2.g) == 1
+//   // which is equivalent to
+//   // e((index * proof) + (commitment - aCommitment), G2.g) * e(-proof, xCommit) == 1
+//   // as this is what the Solidity verifier needs to check
+//   const field = galois.createPrimeField(p);
+//   const srs = srsG2(2);
+//
+//   const a = field.newVectorFrom([value].map(BigInt));
+//   const aCommit = commit(a.toValues());
+//   const x = field.newVectorFrom([0, 1].map(BigInt));
+//   const xCommit = polyCommit(x.toValues(), G2, srs);
+//
+//   // const z = field.newVectorFrom([index].map(BigInt));
+//   // const zCommit = polyCommit(z.toValues(), G2, srs);
+//
+//   const inputs = [
+//     {
+//       G1: G1.affine(
+//         G1.add(G1.mulScalar(proof, index), G1.sub(commitment, aCommit)),
+//       ),
+//       G2: G2.g,
+//     },
+//     {
+//       G1: G1.affine(G1.neg(proof)),
+//       G2: xCommit,
+//     },
+//   ];
+//
+//   return isValidPairing(inputs);
+// };
 
 const genVerifierContractParams = (
   commitment: Commitment,
@@ -396,42 +397,42 @@ const genVerifierContractParams = (
   };
 };
 
-const genMultiVerifierContractParams = (
-  commitment: Commitment,
-  proof: MultiProof,
-  indices: number[] | bigint[],
-  values: bigint[],
-  p: bigint = FIELD_SIZE,
-) => {
-  assert(indices.length <= MAX_G1_SOL_POINTS);
+// const genMultiVerifierContractParams = (
+//   commitment: Commitment,
+//   proof: MultiProof,
+//   indices: number[] | bigint[],
+//   values: bigint[],
+//   p: bigint = FIELD_SIZE,
+// ) => {
+//   assert(indices.length <= MAX_G1_SOL_POINTS);
 
-  const field = galois.createPrimeField(p);
-  const xVals: bigint[] = [];
-  for (let i of indices) {
-    xVals.push(BigInt(i));
-  }
+//   const field = galois.createPrimeField(p);
+//   const xVals: bigint[] = [];
+//   for (let i of indices) {
+//     xVals.push(BigInt(i));
+//   }
 
-  const iPoly = field.interpolate(
-    field.newVectorFrom(xVals),
-    field.newVectorFrom(values),
-  );
-  const zPoly = genZeroPoly(field, indices);
+//   const iPoly = field.interpolate(
+//     field.newVectorFrom(xVals),
+//     field.newVectorFrom(values),
+//   );
+//   const zPoly = genZeroPoly(field, indices);
 
-  return {
-    commitment: [
-      "0x" + commitment[0].toString(16),
-      "0x" + commitment[1].toString(16),
-    ],
-    proof: [
-      ["0x" + proof[0][1].toString(16), "0x" + proof[0][0].toString(16)],
-      ["0x" + proof[1][1].toString(16), "0x" + proof[1][0].toString(16)],
-    ],
-    indices: xVals.map((x) => "0x" + BigInt(x).toString(16)),
-    values: values.map((x) => "0x" + BigInt(x).toString(16)),
-    iCoeffs: iPoly.toValues().map((x) => "0x" + BigInt(x).toString(16)),
-    zCoeffs: zPoly.toValues().map((x) => "0x" + BigInt(x).toString(16)),
-  };
-};
+//   return {
+//     commitment: [
+//       "0x" + commitment[0].toString(16),
+//       "0x" + commitment[1].toString(16),
+//     ],
+//     proof: [
+//       ["0x" + proof[0][1].toString(16), "0x" + proof[0][0].toString(16)],
+//       ["0x" + proof[1][1].toString(16), "0x" + proof[1][0].toString(16)],
+//     ],
+//     indices: xVals.map((x) => "0x" + BigInt(x).toString(16)),
+//     values: values.map((x) => "0x" + BigInt(x).toString(16)),
+//     iCoeffs: iPoly.toValues().map((x) => "0x" + BigInt(x).toString(16)),
+//     zCoeffs: zPoly.toValues().map((x) => "0x" + BigInt(x).toString(16)),
+//   };
+// };
 
 /*
  * @return The coefficient to a polynomial which intersects the points (0,
@@ -474,11 +475,11 @@ const genCoefficients = (
  * @return The hexadecimal representation of a value, padded to have 64
  *         characters. Does not add the 0x prefix.
  */
-const hexify = (value: bigint) => {
-  const p = value.toString(16);
-  assert(p.length <= 64);
-  return p.padStart(64, "0");
-};
+// const hexify = (value: bigint) => {
+//   const p = value.toString(16);
+//   assert(p.length <= 64);
+//   return p.padStart(64, "0");
+// };
 
 /*
  * Performs a pairing check in the style of EIP-197.
@@ -487,49 +488,50 @@ const hexify = (value: bigint) => {
  * @param inputs An array of PairingInputs such that
  * input[0] * input[1] * ... * input[n] = 1
  */
-const isValidPairing = (inputs: PairingInputs[]): boolean => {
-  assert(inputs.length > 0);
-
-  let hexStr = "";
-  for (const input of inputs) {
-    // Convert the points to their affine form
-    const affineG1 = ffjavascript.bn128.G1.affine(input.G1);
-    const affineG2 = ffjavascript.bn128.G2.affine(input.G2);
-
-    hexStr += hexify(affineG1[0]);
-    hexStr += hexify(affineG1[1]);
-
-    // Note the order of the G2 point coefficients
-    hexStr += hexify(affineG2[0][1]);
-    hexStr += hexify(affineG2[0][0]);
-    hexStr += hexify(affineG2[1][1]);
-    hexStr += hexify(affineG2[1][0]);
-  }
-
-  const pairingResult = bn128.pairing(Buffer.from(hexStr, "hex"));
-
-  if (pairingResult.length === 0) {
-    return false;
-  } else {
-    return BigInt("0x" + pairingResult.toString("hex")) === BigInt(1);
-  }
-};
+// const isValidPairing = (inputs: PairingInputs[]): boolean => {
+//   assert(inputs.length > 0);
+//
+//   let hexStr = "";
+//   for (const input of inputs) {
+//     // Convert the points to their affine form
+//     const affineG1 = ffjavascript.bn128.G1.affine(input.G1);
+//     const affineG2 = ffjavascript.bn128.G2.affine(input.G2);
+//
+//     hexStr += hexify(affineG1[0]);
+//     hexStr += hexify(affineG1[1]);
+//
+//     // Note the order of the G2 point coefficients
+//     hexStr += hexify(affineG2[0][1]);
+//     hexStr += hexify(affineG2[0][0]);
+//     hexStr += hexify(affineG2[1][1]);
+//     hexStr += hexify(affineG2[1][0]);
+//   }
+//
+//   const pairingResult = bn128.pairing(Buffer.from(hexStr, "hex"));
+//
+//   if (pairingResult.length === 0) {
+//     return false;
+//   } else {
+//     return BigInt("0x" + pairingResult.toString("hex")) === BigInt(1);
+//   }
+// };
 
 export {
-  FIELD_SIZE,
   commit,
-  evaluateAt,
-  genBabyJubField,
+  // evaluateAt,
+  FIELD_SIZE,
+  // genBabyJubField,
   genCoefficients,
-  genMultiProof,
-  genMultiVerifierContractParams,
+  // genMultiProof,
+  // genMultiVerifierContractParams,
   genProof,
+  // genChallengeProof,
   genQuotientPolynomial,
   genVerifierContractParams,
-  genZeroPoly,
-  isValidPairing,
-  verify,
-  verifyMulti,
-  verifyViaEIP197,
+  // genZeroPoly,
+  // isValidPairing,
+  // verify,
+  // verifyMulti,
+  // verifyViaEIP197,
 };
-export type { Coefficient, Commitment, Polynomial, Proof };
+export type { Coefficient, Commitment, Proof }; // export Polynomial
