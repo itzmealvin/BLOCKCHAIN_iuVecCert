@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import IssuerPage from "./Issuer/IssuerPage";
-import ErrorPage from "./Pages/ErrorPage";
-import LandingPage from "./Pages/LandingPage";
-import Layout from "./Pages/Layout";
+import IssuerPage from "../pages/IssuerPage";
+import ErrorPage from "../pages/ErrorPage";
+import LandingPage from "../pages/LandingPage";
+import Layout from "../pages/Layout";
 import RevokeCerts from "./RevokeCerts";
-import VerifierPage from "./Verifier/VerifierPage";
+import VerifierPage from "../pages/VerifierPage";
 
 export const tabs = [
   {

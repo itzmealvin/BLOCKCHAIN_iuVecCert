@@ -1,4 +1,4 @@
-import { Box, Link as ChakraLink, Heading, Text } from "@chakra-ui/react";
+import { Box, Heading, Link as ChakraLink, Text } from "@chakra-ui/react";
 import { Link as NavLink, useRouteError } from "react-router-dom";
 
 const ErrorPage = () => {

@@ -2,8 +2,8 @@ import { Box, Flex } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DarkModeSwitch from "../Elements/DarkModeSwitch";
-import NavBar from "../Elements/NavBar";
+import DarkModeSwitch from "../components/Elements/DarkModeSwitch";
+import NavBar from "../components/Elements/NavBar";
 
 const Layout = () => {
   return (

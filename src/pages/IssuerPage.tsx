@@ -1,12 +1,12 @@
 import { Center, VStack } from "@chakra-ui/react";
-import CertsForm from "../CertsForm/CertsForm";
-import ConfigsForm from "../ConfigsForm/ConfigsForm";
-import Navigator from "../StepsIndicator/Navigator";
-import ProgressSpine from "../StepsIndicator/ProgressSpine";
-import { issuerSteps, useIssuerStore } from "../StepsIndicator/useStepsStores";
-import CalculateCoeffs from "./CalculateCoeffs";
-import DeployBlockchain from "./DeployBlockchain";
-import EmbedProof from "./EmbedProof";
+import CertsForm from "../components/CertsForm/CertsForm";
+import ConfigsForm from "../components/ConfigsForm/ConfigsForm";
+import Navigator from "../components/StepsIndicator/Navigator";
+import ProgressSpine from "../components/StepsIndicator/ProgressSpine";
+import { issuerSteps, useIssuerStore } from "../components/StepsIndicator/useStepsStores";
+import CalculateCoeffs from "../components/Issuer/CalculateCoeffs";
+import DeployBlockchain from "../components/Issuer/DeployBlockchain";
+import EmbedProof from "../components/Issuer/EmbedProof";
 
 const IssuerPage = () => {
   const { isDone, currentStep, maxStep, nextStep, prevStep, resetStep } =
