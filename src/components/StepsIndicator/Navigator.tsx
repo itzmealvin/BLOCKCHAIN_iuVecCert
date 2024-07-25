@@ -1,4 +1,4 @@
-import { Button, Link as ChakraLink, HStack } from "@chakra-ui/react";
+import { Button, HStack, Link as ChakraLink } from "@chakra-ui/react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,13 +14,13 @@ interface Props {
 }
 
 const Navigator = ({
-  isDone,
-  currentStep,
-  maxStep,
-  prevStep,
-  nextStep,
-  resetStep,
-}: Props) => {
+                     isDone,
+                     currentStep,
+                     maxStep,
+                     prevStep,
+                     nextStep,
+                     resetStep,
+                   }: Props) => {
   const onReset = () => {
     resetStep();
     toast.success("All progress cleared!");

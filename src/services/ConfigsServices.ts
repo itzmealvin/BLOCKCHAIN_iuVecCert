@@ -1,4 +1,5 @@
 import forge from "node-forge";
+
 export interface Configs {
   account: string;
   signature: string;

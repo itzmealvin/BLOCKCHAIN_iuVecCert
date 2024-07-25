@@ -46,7 +46,7 @@ const CalculateCoeffs = () => {
           <pre>
             {JSON.stringify(
               resultObj &&
-                Object.fromEntries(Object.entries(resultObj).slice(0, 10)),
+              Object.fromEntries(Object.entries(resultObj).slice(0, 10)),
               null,
               2,
             )}

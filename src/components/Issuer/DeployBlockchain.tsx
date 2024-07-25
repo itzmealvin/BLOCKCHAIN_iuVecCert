@@ -13,7 +13,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { HashType, hashAsBigInt } from "bigint-hash";
+import { hashAsBigInt, HashType } from "bigint-hash";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaCheckCircle, FaUniversity } from "react-icons/fa";
@@ -21,9 +21,7 @@ import { toast } from "react-toastify";
 import { z } from "zod";
 import CertCommitment from "../../compiled";
 import { useCommit } from "../../hooks/useCalculations";
-import BlockchainServices, {
-  ContractProps,
-} from "../../services/BlockchainServices";
+import BlockchainServices, { ContractProps } from "../../services/BlockchainServices";
 import useConfigsStore from "../ConfigsForm/useConfigsStore";
 import { useIssuerStore } from "../StepsIndicator/useStepsStores";
 import useWeb3AuthStore from "../Web3Auth/useWeb3AuthStore";

@@ -1,12 +1,12 @@
 body {
-  margin: 30px;
-  padding: 15px;
+    margin: 30px;
+    padding: 15px;
 }
 
 ::file-selector-button {
-  display: none;
+    display: none;
 }
 
 input[type="file"] {
-  padding-top: 7px;
+    padding-top: 7px;
 }

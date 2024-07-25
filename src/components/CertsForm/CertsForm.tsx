@@ -1,20 +1,9 @@
-import {
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  HStack,
-  Input,
-} from "@chakra-ui/react";
+import { Button, FormControl, FormErrorMessage, FormLabel, HStack, Input } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod";
-import FilesServices, {
-  FileDetails,
-  FileProps,
-  MetaDataObj,
-} from "../../services/FilesServices";
+import FilesServices, { FileDetails, FileProps, MetaDataObj } from "../../services/FilesServices";
 import { useIssuerStore } from "../StepsIndicator/useStepsStores";
 import useFilesStore from "./useFilesStore";
 

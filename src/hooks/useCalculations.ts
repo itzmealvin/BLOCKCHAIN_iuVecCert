@@ -1,10 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { CACHE_KEY_COEFFS, CACHE_KEY_COMMIT } from "../constants";
-import {
-  StringValues,
-  coefficientsService,
-  commitmentService,
-} from "../services/calculateServices";
+import { coefficientsService, commitmentService, StringValues } from "../services/calculateServices";
 
 const useCoeffs = (hashes: StringValues) => {
   return useQuery<StringValues, Error>({

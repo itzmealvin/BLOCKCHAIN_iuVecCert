@@ -1,4 +1,4 @@
-import { Link as ChakraLink, HStack, Heading, Image } from "@chakra-ui/react";
+import { Heading, HStack, Image, Link as ChakraLink } from "@chakra-ui/react";
 import { Link as NavLink } from "react-router-dom";
 import logo from "../../assets/favicon.png";
 import ConnectWeb3Menu from "../Web3Auth/ConnectWeb3Menu";

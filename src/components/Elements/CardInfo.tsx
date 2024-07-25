@@ -1,13 +1,4 @@
-import {
-  Box,
-  Card,
-  CardBody,
-  CardHeader,
-  Heading,
-  Stack,
-  StackDivider,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Card, CardBody, CardHeader, Heading, Stack, StackDivider, Text } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { Configs } from "../../services/ConfigsServices";
 
@@ -15,6 +6,7 @@ interface Props {
   children: ReactNode;
   dataObject: Configs;
 }
+
 const CardInfo = ({ children, dataObject }: Props) => {
   return (
     <Box maxWidth="40%" margin="auto">

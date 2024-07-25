@@ -6,10 +6,10 @@ import {
   StepIcon,
   StepIndicator,
   StepNumber,
+  Stepper,
   StepSeparator,
   StepStatus,
   StepTitle,
-  Stepper,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { StepsDetails } from "./useStepsStores";
