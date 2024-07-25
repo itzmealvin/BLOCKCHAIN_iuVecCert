@@ -1,20 +1,11 @@
 import cors from "cors";
 import express from "express";
-import fs from "fs";
 import os from "os";
-import path from "path";
 import { Worker } from "worker_threads";
-import ChallengeDto from "./dtos/ChallengeDto";
 import { FileParamsDto } from "./dtos/FileParamsDto";
 import ProofsDto from "./dtos/ProofsDto";
 import ValuesDto from "./dtos/ValuesDto";
-import {
-  commit,
-  evaluateAt,
-  genCoefficients,
-  genProof,
-  verify,
-} from "./libs/lib-kzg";
+import { commit, genCoefficients } from "./libs/lib-kzg";
 
 const app = express();
 const port = 8000;
@@ -33,6 +24,7 @@ app.post("/coefficients", (req, res) => {
       return;
     }
     const results = genCoefficients(values.map(BigInt));
+    // @TODO: Log the time taken to process
     console.log("Request processed! Sending result...");
     res.status(200).json({ values: results.map(String) });
   } catch (error) {
@@ -51,6 +43,8 @@ app.post("/commitment", (req, res) => {
       return;
     }
     const results = commit(values.map(BigInt));
+    // @TODO: Add Fiat-Shamir Heuristics here (incorporate challenge, genProof on challenge, genParams on challenge)
+    // @TODO: Log the time taken to process
     console.log("Request processed! Sending result...");
     res.status(200).json({ values: results.map(String) });
   } catch (error) {
@@ -139,6 +133,7 @@ app.post("/proof", async (req, res) => {
     });
     Promise.all(workerPromises)
       .then(() => {
+        // @TODO: Log the time taken to process
         console.log("Request processed! Sending result...");
         return res.status(200).json(resultProofs);
       })
@@ -152,85 +147,6 @@ app.post("/proof", async (req, res) => {
   }
 });
 
-const readCoefficient = (commitHash: string): string[] | undefined => {
-  try {
-    const coefficientsFilename = `coefficients_${commitHash}.json`;
-    const coefficientsFilePath = path.join(
-      __dirname,
-      "coefficients",
-      coefficientsFilename,
-    );
-    const coefficientsJson = fs.readFileSync(coefficientsFilePath, "utf-8");
-    const { calculatedCoeffs } = JSON.parse(coefficientsJson);
-    return calculatedCoeffs;
-  } catch (error) {
-    console.error(`Error occurred: ${error}. Stopping...`);
-    return;
-  }
-};
-
-app.post("/verify", (req, res) => {
-  try {
-    console.log(
-      "Receive request to verify the Coefficients using random number! Processing...",
-    );
-    const { commit, value, commitHash } = req.body as ChallengeDto;
-    const coeffsString = readCoefficient(commitHash);
-    if (!coeffsString) {
-      console.log("BAD REQUEST! Stopping...");
-      res.status(400).send("Invalid challenge provided!");
-      return;
-    }
-    const coeffs = coeffsString!.map(BigInt);
-    const xVal = BigInt(value);
-    const proof = genProof(coeffs, xVal);
-    const yVal = evaluateAt(coeffs, xVal);
-    const commitment = commit.map(BigInt);
-    const result = { challengeResult: verify(commitment, proof, xVal, yVal) };
-    console.log(`Sent challenge:
-    x-value: ${xVal}
-    commitHash: ${commitHash}
-    calculated y-value: ${yVal}
-    ${result}
-    `);
-    return res.status(200).json(result);
-  } catch (error) {
-    return res.status(500).send("An unknown error occurred!");
-  }
-});
-
-app.post("/verifyRandom", (req, res) => {
-  try {
-    console.log(
-      "Receive request to verify the Coefficients using random number! Processing...",
-    );
-    const { commit, value, commitHash } = req.body as ChallengeDto;
-    const coeffsString = readCoefficient(commitHash);
-    if (!coeffsString) {
-      console.log("BAD REQUEST! Stopping...");
-      res.status(400).send("Invalid challenge provided!");
-      return;
-    }
-    const coeffs = coeffsString!.map(BigInt);
-    const xVal = BigInt(value);
-    const proof = genProof(coeffs, xVal);
-    const yVal = evaluateAt(coeffs, xVal);
-    const commitment = commit.map(BigInt);
-    const result = { challengeResult: verify(commitment, proof, xVal, yVal) };
-    console.log(`
-    -----
-    Challenge response:
-      x-value: ${xVal}
-      commitHash: ${commitHash}
-      calculated y-value: ${yVal}
-      ${result}
-    -----
-    `);
-    return res.status(200).json(result);
-  } catch (error) {
-    return res.status(500).send("An unknown error occurred!");
-  }
-});
 
 app.listen(port, () =>
   console.log(`Server is listening at http://localhost:${port}`),

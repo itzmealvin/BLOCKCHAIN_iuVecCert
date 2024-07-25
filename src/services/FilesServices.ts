@@ -109,6 +109,7 @@ class FilesServices {
     const zip = new JSZip();
     for (let i = 0; i < filesDetails.length; i++) {
       const pdfDoc = await PDFDocument.load(filesDetails[i].fileBuffer);
+      // @TODO: Put the values in keyword field
       pdfDoc.setTitle(metadataObjects.commitHash);
       pdfDoc.setAuthor(metadataObjects.commitAddress);
       pdfDoc.setSubject(JSON.stringify(metadataObjects.files[i]));

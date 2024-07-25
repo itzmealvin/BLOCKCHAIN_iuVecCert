@@ -1,4 +1,4 @@
-import { BrowserProvider, InterfaceAbi, ethers } from "ethers";
+import { BrowserProvider, ethers, InterfaceAbi } from "ethers";
 import { toast } from "react-toastify";
 
 export interface ContractDetails {
@@ -13,7 +13,8 @@ export interface ContractProps extends ContractDetails {
 }
 
 class BlockchainServices {
-  constructor(private _networkID = "0xaa36a7") {}
+  constructor(private _networkID = "0xaa36a7") {
+  }
 
   getProvider(network?: "sepolia") {
     if (window.ethereum === null && network) {
@@ -89,10 +90,21 @@ class BlockchainServices {
     return;
   }
 
+  // @TODO: Implement revoke cert contract call
   // async revokeCert(
   //   hashValue: string,
   //   commitContract: ethers.Contract
   // ): Promise<void> {}
+
+  // @TODO: Implement verify challenge contract call
+  // async verifyChallenge(
+  //   commitContract: ethers.Contract
+  // ): Promise<void> {}
+
+  // @TODO: Implement verify cert contract call
+  // async verifyCert(
+  //  certParams: FileProps
+  // ): Promise<boolean> {}
 }
 
 export default new BlockchainServices();
