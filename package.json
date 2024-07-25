@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "client": "vite",
     "server": "tsx watch server/index.ts",
-    "start": "concurrently \"npm run client\" \"npm run server\""
+    "start": "concurrently \"npm run client\" \"npm run server\"",
+    "compile": "hardhat compile"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
