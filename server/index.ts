@@ -5,7 +5,8 @@ import { Worker } from "worker_threads";
 import { FileParamsDto } from "./dtos/FileParamsDto";
 import ProofsDto from "./dtos/ProofsDto";
 import ValuesDto from "./dtos/ValuesDto";
-import { commit, genCoefficients } from "./libs/lib-kzg";
+import { commit, evaluateAt, genCoefficients, genProof, genVerifierContractParams } from "./libs/lib-kzg";
+import crypto from "crypto";
 
 const app = express();
 const port = 8000;
@@ -14,7 +15,19 @@ const CONCURRENT_WORKER = os.cpus().length;
 app.use(cors());
 app.use(express.json({ limit: "2mb" }));
 
-app.post("/coefficients", (req, res) => {
+const measureExecutionTime = async <T>(
+  func: () => Promise<T> | T,
+): Promise<{ result: T; timeTaken: number }> => {
+  const startTime = Date.now();
+  const result = await func();
+  const endTime = Date.now();
+  return {
+    result,
+    timeTaken: endTime - startTime,
+  };
+};
+
+app.post("/coefficients", async (req, res) => {
   try {
     console.log("Receive request to calculate Coefficients! Processing...");
     const { values } = req.body as ValuesDto;
@@ -23,8 +36,10 @@ app.post("/coefficients", (req, res) => {
       res.status(400).send("Invalid values provided!");
       return;
     }
-    const results = genCoefficients(values.map(BigInt));
-    // @TODO: Log the time taken to process
+    const { result: results, timeTaken } = await measureExecutionTime(() =>
+      genCoefficients(values.map(BigInt)),
+    );
+    console.log(`Time taken to process request: ${timeTaken}ms`);
     console.log("Request processed! Sending result...");
     res.status(200).json({ values: results.map(String) });
   } catch (error) {
@@ -33,7 +48,22 @@ app.post("/coefficients", (req, res) => {
   }
 });
 
-app.post("/commitment", (req, res) => {
+const pickRandomValues = (values: bigint[], n: number): bigint[] => {
+  const shuffled = values.sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, n);
+};
+
+const genChallengeValue = (
+  commitment: bigint[],
+  randomValues: bigint[],
+): bigint => {
+  const hash = crypto.createHash("sha256");
+  hash.update(commitment.join(""));
+  randomValues.forEach((value) => hash.update(value.toString()));
+  return BigInt("0x" + hash.digest("hex"));
+};
+
+app.post("/commitment", async (req, res) => {
   try {
     console.log("Receive request to calculate Commitment! Processing...");
     const { values } = req.body as ValuesDto;
@@ -42,11 +72,26 @@ app.post("/commitment", (req, res) => {
       res.status(400).send("Invalid values provided!");
       return;
     }
-    const results = commit(values.map(BigInt));
-    // @TODO: Add Fiat-Shamir Heuristics here (incorporate challenge, genProof on challenge, genParams on challenge)
-    // @TODO: Log the time taken to process
+    const bigIntCoeffs = values.map(BigInt);
+    const n = 4;
+    const randomValues = pickRandomValues(bigIntCoeffs, n);
+
+    const { result: results, timeTaken } = await measureExecutionTime(() => {
+      const commitment = commit(bigIntCoeffs);
+      const challengeIndex = genChallengeValue(commitment, randomValues);
+      const challengeValue = evaluateAt(bigIntCoeffs, challengeIndex);
+      const proof = genProof(bigIntCoeffs, challengeIndex);
+      const params = genVerifierContractParams(
+        commitment,
+        proof,
+        challengeIndex,
+        challengeValue,
+      );
+      return { values: commitment.map(String), challenge: params };
+    });
+    console.log(`Time taken to process request: ${timeTaken}ms`);
     console.log("Request processed! Sending result...");
-    res.status(200).json({ values: results.map(String) });
+    res.status(200).json(results);
   } catch (error) {
     console.error(`Error occurred: ${error}. Stopping...`);
     res.status(500).send("An unknown error occurred!");
@@ -88,6 +133,7 @@ const chunkify = <T>(array: T[], n_workers: number): T[][] => {
   return chunks;
 };
 
+// @ts-ignore
 app.post("/proof", async (req, res) => {
   try {
     console.log(
@@ -104,6 +150,7 @@ app.post("/proof", async (req, res) => {
       res.status(400).send("Invalid values provided!");
       return;
     }
+
     const bigIntCoeffs = coeffs.map(BigInt);
     const bigIntCommit = commit.map(BigInt);
     const chunks = chunkify(files, CONCURRENT_WORKER);
@@ -112,41 +159,47 @@ app.post("/proof", async (req, res) => {
       files: [],
       commit: commit,
     };
-    const workerPromises = chunks.map((chunk, i) => {
-      return new Promise<void>((resolve) => {
-        const worker = new Worker("./server/workers/worker.js", {
-          workerData: {
-            coeffs: bigIntCoeffs,
-            chunks: chunk,
-            commit: bigIntCommit,
-            path: "./ProofWorker.ts",
-          },
-        });
-        worker.on("message", (resultFiles) => {
-          console.log(`Worker ${i} completed!`);
-          resultFiles.forEach((file: FileParamsDto) =>
-            resultProofs.files.push(file),
-          );
-          resolve();
+
+    const processChunks = async () => {
+      const workerPromises = chunks.map((chunk, i) => {
+        return new Promise<void>((resolve, reject) => {
+          // Added reject to handle errors
+          const worker = new Worker("./server/workers/worker.js", {
+            workerData: {
+              coeffs: bigIntCoeffs,
+              chunks: chunk,
+              commit: bigIntCommit,
+              path: "./ProofWorker.ts",
+            },
+          });
+          worker.on("message", (resultFiles) => {
+            console.log(`Worker ${i} completed!`);
+            resultFiles.forEach((file: FileParamsDto) =>
+              resultProofs.files.push(file),
+            );
+            resolve();
+          });
+          worker.on("error", reject);
+          worker.on("exit", (code) => {
+            if (code !== 0) {
+              reject(new Error(`Worker stopped with exit code ${code}`));
+            }
+          });
         });
       });
-    });
-    Promise.all(workerPromises)
-      .then(() => {
-        // @TODO: Log the time taken to process
-        console.log("Request processed! Sending result...");
-        return res.status(200).json(resultProofs);
-      })
-      .catch((error) => {
-        console.error(`Error occurred: ${error}. Stopping...`);
-        return res.status(500).send("An unknown error occurred!");
-      });
+      return Promise.all(workerPromises);
+    };
+
+    const { timeTaken } = await measureExecutionTime(processChunks);
+
+    console.log(`Time taken to process request: ${timeTaken}ms`);
+    console.log("Request processed! Sending result...");
+    return res.status(200).json(resultProofs);
   } catch (error) {
     console.error(`Error occurred: ${error}. Stopping...`);
     res.status(500).send("An unknown error occurred!");
   }
 });
-
 
 app.listen(port, () =>
   console.log(`Server is listening at http://localhost:${port}`),
