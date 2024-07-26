@@ -10,8 +10,8 @@ export const issuerSteps: StepsDetails[] = [
   { title: "Step 1", description: "Verify Configuration" },
   { title: "Step 2", description: "Upload Certificates" },
   { title: "Step 3", description: "Save Coefficients" },
-  { title: "Step 5", description: "Deploy Commitment" },
-  { title: "Step 4", description: "Embed Proof" },
+  { title: "Step 4", description: "Deploy Commitment" },
+  { title: "Step 5", description: "Embed Proof" },
 ];
 
 export const verifierSteps: StepsDetails[] = [
