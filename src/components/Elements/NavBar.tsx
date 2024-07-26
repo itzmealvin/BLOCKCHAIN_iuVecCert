@@ -15,7 +15,7 @@ const NavBar = () => {
       <HStack>
         <Image src={logo} boxSize="50px" marginRight={2} />
         <Heading as="h1" size="lg">
-          IU VerCert
+          IU-VerCert
         </Heading>
       </HStack>
       <HStack spacing={4}>
