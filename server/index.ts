@@ -29,22 +29,22 @@ const measureExecutionTime = async <T>(
 
 app.post("/coefficients", async (req, res) => {
   try {
-    console.log("Receive request to calculate  Coefficients! Processing...");
+    console.log("COEFFS: Receive request to calculate Coefficients! Processing...");
     const { values } = req.body as ValuesDto;
     if (!Array.isArray(values)) {
-      console.log("BAD REQUEST! Stopping...");
-      res.status(400).send("Invalid values provided!");
+      console.log("COEFFS: BAD REQUEST! Stopping...");
+      res.status(400).send("COEFFS: Invalid values provided!");
       return;
     }
     const { result: results, timeTaken } = await measureExecutionTime(() =>
       genCoefficients(values.map(BigInt)),
     );
-    console.log(`Time taken to process ${values.length} request(s): ${timeTaken}ms`);
-    console.log("Request processed! Sending result...");
+    console.log(`COEFFS: Time taken to process ${values.length} request(s): ${timeTaken}ms`);
+    console.log("COEFFS: Request processed! Sending result...");
     res.status(200).json({ values: results.map(String) });
   } catch (error) {
-    console.error(`Error occurred: ${error}. Stopping...`);
-    res.status(500).send("An unknown error occurred!");
+    console.error(`COEFFS: Error occurred: ${error}. Stopping...`);
+    res.status(500).send("COEFFS: An unknown error occurred!");
   }
 });
 
@@ -65,11 +65,11 @@ const genChallengeValue = (
 
 app.post("/commitment", async (req, res) => {
   try {
-    console.log("Receive request to calculate Commitment! Processing...");
+    console.log("COMMIT: Receive request to calculate Commitment! Processing...");
     const { values } = req.body as ValuesDto;
     if (!Array.isArray(values)) {
-      console.log("BAD REQUEST! Stopping...");
-      res.status(400).send("Invalid values provided!");
+      console.log("COMMIT: BAD REQUEST! Stopping...");
+      res.status(400).send("COMMIT: Invalid values provided!");
       return;
     }
     const bigIntCoeffs = values.map(BigInt);
@@ -89,12 +89,12 @@ app.post("/commitment", async (req, res) => {
       );
       return { values: commitment.map(String), challenge: params };
     });
-    console.log(`Time taken to process ${values.length} request(s): ${timeTaken}ms`);
-    console.log("Request processed! Sending result...");
+    console.log(`COMMIT: Time taken to process ${values.length} request(s): ${timeTaken}ms`);
+    console.log("COMMIT: Request processed! Sending result...");
     res.status(200).json(results);
   } catch (error) {
-    console.error(`Error occurred: ${error}. Stopping...`);
-    res.status(500).send("An unknown error occurred!");
+    console.error(`COMMIT: Error occurred: ${error}. Stopping...`);
+    res.status(500).send("COMMIT: An unknown error occurred!");
   }
 });
 
@@ -137,7 +137,7 @@ const chunkify = <T>(array: T[], n_workers: number): T[][] => {
 app.post("/proof", async (req, res) => {
   try {
     console.log(
-      "Receive request to calculate Proof! May take a long time to processing...",
+      "PROOF: Receive request to calculate Proof! May take a long time to processing...",
     );
     const { coeffs, files, commit } = req.body as ProofsDto;
     if (
@@ -146,8 +146,8 @@ app.post("/proof", async (req, res) => {
       !Array.isArray(files) ||
       files.some((file) => file.fileProof.length !== 0)
     ) {
-      console.log("BAD REQUEST! Stopping...");
-      res.status(400).send("Invalid values provided!");
+      console.log("PROOF: BAD REQUEST! Stopping...");
+      res.status(400).send("PROOF: Invalid values provided!");
       return;
     }
 
@@ -173,7 +173,7 @@ app.post("/proof", async (req, res) => {
             },
           });
           worker.on("message", (resultFiles) => {
-            console.log(`Worker ${i} completed!`);
+            console.log(`PROOF: Worker ${i} completed!`);
             resultFiles.forEach((file: FileParamsDto) =>
               resultProofs.files.push(file),
             );
@@ -182,7 +182,7 @@ app.post("/proof", async (req, res) => {
           worker.on("error", reject);
           worker.on("exit", (code) => {
             if (code !== 0) {
-              reject(new Error(`Worker stopped with exit code ${code}`));
+              reject(new Error(`PROOF: Worker stopped with exit code ${code}`));
             }
           });
         });
@@ -192,15 +192,15 @@ app.post("/proof", async (req, res) => {
 
     const { timeTaken } = await measureExecutionTime(processChunks);
 
-    console.log(`Time taken to process ${coeffs.length} request(s): ${timeTaken}ms`);
-    console.log("Request processed! Sending result...");
+    console.log(`PROOF: Time taken to process ${coeffs.length} request(s): ${timeTaken}ms`);
+    console.log("PROOF: Request processed! Sending result...");
     return res.status(200).json(resultProofs);
   } catch (error) {
-    console.error(`Error occurred: ${error}. Stopping...`);
-    res.status(500).send("An unknown error occurred!");
+    console.error(`PROOF: Error occurred: ${error}. Stopping...`);
+    res.status(500).send("PROOF: An unknown error occurred!");
   }
 });
 
 app.listen(port, () =>
-  console.log(`Server is listening at http://localhost:${port}`),
+  console.log(`SERVER: Server is listening at http://localhost:${port}`),
 );
