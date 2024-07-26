@@ -1,10 +1,8 @@
 import APIClient from "./apiClient";
 
-import { FileProps } from "./FilesServices";
-
 export interface StringValues {
   values: string[];
-  challenge?: FileProps;
+  challenge?: { commitment: string[]; proof: string[]; index: string; value: string };
 }
 
 export const coefficientsService = new APIClient<StringValues>("/coefficients");

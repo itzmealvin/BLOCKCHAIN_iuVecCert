@@ -18,7 +18,7 @@ class BlockchainServices {
 
   getProvider(network?: "sepolia") {
     if (window.ethereum === null && network) {
-      toast.error("MetaMask is not installed! Running as READ-ONLY mode.");
+      toast.error("MetaMask is not installed! Only VERIFY mode available.");
       return ethers.getDefaultProvider(network);
     } else {
       return new ethers.BrowserProvider(window.ethereum);
@@ -59,7 +59,7 @@ class BlockchainServices {
   async performSignIn(wallet: BrowserProvider) {
     const currentSigner = await wallet.getSigner();
     const currentAddress = currentSigner.address;
-    const signInMsg = `I hereby confirm I am the owner of address ${currentAddress} and accept the ToS for IU-VerCert!\n\nChain ID: ${
+    const signInMsg = `I hereby confirm I am the owner of address ${currentAddress} to use IU-VerCert!\n\nChain ID: ${
       this._networkID
     }\n\nIssued At: ${new Date().toLocaleString()}.`;
     await wallet.send("personal_sign", [signInMsg, currentAddress]);
@@ -69,25 +69,30 @@ class BlockchainServices {
   async deployContract(
     deployer: ethers.Signer,
     contractDetails: ContractProps,
-  ): Promise<string> {
+  ): Promise<{ hash: string, address: string }> {
     const { abi, bytecode, parameters } = contractDetails;
     const factory = new ethers.ContractFactory(abi, bytecode, deployer);
     let deployedContractInstance;
     parameters
       ? (deployedContractInstance = await factory.deploy(...parameters))
       : (deployedContractInstance = await factory.deploy());
-    return deployedContractInstance.getAddress();
+    return {
+      hash: deployedContractInstance.deploymentTransaction()!.hash,
+      address: await deployedContractInstance.getAddress(),
+    };
   }
 
   getContract(
-    issuer: ethers.Signer,
     contractDetails: ContractDetails,
+    issuer?: ethers.Signer,
   ): ethers.Contract | undefined {
     const { abi, address } = contractDetails;
-    if (address) {
+    if (address && issuer) {
       return new ethers.Contract(address, abi, issuer);
+    } else if (address) {
+      return new ethers.Contract(address, abi);
     }
-    return;
+
   }
 
   // @TODO: Implement revoke cert contract call
