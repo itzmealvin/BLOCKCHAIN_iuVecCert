@@ -3,17 +3,22 @@ import { create } from "zustand";
 import { StringValues } from "../../services/calculateServices";
 
 interface ResultsStates {
-  coeffs: { calculatedCoeffs: string[]; commitHash: string };
+  coeffs: { calculatedCoeffs: string[] };
+  commit: { calculatedCommit: string[] };
+  challenge?: { commitment: string[]; proof: string[]; index: string; value: string };
 }
 
 interface ResultsActions {
   setCoeffsResult: (resultObj: StringValues) => void;
-  setCommitHash: (hash: string) => void;
+  setCommitResult: (resultObj: StringValues) => void;
+  setChallengeResult: (resultObj: StringValues) => void;
   resetResults: () => void;
 }
 
 const initialState: ResultsStates = {
-  coeffs: { calculatedCoeffs: [], commitHash: "" },
+  coeffs: { calculatedCoeffs: [] },
+  commit: { calculatedCommit: [] },
+  challenge: { commitment: [], proof: [], index: "", value: "" },
 };
 
 const useResultsStore = create<ResultsStates & ResultsActions>((set) => ({
@@ -25,13 +30,16 @@ const useResultsStore = create<ResultsStates & ResultsActions>((set) => ({
         calculatedCoeffs: resultObj.values,
       },
     })),
-  setCommitHash: (hash) =>
+  setCommitResult: (resultObj) =>
     set((state) => ({
-      coeffs: {
-        ...state.coeffs,
-        commitHash: hash,
+      commit: {
+        ...state.commit,
+        calculatedCommit: resultObj.values,
       },
     })),
+  setChallengeResult: (resultObj) => set(() => ({
+    challenge: resultObj.challenge,
+  })),
   resetResults: () => set(initialState),
 }));
 

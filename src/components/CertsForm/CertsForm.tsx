@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod";
-import FilesServices, { FileDetails, FileProps, MetaDataObj } from "../../services/FilesServices";
+import FilesServices, { FileDetails, FileProps } from "../../services/FilesServices";
 import { useIssuerStore } from "../StepsIndicator/useStepsStores";
 import useFilesStore from "./useFilesStore";
 
@@ -62,25 +62,26 @@ const CertsForm = ({ mode }: Props) => {
   };
 
   const onVerifySubmit = (data: InputSchema) => {
-    const resultPromise: Promise<MetaDataObj> = FilesServices.getMetaObj(
-      data.certificates[0],
-    );
-    toast
-      .promise(resultPromise, {
-        pending: "Metadata are being retrieved",
-        success: "Retrieved metadata!",
-        error: "An unknown error occurred!",
-      })
-      .then((res): void => {
-        console.log(res);
-        reset();
-        if (!isDone) toggleDone();
-      })
-      .catch((error): void => {
-        toast.error(error);
-        return;
-      });
   };
+  //   const resultPromise: Promise<MetaDataObj> = FilesServices.getMetaObj(
+  //     data.certificates[0],
+  //   );
+  //   toast
+  //     .promise(resultPromise, {
+  //       pending: "Metadata are being retrieved",
+  //       success: "Retrieved metadata!",
+  //       error: "An unknown error occurred!",
+  //     })
+  //     .then((res): void => {
+  //       console.log(res);
+  //       reset();
+  //       if (!isDone) toggleDone();
+  //     })
+  //     .catch((error): void => {
+  //       toast.error(error);
+  //       return;
+  //     });
+  // };
 
   return (
     <form

@@ -14,12 +14,13 @@ import useResultsStore from "./useResultsStore";
 
 const EmbedProof = () => {
   const { filesDetails, filesProps } = useFilesStore();
-  const { coeffs } = useResultsStore();
+  const { coeffs, commit } = useResultsStore();
   const { configs } = useConfigsStore();
   const { contractAddress } = useWeb3AuthStore();
   const { toggleDone } = useIssuerStore();
   const prepareProofObj: Proofs = {
     coeffs: coeffs.calculatedCoeffs,
+    commit: commit.calculatedCommit,
     files: filesProps,
   };
   const { data: proofObj, error, isLoading } = useProof(prepareProofObj);
@@ -31,7 +32,6 @@ const EmbedProof = () => {
       const metaObj: MetaDataObj = {
         ...proofObj,
         commitAddress: contractAddress,
-        commitHash: coeffs.commitHash,
         config: configs!,
       };
       const promiseResult = FilesServices.embedAndZip(filesDetails, metaObj);
@@ -42,11 +42,7 @@ const EmbedProof = () => {
           error: "An unknown error occurred!",
         })
         .then((res) => {
-          fileDownload(res, `${coeffs.commitHash}_embedded.zip`);
-          fileDownload(
-            FilesServices.objectToUint8Array(coeffs),
-            `coefficient_${coeffs.commitHash}.json`,
-          );
+          fileDownload(res, `${contractAddress}_embedded.zip`);
         });
       setDisabled(!disabled);
       toggleDone();
