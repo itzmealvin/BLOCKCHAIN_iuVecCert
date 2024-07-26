@@ -13,10 +13,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { hashAsBigInt, HashType } from "bigint-hash";
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaCheckCircle, FaUniversity } from "react-icons/fa";
+import { FaCheckCircle, FaQuestionCircle, FaUniversity } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { z } from "zod";
 import CertCommitment from "../../compiled";
@@ -26,6 +26,7 @@ import useConfigsStore from "../ConfigsForm/useConfigsStore";
 import { useIssuerStore } from "../StepsIndicator/useStepsStores";
 import useWeb3AuthStore from "../Web3Auth/useWeb3AuthStore";
 import useResultsStore from "./useResultsStore";
+
 
 const schema = z.object({
   batchDesc: z
@@ -59,7 +60,7 @@ const DeployBlockchain = () => {
     contractAddress,
     setContractAddress,
   } = useWeb3AuthStore();
-  const { coeffs, setCommitHash: setCoeffsCommit } = useResultsStore();
+  const { coeffs, setCommitResult } = useResultsStore();
   const { issuerCN } = useConfigsStore();
   const { toggleDone } = useIssuerStore();
   const {
@@ -67,6 +68,7 @@ const DeployBlockchain = () => {
     error,
     isLoading,
   } = useCommit({ values: coeffs.calculatedCoeffs });
+  const [txnHash, setTxnHash] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [contractToDeploy, setContractToDeploy] = useState<ContractProps>({
     abi: CertCommitment.abi,
@@ -75,27 +77,29 @@ const DeployBlockchain = () => {
   });
   const {
     register,
-    handleSubmit,
-    reset,
+    handleSubmit
+    ,
     formState: { errors },
   } = useForm<InputData>({ resolver: zodResolver(schema) });
   error ? toast.error(error.message) : null;
 
   const onHandleSubmit = (data: InputData) => {
-    if (commitObj) {
-      setCoeffsCommit(
-        hashAsBigInt(
-          HashType.SHA1,
-          Buffer.from(commitObj.values.toString()),
-        ).toString(),
-      );
+    if (commitObj?.challenge) {
+      setCommitResult(commitObj);
       setContractToDeploy((existingContract) => ({
         ...existingContract,
-        parameters: [issuerCN, data.batchDesc, ...commitObj.values],
+        parameters: [
+          issuerCN,
+          data.batchDesc,
+          ...commitObj.challenge!.commitment,
+          commitObj.challenge!.index,
+          commitObj.challenge!.value,
+          ...commitObj.challenge!.proof,
+        ],
       }));
     }
     setDisabled(false);
-    reset();
+
   };
 
   const handleDeploy = async () => {
@@ -111,13 +115,21 @@ const DeployBlockchain = () => {
           error: "An unknown error occurred!",
         })
         .then((res) => {
-          setContractAddress(res);
+          setTxnHash(res.hash);
+          setContractAddress(res.address);
         })
         .catch((error) => toast.error(error));
       toggleDone();
     } else {
       toast.error("No wallet detected! Use Connect Wallet button to connect!");
     }
+  };
+
+  const truncateString = (str: string, num: number) => {
+    if (str.length <= num * 2) {
+      return str;
+    }
+    return str.slice(0, num) + "..." + str.slice(-num);
   };
 
   return (
@@ -129,14 +141,22 @@ const DeployBlockchain = () => {
         <List spacing={3}>
           <ListItem>
             <ListIcon as={FaUniversity} color="black.500" />
-            {issuerCN}
+            CN: {issuerCN}
           </ListItem>
-          {commitObj?.values.map((value) => (
-            <ListItem key={value}>
-              <ListIcon as={FaCheckCircle} color="black.500" />
-              {value}
-            </ListItem>
-          ))}
+          {commitObj?.challenge && (
+            <>
+              <ListItem key="challenge">
+                <ListIcon as={FaQuestionCircle} color="black.500" />
+                Challenge:
+                ({truncateString(commitObj.challenge.index, 5)},{truncateString(commitObj.challenge.value, 5)})
+              </ListItem>
+              {commitObj?.challenge.commitment.map((value, index) => (
+                <ListItem key={value}>
+                  <ListIcon as={FaCheckCircle} color="black.500" />
+                  Commitment {index}: {value}
+                </ListItem>
+              ))}
+            </>)}
         </List>
         <form
           onSubmit={handleSubmit((data, event) => {
@@ -172,18 +192,29 @@ const DeployBlockchain = () => {
           DEPLOY
         </Button>
       </VStack>
-      {contractAddress && (
-        <Text>
-          Deployed Contract Address:{" "}
-          <Link
-            color="blue.500"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`https://sepolia.etherscan.io/address/${contractAddress}`}
-          >
-            {contractAddress}
-          </Link>
-        </Text>
+      {contractAddress && txnHash && (<>
+          <Text>
+            Transaction Hash:{" "}
+            <Link
+              color="blue.500"
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://sepolia.etherscan.io/tx/${txnHash}`}
+            >
+              {txnHash}
+            </Link>
+          </Text>
+          <Text>
+            Deployed Contract Address:{" "}
+            <Link
+              color="blue.500"
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://sepolia.etherscan.io/address/${contractAddress}`}
+            >
+              {contractAddress}
+            </Link>
+          </Text></>
       )}
     </>
   );
