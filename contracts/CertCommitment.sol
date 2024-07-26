@@ -7,7 +7,7 @@ contract CertsCommitment {
     uint256 public publishTime;
     string public publisherCN;
     string public batchDesc;
-    string public challenge;
+    string public challengeIndex;
     Points public commitment;
     Points public challengeProof;
     mapping(string => bool) public isRevoked;
@@ -34,7 +34,7 @@ contract CertsCommitment {
     constructor(
         string memory _publisherCN,
         string memory _batchDesc,
-        string memory _challenge,
+        string memory _challengeIndex,
         string memory _r1,
         string memory _s1,
         string memory _recoverParam1,
@@ -45,7 +45,7 @@ contract CertsCommitment {
         publishTime = block.timestamp;
         publisher = msg.sender;
         publisherCN = _publisherCN;
-        challenge = _challenge;
+        challengeIndex = _challengeIndex;
         batchDesc = _batchDesc;
         commitment = Points(_r1, _s1, _recoverParam1);
         challengeProof = Points(_r2, _s2, _recoverParam2);
