@@ -14,7 +14,7 @@ const ErrorPage = () => {
       alignItems="center"
     >
       <Heading as="h1" size="4xl" mb={4} fontWeight="bold" color="red.500">
-        {error ? "URL not found!" : "Critical error ocurred!"}
+        {error ? "404 URL not found!" : "Critical error ocurred!"}
       </Heading>
       <Text as="h2" fontSize="2xl" mb={6}>
         We apologize for the inconvenience. Please try again later.
