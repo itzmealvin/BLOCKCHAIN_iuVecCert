@@ -29,7 +29,7 @@ const measureExecutionTime = async <T>(
 
 app.post("/coefficients", async (req, res) => {
   try {
-    console.log("Receive request to calculate Coefficients! Processing...");
+    console.log("Receive request to calculate  Coefficients! Processing...");
     const { values } = req.body as ValuesDto;
     if (!Array.isArray(values)) {
       console.log("BAD REQUEST! Stopping...");
@@ -39,7 +39,7 @@ app.post("/coefficients", async (req, res) => {
     const { result: results, timeTaken } = await measureExecutionTime(() =>
       genCoefficients(values.map(BigInt)),
     );
-    console.log(`Time taken to process request: ${timeTaken}ms`);
+    console.log(`Time taken to process ${values.length} request(s): ${timeTaken}ms`);
     console.log("Request processed! Sending result...");
     res.status(200).json({ values: results.map(String) });
   } catch (error) {
@@ -73,7 +73,7 @@ app.post("/commitment", async (req, res) => {
       return;
     }
     const bigIntCoeffs = values.map(BigInt);
-    const n = 4;
+    const n = 1;
     const randomValues = pickRandomValues(bigIntCoeffs, n);
 
     const { result: results, timeTaken } = await measureExecutionTime(() => {
@@ -89,7 +89,7 @@ app.post("/commitment", async (req, res) => {
       );
       return { values: commitment.map(String), challenge: params };
     });
-    console.log(`Time taken to process request: ${timeTaken}ms`);
+    console.log(`Time taken to process ${values.length} request(s): ${timeTaken}ms`);
     console.log("Request processed! Sending result...");
     res.status(200).json(results);
   } catch (error) {
@@ -192,7 +192,7 @@ app.post("/proof", async (req, res) => {
 
     const { timeTaken } = await measureExecutionTime(processChunks);
 
-    console.log(`Time taken to process request: ${timeTaken}ms`);
+    console.log(`Time taken to process ${coeffs.length} request(s): ${timeTaken}ms`);
     console.log("Request processed! Sending result...");
     return res.status(200).json(resultProofs);
   } catch (error) {
