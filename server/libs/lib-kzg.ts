@@ -162,14 +162,14 @@ const genQuotientPolynomial = (
     .toValues();
 };
 
-// const evaluateAt = (
-//   coefficients: Coefficient[],
-//   xVal: bigint,
-//   p: bigint = FIELD_SIZE,
-// ): bigint => {
-//   const field = galois.createPrimeField(p);
-//   return field.evalPolyAt(field.newVectorFrom(coefficients), xVal);
-// };
+const evaluateAt = (
+  coefficients: Coefficient[],
+  xVal: bigint,
+  p: bigint = FIELD_SIZE,
+): bigint => {
+  const field = galois.createPrimeField(p);
+  return field.evalPolyAt(field.newVectorFrom(coefficients), xVal);
+};
 
 /*
  * @return A KZG commitment proof of evaluation at a single point.
@@ -186,7 +186,6 @@ const genProof = (
   const quotient = genQuotientPolynomial(coefficients, BigInt(index), p);
   return commit(quotient);
 };
-
 
 // const genZeroPoly = (
 //   field: galois.FiniteField,
@@ -518,7 +517,7 @@ const genCoefficients = (
 
 export {
   commit,
-  // evaluateAt,
+  evaluateAt,
   FIELD_SIZE,
   // genBabyJubField,
   genCoefficients,
