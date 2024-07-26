@@ -26,24 +26,24 @@ contract Verifier {
         // The G2 generator
         g2Generator = Pairing.G2Point({
             X: [
-                constantsContract.SRS_G2_X_0(0),
-                constantsContract.SRS_G2_X_1(0)
-            ],
+        constantsContract.SRS_G2_X_0(0),
+        constantsContract.SRS_G2_X_1(0)
+        ],
             Y: [
-                constantsContract.SRS_G2_Y_0(0),
-                constantsContract.SRS_G2_Y_1(0)
-            ]
+        constantsContract.SRS_G2_Y_0(0),
+        constantsContract.SRS_G2_Y_1(0)
+        ]
         });
 
         SRS_G2_1 = Pairing.G2Point({
             X: [
-                constantsContract.SRS_G2_X_0(1),
-                constantsContract.SRS_G2_X_1(1)
-            ],
+        constantsContract.SRS_G2_X_0(1),
+        constantsContract.SRS_G2_X_1(1)
+        ],
             Y: [
-                constantsContract.SRS_G2_Y_0(1),
-                constantsContract.SRS_G2_Y_1(1)
-            ]
+        constantsContract.SRS_G2_Y_0(1),
+        constantsContract.SRS_G2_Y_1(1)
+        ]
         });
     }
 
@@ -130,11 +130,11 @@ contract Verifier {
         // e((index * proof) + (commitment - aCommitment), G2.g) * e(-proof, xCommit) == 1
         return
             Pairing.pairing(
-                Pairing.plus(indexMulProof, commitmentMinusA),
-                g2Generator,
-                negProof,
-                SRS_G2_1
-            );
+            Pairing.plus(indexMulProof, commitmentMinusA),
+            g2Generator,
+            negProof,
+            SRS_G2_1
+        );
     }
 
     /*
@@ -287,11 +287,11 @@ contract Verifier {
         // Perform the pairing check
         return
             Pairing.pairing(
-                Pairing.negate(zCommit),
-                _proof,
-                commitmentMinusICommit,
-                g2Generator
-            );
+            Pairing.negate(zCommit),
+            _proof,
+            commitmentMinusICommit,
+            g2Generator
+        );
     }
 
     /*

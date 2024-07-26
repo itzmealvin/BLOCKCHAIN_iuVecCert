@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 library Pairing {
     uint256 public constant PRIME_Q =
-        21888242871839275222246405745257275088696311157297823662689037894645226208583;
+    21888242871839275222246405745257275088696311157297823662689037894645226208583;
 
     struct G1Point {
         uint256 X;
@@ -45,7 +45,7 @@ library Pairing {
         // solium-disable-next-line security/no-inline-assembly
         assembly {
             success := staticcall(sub(gas(), 2000), 6, input, 0xc0, r, 0x60)
-            // Use "invalid" to make gas estimation work
+        // Use "invalid" to make gas estimation work
             switch success
             case 0 {
                 invalid()
@@ -72,7 +72,7 @@ library Pairing {
         // solium-disable-next-line security/no-inline-assembly
         assembly {
             success := staticcall(sub(gas(), 2000), 7, input, 0x80, r, 0x60)
-            // Use "invalid" to make gas estimation work
+        // Use "invalid" to make gas estimation work
             switch success
             case 0 {
                 invalid()
@@ -121,7 +121,7 @@ library Pairing {
                 out,
                 0x20
             )
-            // Use "invalid" to make gas estimation work
+        // Use "invalid" to make gas estimation work
             switch success
             case 0 {
                 invalid()
