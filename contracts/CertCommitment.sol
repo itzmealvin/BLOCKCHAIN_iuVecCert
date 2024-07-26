@@ -4,13 +4,15 @@ pragma solidity ^0.8.0;
 
 contract CertsCommitment {
     address public publisher;
-    uint256 public deploymentTime;
+    uint256 public publishTime;
     string public publisherCN;
     string public batchDesc;
-    Commitment public commitment;
+    string public challenge;
+    Points public commitment;
+    Points public challengeProof;
     mapping(string => bool) public isRevoked;
 
-    struct Commitment {
+    struct Points {
         string _r;
         string _s;
         string _recoverParam;
@@ -32,15 +34,21 @@ contract CertsCommitment {
     constructor(
         string memory _publisherCN,
         string memory _batchDesc,
-        string memory _r,
-        string memory _s,
-        string memory _recoverParam
+        string memory _challenge,
+        string memory _r1,
+        string memory _s1,
+        string memory _recoverParam1,
+        string memory _r2,
+        string memory _s2,
+        string memory _recoverParam2
     ) {
-        deploymentTime = block.timestamp;
+        publishTime = block.timestamp;
         publisher = msg.sender;
         publisherCN = _publisherCN;
+        challenge = _challenge;
         batchDesc = _batchDesc;
-        commitment = Commitment(_r, _s, _recoverParam);
+        commitment = Points(_r1, _s1, _recoverParam1);
+        challengeProof = Points(_r2, _s2, _recoverParam2);
     }
 
     function revoke(string memory _hash) external onlyPublisher isValid(_hash) {
