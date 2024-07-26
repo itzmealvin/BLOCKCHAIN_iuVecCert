@@ -3,23 +3,19 @@
 pragma solidity ^0.8.0;
 
 contract CertsCommitment {
-    address public publisher;
-    uint256 public publishTime;
-    string public publisherCN;
+
+    uint256 public issueTime;
+    address public issuer;
+    string public issuerCN;
     string public batchDesc;
-    string public challengeIndex;
-    Points public commitment;
-    Points public challengeProof;
+    uint256[2] public commitment;
+    uint256 public challengeIndex;
+    uint256 public challengeValue;
+    uint256[2] public challengeProof;
     mapping(string => bool) public isRevoked;
 
-    struct Points {
-        string _r;
-        string _s;
-        string _recoverParam;
-    }
-
-    modifier onlyPublisher() {
-        require(msg.sender == publisher, "You are not the publisher!");
+    modifier onlyIssuer() {
+        require(msg.sender == issuer, "You are not the issuer!");
         _;
     }
 
@@ -31,27 +27,57 @@ contract CertsCommitment {
         _;
     }
 
-    constructor(
-        string memory _publisherCN,
+    constructor (
+        string memory _issuerCN,
         string memory _batchDesc,
-        string memory _challengeIndex,
-        string memory _r1,
-        string memory _s1,
-        string memory _recoverParam1,
-        string memory _r2,
-        string memory _s2,
-        string memory _recoverParam2
+        uint256 _commitment0,
+        uint256 _commitment1,
+        uint256 _challengeIndex,
+        uint256 _challengeValue,
+        uint256 _challengeProof0,
+        uint256 _challengeProof1
     ) {
-        publishTime = block.timestamp;
-        publisher = msg.sender;
-        publisherCN = _publisherCN;
-        challengeIndex = _challengeIndex;
+        issueTime = block.timestamp;
+        issuer = msg.sender;
+        issuerCN = _issuerCN;
         batchDesc = _batchDesc;
-        commitment = Points(_r1, _s1, _recoverParam1);
-        challengeProof = Points(_r2, _s2, _recoverParam2);
+        commitment[0] = _commitment0;
+        commitment[1] = _commitment1;
+        challengeIndex = _challengeIndex;
+        challengeValue = _challengeValue;
+        challengeProof[0] = _challengeProof0;
+        challengeProof[1] = _challengeProof1;
     }
 
-    function revoke(string memory _hash) external onlyPublisher isValid(_hash) {
+//    function getIssueTime() external view returns (uint256) {
+//        return issueTime;
+//    }
+//
+//    function getIssuer() external view returns (address) {
+//        return issuer;
+//    }
+//
+//    function getIssuerCN() external view returns (string memory) {
+//        return issuerCN;
+//    }
+//
+//    function getBatchDesc() external view returns (string memory) {
+//        return batchDesc;
+//    }
+//
+//    function getCommitment() external view returns (uint256[2] memory) {
+//        return commitment;
+//    }
+//
+//    function getChallenge() external view returns (uint256[2] memory) {
+//        return [challengeIndex, challengeValue];
+//    }
+//
+//    function getChallengeProof() external view returns (uint256[2] memory) {
+//        return challengeProof;
+//    }
+
+    function revoke(string memory _hash) external onlyIssuer isValid(_hash) {
         isRevoked[_hash] = true;
     }
 }
