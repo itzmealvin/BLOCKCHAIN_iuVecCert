@@ -9,7 +9,7 @@ import useResultsStore from "./useResultsStore";
 
 const CalculateCoeffs = () => {
   const { filesProps } = useFilesStore();
-  const { coeffs, setCoeffsResult } = useResultsStore();
+  const { setCoeffsResult } = useResultsStore();
   const hashObj: StringValues = {
     values: filesProps.map((file) => file.fileHash),
   };
@@ -22,7 +22,7 @@ const CalculateCoeffs = () => {
     <>
       {resultObj && (
         <Heading as="h1" size="md">
-          Remember to put this file inside /server folder
+          These are the coefficients of the polynomials generated from your credentials
         </Heading>
       )}
       <Button
@@ -31,9 +31,7 @@ const CalculateCoeffs = () => {
         onClick={() => {
           resultObj ? setCoeffsResult(resultObj) : null;
           setDisabled(!disabled);
-          setTimeout(() => {
-            toggleDone();
-          }, 5000);
+          toggleDone();
         }}
         isLoading={isLoading}
         isDisabled={!disabled}
