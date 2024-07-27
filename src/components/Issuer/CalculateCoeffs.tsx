@@ -22,7 +22,8 @@ const CalculateCoeffs = () => {
     <>
       {resultObj && (
         <Heading as="h1" size="md">
-          These are the coefficients of the polynomials generated from your credentials
+          These are the coefficients of the polynomials generated from your
+          credentials
         </Heading>
       )}
       <Button

@@ -69,7 +69,7 @@ class BlockchainServices {
   async deployContract(
     deployer: ethers.Signer,
     contractDetails: ContractProps,
-  ): Promise<{ hash: string, address: string }> {
+  ): Promise<{ hash: string; address: string }> {
     const { abi, bytecode, parameters } = contractDetails;
     const factory = new ethers.ContractFactory(abi, bytecode, deployer);
     let deployedContractInstance;
@@ -92,7 +92,6 @@ class BlockchainServices {
     } else if (address) {
       return new ethers.Contract(address, abi);
     }
-
   }
 
   // @TODO: Implement revoke cert contract call

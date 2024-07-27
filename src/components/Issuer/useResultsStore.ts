@@ -5,7 +5,12 @@ import { StringValues } from "../../services/calculateServices";
 interface ResultsStates {
   coeffs: { calculatedCoeffs: string[] };
   commit: { calculatedCommit: string[] };
-  challenge?: { commitment: string[]; proof: string[]; index: string; value: string };
+  challenge?: {
+    commitment: string[];
+    proof: string[];
+    index: string;
+    value: string;
+  };
 }
 
 interface ResultsActions {
@@ -37,9 +42,10 @@ const useResultsStore = create<ResultsStates & ResultsActions>((set) => ({
         calculatedCommit: resultObj.values,
       },
     })),
-  setChallengeResult: (resultObj) => set(() => ({
-    challenge: resultObj.challenge,
-  })),
+  setChallengeResult: (resultObj) =>
+    set(() => ({
+      challenge: resultObj.challenge,
+    })),
   resetResults: () => set(initialState),
 }));
 

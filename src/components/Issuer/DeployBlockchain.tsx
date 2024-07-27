@@ -27,7 +27,6 @@ import { useIssuerStore } from "../StepsIndicator/useStepsStores";
 import useWeb3AuthStore from "../Web3Auth/useWeb3AuthStore";
 import useResultsStore from "./useResultsStore";
 
-
 const schema = z.object({
   batchDesc: z
     .string()
@@ -77,8 +76,7 @@ const DeployBlockchain = () => {
   });
   const {
     register,
-    handleSubmit
-    ,
+    handleSubmit,
     formState: { errors },
   } = useForm<InputData>({ resolver: zodResolver(schema) });
   error ? toast.error(error.message) : null;
@@ -99,7 +97,6 @@ const DeployBlockchain = () => {
       }));
     }
     setDisabled(false);
-
   };
 
   const handleDeploy = async () => {
@@ -147,8 +144,8 @@ const DeployBlockchain = () => {
             <>
               <ListItem key="challenge">
                 <ListIcon as={FaQuestionCircle} color="black.500" />
-                Challenge:
-                ({truncateString(commitObj.challenge.index, 5)},{truncateString(commitObj.challenge.value, 5)})
+                Challenge: ({truncateString(commitObj.challenge.index, 5)},
+                {truncateString(commitObj.challenge.value, 5)})
               </ListItem>
               {commitObj?.challenge.commitment.map((value, index) => (
                 <ListItem key={value}>
@@ -156,7 +153,8 @@ const DeployBlockchain = () => {
                   Commitment {index}: {value}
                 </ListItem>
               ))}
-            </>)}
+            </>
+          )}
         </List>
         <form
           onSubmit={handleSubmit((data, event) => {
@@ -192,7 +190,8 @@ const DeployBlockchain = () => {
           DEPLOY
         </Button>
       </VStack>
-      {contractAddress && txnHash && (<>
+      {contractAddress && txnHash && (
+        <>
           <Text>
             Transaction Hash:{" "}
             <Link
@@ -214,7 +213,8 @@ const DeployBlockchain = () => {
             >
               {contractAddress}
             </Link>
-          </Text></>
+          </Text>
+        </>
       )}
     </>
   );
