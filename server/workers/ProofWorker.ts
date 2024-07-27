@@ -18,7 +18,6 @@ function genProofs(
       BigInt(fileHash),
     );
     results.push({
-      commitment: params.commitment,
       fileProof: params.proof,
       fileIndex: params.index,
       fileHash: params.value,
