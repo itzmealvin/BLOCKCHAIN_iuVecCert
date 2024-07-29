@@ -190,13 +190,14 @@ app.post("/proof", async (req, res) => {
                   },
                 });
                 worker.on("message", (message) => {
-                  console.log(
-                    `3 PROOFS: Worker ${workerIndex} completed sub-chunk ${
-                      subIndex + 1
-                    }/${chunk.length} of chunk ${chunkIndex + 1}: ${message.toString()}`
-                  );
-                      resultProofs.files.push(message);
-                    resolve();
+                  // console.log(
+                  //   `PROOFS: Worker ${workerIndex} completed sub-chunk ${
+                  //     subIndex + 1
+                  //   }/${chunk.length} of chunk ${chunkIndex + 1}`
+                  // );
+                  resultProofs.files.push(message);
+                  console.log(resultProofs);
+                  resolve();
                 });
                 worker.on("error", (error) => {
                   console.log(
