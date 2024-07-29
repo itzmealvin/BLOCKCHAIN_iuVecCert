@@ -52,8 +52,7 @@ const EmbedProof = () => {
   return (
     <>
       <Heading as="h1" size="md">
-        Distribute the embedded certificates and store the coefficients in
-        secure place
+        Distribute the embedded certificates to the students, that's the end of this process
       </Heading>
       <Button
         colorScheme="blue"
