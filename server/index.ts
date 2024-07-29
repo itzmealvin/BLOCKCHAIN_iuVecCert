@@ -193,11 +193,9 @@ app.post("/proof", async (req, res) => {
                   console.log(
                     `3 PROOFS: Worker ${workerIndex} completed sub-chunk ${
                       subIndex + 1
-                    }/${chunk.length} of chunk ${chunkIndex + 1}: ${message}`
+                    }/${chunk.length} of chunk ${chunkIndex + 1}: ${message.toString()}`
                   );
-                    message.forEach((file: FileParamsDto) => {
-                      resultProofs.files.push(file);
-                    });
+                      resultProofs.files.push(message);
                     resolve();
                 });
                 worker.on("error", (error) => {
