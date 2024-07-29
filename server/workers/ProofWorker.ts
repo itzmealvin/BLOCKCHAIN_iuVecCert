@@ -6,8 +6,10 @@ function genProofs(
   coeffs: bigint[],
   chunks: FileParamsDto[],
   commit: bigint[],
-): FileParamsDto[] {
-  return chunks.map(({ fileIndex, fileHash }) => {
+) {
+  const results: FileParamsDto[] = [];
+  for (let i = 0; i < chunks.length; i++) {
+    const { fileIndex, fileHash } = chunks[i];
     const proof = genProof(coeffs, parseInt(fileIndex));
     const params = genVerifierContractParams(
       commit,
@@ -15,16 +17,15 @@ function genProofs(
       parseInt(fileIndex),
       BigInt(fileHash),
     );
-    console.log(`WORKER: Proof for ${fileIndex} generated`);
-    return {
+    results.push({
       fileProof: params.proof,
       fileIndex: params.index,
       fileHash: params.value,
-    };
-  });
+    });
+  }
+  return results;
 }
 
-// Post the results back to the parent thread
 parentPort!.postMessage(
   genProofs(workerData.coeffs, workerData.chunks, workerData.commit),
 );
