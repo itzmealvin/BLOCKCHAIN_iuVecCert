@@ -189,14 +189,8 @@ app.post("/proof", async (req, res) => {
                     path: "./ProofWorker.ts",
                   },
                 });
-                worker.on("message", (message) => {
-                  // console.log(
-                  //   `PROOFS: Worker ${workerIndex} completed sub-chunk ${
-                  //     subIndex + 1
-                  //   }/${chunk.length} of chunk ${chunkIndex + 1}`
-                  // );
-                  resultProofs.files.push(message);
-                  console.log(resultProofs);
+                worker.on("message", (proofParams) => {
+                  resultProofs.files.push(proofParams);
                   resolve();
                 });
                 worker.on("error", (error) => {
