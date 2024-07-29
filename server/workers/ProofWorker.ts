@@ -4,26 +4,21 @@ import { genProof, genVerifierContractParams } from "../libs/lib-kzg";
 
 function genProofs(
   coeffs: bigint[],
-  chunks: FileParamsDto[],
+  chunk: FileParamsDto,
   commit: bigint[],
-) {
-  const results: FileParamsDto[] = [];
-  for (let i = 0; i < chunks.length; i++) {
-    const { fileIndex, fileHash } = chunks[i];
-    const proof = genProof(coeffs, parseInt(fileIndex));
-    const params = genVerifierContractParams(
-      commit,
-      proof,
-      parseInt(fileIndex),
-      BigInt(fileHash),
-    );
-    results.push({
-      fileProof: params.proof,
-      fileIndex: params.index,
-      fileHash: params.value,
-    });
-  }
-  return results;
+): FileParamsDto {
+  const { fileIndex, fileHash } = chunk;
+  const proof = genProof(coeffs, parseInt(fileIndex));
+  const params = genVerifierContractParams(
+    commit,
+    proof,
+    parseInt(fileIndex),
+    BigInt(fileHash),
+  );
+  return {
+    ...chunk,
+    fileProof: params.proof,
+  };
 }
 
 parentPort!.postMessage(

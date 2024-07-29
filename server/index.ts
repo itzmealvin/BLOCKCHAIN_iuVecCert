@@ -163,13 +163,12 @@ app.post("/proof", async (req, res) => {
     };
 
     const progressBar = new ProgressBar(
-      "PROOFS: Processed [:bar] :current/:total chunks\n",
+      "PROOF: Processing [:bar] :current/:total chunks (:percent)\n",
       {
         complete: "=",
         incomplete: "-",
         width: 30,
         total: chunks.length,
-        curr: 0
       }
     );
 
@@ -190,16 +189,16 @@ app.post("/proof", async (req, res) => {
                     path: "./ProofWorker.ts",
                   },
                 });
-                worker.on("message", (resultFiles) => {
-                  // console.log(
-                  //   `PROOFS: Worker ${workerIndex} completed sub-chunk ${
-                  //     subIndex + 1
-                  //   }/${chunk.length} of chunk ${chunkIndex + 1}`,
-                  // );
-                  resultFiles.forEach((file: FileParamsDto) => {
-                    resultProofs.files.push(file);
-                  });
-                  resolve();
+                worker.on("message", (message) => {
+                  console.log(
+                    `3 PROOFS: Worker ${workerIndex} completed sub-chunk ${
+                      subIndex + 1
+                    }/${chunk.length} of chunk ${chunkIndex + 1}: ${message}`
+                  );
+                    message.forEach((file: FileParamsDto) => {
+                      resultProofs.files.push(file);
+                    });
+                    resolve();
                 });
                 worker.on("error", (error) => {
                   console.log(
