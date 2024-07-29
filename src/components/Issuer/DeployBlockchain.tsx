@@ -131,53 +131,13 @@ const DeployBlockchain = () => {
 
   return (
     <>
+    {commitObj ?
       <Heading as="h1" size="md">
-        Deploy contract with using these information
-      </Heading>
+        Now deploy the storing contract with using these given information!
+      </Heading> :  <Heading as="h1" size="md">
+        Calculating commitment for the given polynomials and generating unique challenge point!
+      </Heading> }
       <VStack spacing={10}>
-        <List spacing={3}>
-          <ListItem>
-            <ListIcon as={FaUniversity} color="black.500" />
-            CN: {issuerCN}
-          </ListItem>
-          {commitObj?.challenge && (
-            <>
-              <ListItem key="challenge">
-                <ListIcon as={FaQuestionCircle} color="black.500" />
-                Challenge: ({truncateString(commitObj.challenge.index, 5)},
-                {truncateString(commitObj.challenge.value, 5)})
-              </ListItem>
-              {commitObj?.challenge.commitment.map((value, index) => (
-                <ListItem key={value}>
-                  <ListIcon as={FaCheckCircle} color="black.500" />
-                  Commitment {index}: {value}
-                </ListItem>
-              ))}
-            </>
-          )}
-        </List>
-        <form
-          onSubmit={handleSubmit((data, event) => {
-            event?.preventDefault();
-            onHandleSubmit(data);
-          })}
-        >
-          <VStack spacing={5}>
-            <FormControl isInvalid={!!errors.batchDesc}>
-              <FormLabel htmlFor="certificates">Batch Description</FormLabel>
-              <Input {...register("batchDesc")} id="batchDesc" type="text" />
-              <FormErrorMessage>{errors.batchDesc?.message}</FormErrorMessage>
-            </FormControl>
-            <Button
-              colorScheme="blue"
-              variant="outline"
-              type="submit"
-              alignContent="center"
-            >
-              Submit Description
-            </Button>
-          </VStack>
-        </form>
         <Button
           colorScheme="blue"
           variant="solid"
@@ -189,6 +149,46 @@ const DeployBlockchain = () => {
         >
           DEPLOY
         </Button>
+        {commitObj?.challenge && ( <> <List spacing={3}>
+          <ListItem>
+            <ListIcon as={FaUniversity} color="black.500" />
+            CN: {issuerCN}
+          </ListItem>
+              <ListItem key="challenge">
+                <ListIcon as={FaQuestionCircle} color="black.500" />
+                Challenge: ({truncateString(commitObj.challenge.index, 5)},
+                {truncateString(commitObj.challenge.value, 5)})
+              </ListItem>
+              {commitObj?.challenge.commitment.map((value, index) => (
+                <ListItem key={value}>
+                  <ListIcon as={FaCheckCircle} color="black.500" />
+                  Commitment {index}: {value}
+                </ListItem>
+              ))}
+        </List> </>
+          )}
+        <form
+          onSubmit={handleSubmit((data, event) => {
+            event?.preventDefault();
+            onHandleSubmit(data);
+          })}
+        >
+          <VStack spacing={5}>
+            <FormControl isInvalid={!!errors.batchDesc}>
+              <FormLabel htmlFor="certificates">Batch description</FormLabel>
+              <Input {...register("batchDesc")} id="batchDesc" type="text" />
+              <FormErrorMessage>{errors.batchDesc?.message}</FormErrorMessage>
+            </FormControl>
+            <Button
+              colorScheme="blue"
+              variant="outline"
+              type="submit"
+              alignContent="center"
+            >
+              SUBMIT
+            </Button>
+          </VStack>
+        </form>
       </VStack>
       {contractAddress && txnHash && (
         <>
@@ -200,7 +200,7 @@ const DeployBlockchain = () => {
               rel="noopener noreferrer"
               href={`https://sepolia.etherscan.io/tx/${txnHash}`}
             >
-              {txnHash}
+              View on Sepolia Scan
             </Link>
           </Text>
           <Text>

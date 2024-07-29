@@ -20,12 +20,15 @@ const CalculateCoeffs = () => {
 
   return (
     <>
-      {resultObj && (
+      {resultObj ?
         <Heading as="h1" size="md">
           These are the coefficients of the polynomials generated from your
-          credentials
+          certificates!
+        </Heading> :        <Heading as="h1" size="md">
+          Calculating coefficients for the polynomials generated from your
+          certificates!
         </Heading>
-      )}
+      }
       <Button
         colorScheme="blue"
         variant="solid"

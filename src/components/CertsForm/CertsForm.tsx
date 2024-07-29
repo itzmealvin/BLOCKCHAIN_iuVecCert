@@ -1,4 +1,4 @@
-import { Button, FormControl, FormErrorMessage, FormLabel, HStack, Input } from "@chakra-ui/react";
+import { Button, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -83,7 +83,14 @@ const CertsForm = ({ mode }: Props) => {
   //     });
   // };
 
-  return (
+  return (<>
+  {mode === "CREATE" ?
+    <Heading as="h1" size="md">
+      Upload your certificate batch (minimum 2 required)!
+    </Heading> :
+    <Heading as="h1" size="md">
+      Upload your embedded certificate to verify/revoke it!
+    </Heading>}
     <form
       onSubmit={handleSubmit((data) => {
         mode === "CREATE" ? onCreateSubmit(data) : onVerifySubmit(data);
@@ -107,7 +114,7 @@ const CertsForm = ({ mode }: Props) => {
           PROCESS
         </Button>
       </HStack>
-    </form>
+    </form></>
   );
 };
 
