@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import os from "os";
 import { Worker } from "worker_threads";
-import { FileParamsDto } from "./dtos/FileParamsDto";
+import  FileParamsDto  from "./dtos/FileParamsDto";
 import ProofsDto from "./dtos/ProofsDto";
 import ValuesDto from "./dtos/ValuesDto";
 import { commit, evaluateAt, genCoefficients, genProof, genVerifierContractParams } from "./libs/lib-kzg";
@@ -30,7 +30,7 @@ const measureExecutionTime = async <T>(
 app.post("/coefficients", async (req, res) => {
   try {
     console.log(
-      "COEFFS: Receive request to calculate Coefficients! Processing...",
+      "COEFFS: Received request to calculate Coefficients! Processing...",
     );
     const { values } = req.body as ValuesDto;
     if (!Array.isArray(values)) {
@@ -42,9 +42,9 @@ app.post("/coefficients", async (req, res) => {
       genCoefficients(values.map(BigInt)),
     );
     console.log(
-      `COEFFS: Time taken to process ${values.length} request(s): ${timeTaken}ms`,
+      `COEFFS: Processed ${values.length} value(s) in ${timeTaken}ms`,
     );
-    console.log("COEFFS: Request processed! Sending result...");
+    console.log("COEFFS: Sending Coefficient(s) result...");
     res.status(200).json({ values: results.map(String) });
   } catch (error) {
     console.error(`COEFFS: Error occurred: ${error}. Stopping...`);
@@ -70,12 +70,12 @@ const genChallengeValue = (
 app.post("/commitment", async (req, res) => {
   try {
     console.log(
-      "COMMIT: Receive request to calculate Commitment! Processing...",
+      "COMMIT: Received request to calculate Commitment! Processing...",
     );
     const { values } = req.body as ValuesDto;
     if (!Array.isArray(values)) {
       console.log("COMMIT: BAD REQUEST! Stopping...");
-      res.status(400).send("COMMIT: Invalid values provided!");
+      res.status(400).send("COMMIT: Invalid coefficient(s) provided!");
       return;
     }
     const bigIntCoeffs = values.map(BigInt);
@@ -96,9 +96,9 @@ app.post("/commitment", async (req, res) => {
       return { values: commitment.map(String), challenge: params };
     });
     console.log(
-      `COMMIT: Time taken to process ${values.length} request(s): ${timeTaken}ms`,
+      `COMMIT: Processed ${values.length} coefficient(s) and generated challenge suite in ${timeTaken}ms`,
     );
-    console.log("COMMIT: Request processed! Sending result...");
+    console.log("COMMIT: Sending Commitment and Challenge suite results...");
     res.status(200).json(results);
   } catch (error) {
     console.error(`COMMIT: Error occurred: ${error}. Stopping...`);
@@ -133,19 +133,126 @@ app.post("/commitment", async (req, res) => {
 //   }
 // });
 
-const chunkify = <T>(array: T[], n_workers: number): T[][] => {
+// const chunkify = <T>(array: T[], n_workers: number): T[][] => {
+//   const chunks: T[][] = [];
+//   for (let i = n_workers; i > 0; i--) {
+//     chunks.push(array.splice(0, Math.ceil(array.length / i)));
+//   }
+//   return chunks;
+// };
+
+// @ts-ignore
+// app.post("/proof", async (req, res) => {
+//   try {
+//     console.log(
+//       "PROOFS: Receive request to calculate Proof! May take a long time to processing...",
+//     );
+//     const { coeffs, files, commit } = req.body as ProofsDto;
+//     if (
+//       !Array.isArray(coeffs) ||
+//       !Array.isArray(commit) ||
+//       !Array.isArray(files) ||
+//       files.some((file) => file.fileProof.length !== 0)
+//     ) {
+//       console.log("PROOF: BAD REQUEST! Stopping...");
+//       res.status(400).send("PROOF: Invalid values provided!");
+//       return;
+//     }
+//
+//     const bigIntCoeffs = coeffs.map(BigInt);
+//     const bigIntCommit = commit.map(BigInt);
+//     const chunks = chunkify(files, CONCURRENT_WORKER);
+//     const resultProofs: ProofsDto = {
+//       coeffs: coeffs,
+//       files: [],
+//       commit: commit,
+//     };
+//
+//     const processChunks = async () => {
+//       const workerPromises = chunks.map((chunk, i) => {
+//         return new Promise<void>((resolve, reject) => {
+//           const worker = new Worker("./server/workers/worker.js", {
+//             workerData: {
+//               coeffs: bigIntCoeffs,
+//               chunks: chunk,
+//               commit: bigIntCommit,
+//               path: "./ProofWorker.ts",
+//             },
+//           });
+//           worker.on("message", (resultFiles) => {
+//             console.log(`PROOFS: Worker ${i} completed!`);
+//             resultFiles.forEach((file: FileParamsDto) =>
+//               resultProofs.files.push(file),
+//             );
+//             resolve();
+//           });
+//           worker.on("error", reject);
+//           worker.on("exit", (code) => {
+//             if (code !== 0) {
+//               reject(
+//                 new Error(`PROOFS: Worker stopped with exit code ${code}`),
+//               );
+//             }
+//           });
+//         });
+//       });
+//       return Promise.all(workerPromises);
+//     };
+//
+//     const { timeTaken } = await measureExecutionTime(processChunks);
+//
+//     console.log(
+//       `PROOFS: Time taken to process ${coeffs.length} request(s): ${timeTaken}ms`,
+//     );
+//     console.log("PROOFS: Request processed! Sending result...");
+//     return res.status(200).json(resultProofs);
+//   } catch (error) {
+//     console.error(`PROOFS: Error occurred: ${error}. Stopping...`);
+//     res.status(500).send("PROOF: An unknown error occurred!");
+//   }
+// });
+
+const chunkify = <T>(array: T[], chunkSize: number): T[][] => {
   const chunks: T[][] = [];
-  for (let i = n_workers; i > 0; i--) {
-    chunks.push(array.splice(0, Math.ceil(array.length / i)));
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize));
   }
   return chunks;
+};
+
+const processChunk = (coeffs: bigint[], commit: bigint[], chunk: FileParamsDto[]): Promise<FileParamsDto[]> => {
+  return new Promise<FileParamsDto[]>((resolve, reject) => {
+    console.log(`PROOFS: Starting a new worker for a chunk with ${chunk.length} files.`);
+    const worker = new Worker("./server/workers/worker.js", {
+      workerData: {
+        coeffs,
+        chunks: chunk,
+        commit,
+        path: "./ProofWorker.ts",
+      },
+    });
+    worker.on("message", (resultFiles: FileParamsDto[]) => {
+      console.log(`PROOFS: Worker finished processing a chunk.`);
+      resolve(resultFiles);
+    });
+    worker.on("error", (error) => {
+      console.error(`PROOFS: Worker encountered an error: ${error}`);
+      reject(error);
+    });
+    worker.on("exit", (code) => {
+      if (code !== 0) {
+        console.error(`PROOFS: Worker stopped with exit code ${code}`);
+        reject(new Error(`PROOFS: Worker stopped with exit code ${code}`));
+      }
+    });
+  });
 };
 
 // @ts-ignore
 app.post("/proof", async (req, res) => {
   try {
     console.log(
-      "PROOFS: Receive request to calculate Proof! May take a long time to processing...",
+      "PROOFS: Received request to calculate Proof! May take a long time to process...",
     );
     const { coeffs, files, commit } = req.body as ProofsDto;
     if (
@@ -155,63 +262,45 @@ app.post("/proof", async (req, res) => {
       files.some((file) => file.fileProof.length !== 0)
     ) {
       console.log("PROOF: BAD REQUEST! Stopping...");
-      res.status(400).send("PROOF: Invalid values provided!");
+      res.status(400).send("PROOF: Invalid parameter(s) provided!");
       return;
     }
 
     const bigIntCoeffs = coeffs.map(BigInt);
     const bigIntCommit = commit.map(BigInt);
-    const chunks = chunkify(files, CONCURRENT_WORKER);
+    const chunks = chunkify(files, 500);
     const resultProofs: ProofsDto = {
-      coeffs: coeffs,
+      coeffs,
       files: [],
-      commit: commit,
+      commit,
     };
 
+    console.log(`PROOFS: Processing ${chunks.length} chunks...`);
+
     const processChunks = async () => {
-      const workerPromises = chunks.map((chunk, i) => {
-        return new Promise<void>((resolve, reject) => {
-          // Added reject to handle errors
-          const worker = new Worker("./server/workers/worker.js", {
-            workerData: {
-              coeffs: bigIntCoeffs,
-              chunks: chunk,
-              commit: bigIntCommit,
-              path: "./ProofWorker.ts",
-            },
-          });
-          worker.on("message", (resultFiles) => {
-            console.log(`PROOFS: Worker ${i} completed!`);
-            resultFiles.forEach((file: FileParamsDto) =>
-              resultProofs.files.push(file),
-            );
-            resolve();
-          });
-          worker.on("error", reject);
-          worker.on("exit", (code) => {
-            if (code !== 0) {
-              reject(
-                new Error(`PROOFS: Worker stopped with exit code ${code}`),
-              );
-            }
-          });
-        });
-      });
-      return Promise.all(workerPromises);
+      for (const [index, chunk] of chunks.entries()) {
+        console.log(`PROOFS: Processing chunk ${index + 1} of ${chunks.length}`);
+        const smallerChunks = chunkify(chunk, CONCURRENT_WORKER);
+        const promises = smallerChunks.map(smallerChunk => processChunk(bigIntCoeffs, bigIntCommit, smallerChunk));
+        const results = await Promise.all(promises);
+        results.forEach(resultFiles => resultProofs.files.push(...resultFiles));
+        console.log(`PROOFS: Completed processing chunk ${index + 1} of ${chunks.length}`);
+      }
     };
 
     const { timeTaken } = await measureExecutionTime(processChunks);
 
     console.log(
-      `PROOFS: Time taken to process ${coeffs.length} request(s): ${timeTaken}ms`,
+      `PROOFS: Processed ${coeffs.length} value(s) in ${timeTaken}ms`,
     );
-    console.log("PROOFS: Request processed! Sending result...");
+    console.log("PROOFS: Sending proof(s) result...");
     return res.status(200).json(resultProofs);
   } catch (error) {
-    console.error(`PROOFS: Error occurred: ${error}. Stopping...`);
+    console.error(`PROOFS: Error occurred: ${error}. Stopping...`, error);
     res.status(500).send("PROOF: An unknown error occurred!");
   }
 });
+
 
 app.listen(port, () =>
   console.log(`SERVER: Server is listening at http://localhost:${port}`),
