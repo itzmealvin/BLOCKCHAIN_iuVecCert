@@ -15,7 +15,7 @@ const port = 8000;
 const CONCURRENT_WORKER = os.cpus().length;
 
 app.use(cors());
-app.use(express.json({ limit: "2mb" }));
+app.use(express.json({ limit: "15mb" }));
 
 app.post("/coefficients", async (req, res) => {
   try {
@@ -144,8 +144,8 @@ app.post("/proof", async (req, res) => {
       !Array.isArray(files) ||
       files.some((file) => file.fileProof.length !== 0)
     ) {
-      console.log("PROOF: BAD REQUEST! Stopping...");
-      res.status(400).send("PROOF: Invalid parameter(s) provided!");
+      console.log("PROOFS: BAD REQUEST! Stopping...");
+      res.status(400).send("PROOFS: Invalid parameter(s) provided!");
       return;
     }
 
@@ -163,7 +163,7 @@ app.post("/proof", async (req, res) => {
     };
 
     const progressBar = new ProgressBar(
-      "PROOF: Processed [:bar] :current/:total chunks (:percent) ETA: :eta s \n",
+      "PROOFS: Processed [:bar] :current/:total chunks (:percent) ETA: :eta s \n",
       {
         complete: "=",
         incomplete: "-",
@@ -227,7 +227,7 @@ app.post("/proof", async (req, res) => {
     return res.status(200).json(resultProofs);
   } catch (error) {
     console.error(`PROOFS: Error occurred: ${error}. Stopping...`);
-    res.status(500).send("PROOF: An unknown error occurred!");
+    res.status(500).send("PROOFS: An unknown error occurred!");
   }
 });
 
