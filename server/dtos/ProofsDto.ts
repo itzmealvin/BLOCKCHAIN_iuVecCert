@@ -1,4 +1,4 @@
-import  FileParamsDto  from "./FileParamsDto";
+import FileParamsDto from "./FileParamsDto";
 
 export default interface ProofsDto {
   coeffs: string[];

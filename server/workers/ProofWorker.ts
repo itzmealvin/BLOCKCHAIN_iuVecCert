@@ -1,5 +1,5 @@
 import { parentPort, workerData } from "worker_threads";
-import  FileParamsDto  from "../dtos/FileParamsDto";
+import FileParamsDto from "../dtos/FileParamsDto";
 import { genProof, genVerifierContractParams } from "../libs/lib-kzg";
 
 function genProofs(

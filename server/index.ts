@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import os from "os";
 import { Worker } from "worker_threads";
-import  FileParamsDto  from "./dtos/FileParamsDto";
+import FileParamsDto from "./dtos/FileParamsDto";
 import ProofsDto from "./dtos/ProofsDto";
 import ValuesDto from "./dtos/ValuesDto";
 import { commit, evaluateAt, genCoefficients, genProof, genVerifierContractParams } from "./libs/lib-kzg";
@@ -135,7 +135,7 @@ const chunkify = <T>(array: T[], chunkSize: number): T[][] => {
 app.post("/proof", async (req, res) => {
   try {
     console.log(
-      "PROOFS: Received request to generate Proof! May take a long time to process..."
+      "PROOFS: Received request to generate Proof! May take a long time to process...",
     );
     const { coeffs, files, commit } = req.body as ProofsDto;
     if (
@@ -154,7 +154,7 @@ app.post("/proof", async (req, res) => {
     const chunkSize = Math.ceil(files.length / (CONCURRENT_WORKER * 2));
     const chunks = chunkify(files, chunkSize);
     console.log(
-      `PROOFS: Will split ${files.length} file(s) into ${chunkSize} file(s) * ${chunks.length} chunks`
+      `PROOFS: Will split ${files.length} file(s) into ${chunkSize} file(s) * ${chunks.length} chunks`,
     );
     const resultProofs: ProofsDto = {
       coeffs: coeffs,
@@ -169,7 +169,7 @@ app.post("/proof", async (req, res) => {
         incomplete: "-",
         width: 30,
         total: chunks.length,
-      }
+      },
     );
 
     progressBar.render();
@@ -197,7 +197,7 @@ app.post("/proof", async (req, res) => {
                   console.log(
                     `PROOFS: Worker ${workerIndex} encountered an error on sub-chunk ${
                       subIndex + 1
-                    }/${chunk.length} of chunk ${chunkIndex + 1}`
+                    }/${chunk.length} of chunk ${chunkIndex + 1}`,
                   );
                   reject(error);
                 });
@@ -207,13 +207,13 @@ app.post("/proof", async (req, res) => {
                       new Error(
                         `PROOFS: Worker ${workerIndex} stopped with exit code ${code} on sub-chunk ${
                           subIndex + 1
-                        }/${chunk.length} of chunk ${chunkIndex + 1}`
-                      )
+                        }/${chunk.length} of chunk ${chunkIndex + 1}`,
+                      ),
                     );
                   }
                 });
-              })
-          )
+              }),
+          ),
         );
         progressBar.tick();
       }
@@ -221,7 +221,7 @@ app.post("/proof", async (req, res) => {
 
     const { timeTaken } = await measureExecutionTime(() => processChunks(chunks));
     console.log(
-      `PROOFS: Generated ${coeffs.length} proof(s) in ${timeTaken}ms`
+      `PROOFS: Generated ${coeffs.length} proof(s) in ${timeTaken}ms`,
     );
     console.log("PROOFS: Sending Proof results...");
     return res.status(200).json(resultProofs);
