@@ -1,5 +1,5 @@
 {
-  "name": "server-iuVerCert",
+  "name": "iu-vercert-server",
   "version": "1.0.0",
   "description": "A server implementation for IU-VerCert",
   "main": "index.ts",
