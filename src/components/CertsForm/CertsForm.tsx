@@ -84,37 +84,38 @@ const CertsForm = ({ mode }: Props) => {
   // };
 
   return (<>
-  {mode === "CREATE" ?
-    <Heading as="h1" size="md">
-      Upload your certificate batch (minimum 2 required)!
-    </Heading> :
-    <Heading as="h1" size="md">
-      Upload your embedded certificate to verify/revoke it!
-    </Heading>}
-    <form
-      onSubmit={handleSubmit((data) => {
-        mode === "CREATE" ? onCreateSubmit(data) : onVerifySubmit(data);
-      })}
-    >
-      <HStack spacing={5}>
-        <FormControl isInvalid={!!errors.certificates}>
-          <FormLabel htmlFor="certificates">
-            {mode === "CREATE" ? "" : "Embedded"} Certificates:
-          </FormLabel>
-          <Input
-            {...register("certificates")}
-            id="certificates"
-            type="file"
-            accept=".pdf"
-            multiple={true}
-          />
-          <FormErrorMessage>{errors.certificates?.message}</FormErrorMessage>
-        </FormControl>
-        <Button colorScheme="blue" variant="solid" type="submit" marginTop={3}>
-          PROCESS
-        </Button>
-      </HStack>
-    </form></>
+      {mode === "CREATE" ?
+        <Heading as="h1" size="md">
+          Upload your certificate batch (minimum 2 required)!
+        </Heading> :
+        <Heading as="h1" size="md">
+          Upload your embedded certificate to verify/revoke it!
+        </Heading>}
+      <form
+        onSubmit={handleSubmit((data) => {
+          mode === "CREATE" ? onCreateSubmit(data) : onVerifySubmit(data);
+        })}
+      >
+        <HStack spacing={5}>
+          <FormControl isInvalid={!!errors.certificates}>
+            <FormLabel htmlFor="certificates">
+              {mode === "CREATE" ? "" : "Embedded"} Certificates:
+            </FormLabel>
+            <Input
+              {...register("certificates")}
+              id="certificates"
+              type="file"
+              accept=".pdf"
+              multiple={true}
+            />
+            <FormErrorMessage>{errors.certificates?.message}</FormErrorMessage>
+          </FormControl>
+          <Button colorScheme="blue" variant="solid" type="submit" marginTop={3}>
+            PROCESS
+          </Button>
+        </HStack>
+      </form>
+    </>
   );
 };
 

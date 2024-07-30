@@ -131,12 +131,12 @@ const DeployBlockchain = () => {
 
   return (
     <>
-    {commitObj ?
-      <Heading as="h1" size="md">
-        Now deploy the storing contract with using these given information!
-      </Heading> :  <Heading as="h1" size="md">
-        Calculating commitment for the given polynomials and generating unique challenge point!
-      </Heading> }
+      {commitObj ?
+        <Heading as="h1" size="md">
+          Now deploy the storing contract with using these given information!
+        </Heading> : <Heading as="h1" size="md">
+          Calculating commitment for the given polynomials and generating unique challenge point!
+        </Heading>}
       <VStack spacing={10}>
         <Button
           colorScheme="blue"
@@ -149,24 +149,22 @@ const DeployBlockchain = () => {
         >
           DEPLOY
         </Button>
-        {commitObj?.challenge && ( <> <List spacing={3}>
-          <ListItem>
-            <ListIcon as={FaUniversity} color="black.500" />
-            CN: {issuerCN}
-          </ListItem>
-              <ListItem key="challenge">
-                <ListIcon as={FaQuestionCircle} color="black.500" />
-                Challenge: ({truncateString(commitObj.challenge.index, 5)},
-                {truncateString(commitObj.challenge.value, 5)})
-              </ListItem>
-              {commitObj?.challenge.commitment.map((value, index) => (
-                <ListItem key={value}>
-                  <ListIcon as={FaCheckCircle} color="black.500" />
-                  Commitment {index}: {value}
-                </ListItem>
-              ))}
-        </List> </>
-          )}
+        {commitObj?.challenge && (<> <List spacing={3}>
+            <ListItem>
+              <ListIcon as={FaUniversity} color="black.500" />
+              CN: {issuerCN}
+            </ListItem>
+            <ListItem key="challenge">
+              <ListIcon as={FaQuestionCircle} color="black.500" />
+              Challenge: ({truncateString(commitObj.challenge.index, 5)}, {truncateString(commitObj.challenge.value, 5)})
+            </ListItem>
+            <ListItem key="commitment">
+              <ListIcon as={FaCheckCircle} color="black.500" />
+              Commitment:
+              ({truncateString(commitObj.challenge.commitment[0], 5)}, {truncateString(commitObj.challenge.commitment[1], 5)})
+            </ListItem>
+          </List> </>
+        )}
         <form
           onSubmit={handleSubmit((data, event) => {
             event?.preventDefault();

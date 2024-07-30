@@ -24,7 +24,7 @@ const CalculateCoeffs = () => {
         <Heading as="h1" size="md">
           These are the coefficients of the polynomials generated from your
           certificates!
-        </Heading> :        <Heading as="h1" size="md">
+        </Heading> : <Heading as="h1" size="md">
           Calculating coefficients for the polynomials generated from your
           certificates!
         </Heading>

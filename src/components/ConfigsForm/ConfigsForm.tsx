@@ -60,9 +60,9 @@ const ConfigsForm = () => {
       {!connectedAddress ?
         <Heading as="h1" size="md">
           Connect a wallet to begin verification!
-        </Heading> :   <Heading as="h1" size="md">
-        Upload your given configuration permission file!
-      </Heading>
+        </Heading> : <Heading as="h1" size="md">
+          Upload your given configuration permission file!
+        </Heading>
       }
       <form
         onSubmit={handleSubmit((data) => {
