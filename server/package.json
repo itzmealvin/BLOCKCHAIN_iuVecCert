@@ -1,14 +1,13 @@
 {
   "name": "server-iuVerCert",
-  "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "1.0.0",
+  "description": "A server implementation for IU-VerCert",
+  "main": "index.ts",
   "scripts": {
     "start": "tsx watch index.ts"
   },
-  "keywords": [],
   "author": "Quang-Dieu Nguyen",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@guildofweavers/galois": "^0.4.22",
     "cors": "^2.8.5",
