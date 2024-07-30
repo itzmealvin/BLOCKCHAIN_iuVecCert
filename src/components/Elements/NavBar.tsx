@@ -1,8 +1,8 @@
 import { Heading, HStack, Image, Link as ChakraLink } from "@chakra-ui/react";
 import { Link as NavLink } from "react-router-dom";
 import logo from "../../assets/favicon.png";
-import ConnectWeb3Menu from "../Web3Auth/ConnectWeb3Menu";
 import { tabs } from "../route";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const NavBar = () => {
   return (
@@ -24,7 +24,7 @@ const NavBar = () => {
             {tab.name}
           </ChakraLink>
         ))}
-        <ConnectWeb3Menu />
+        <ConnectButton accountStatus="address" chainStatus="none" showBalance={false} />
       </HStack>
     </HStack>
   );

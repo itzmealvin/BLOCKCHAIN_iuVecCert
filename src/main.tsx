@@ -7,6 +7,14 @@ import { RouterProvider } from "react-router-dom";
 import router from "./components/route";
 import "./index.css";
 import theme from "./theme";
+import '@rainbow-me/rainbowkit/styles.css';
+import {
+  getDefaultConfig, RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
+import { WagmiProvider } from 'wagmi';
+import {
+sepolia
+} from 'wagmi/chains';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,19 +23,28 @@ const queryClient = new QueryClient({
       refetchOnMount: false,
       refetchOnReconnect: false,
       retry: false, // Do not auto retry
-      cacheTime: 1000 * 60 * 60 * 24, // Cache up-to 1 day
     },
   },
+});
+
+const config = getDefaultConfig({
+  appName: 'IU_VerCert',
+  projectId: 'PROJECT_ID',
+  chains: [sepolia],
 });
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>
         <RouterProvider router={router} />
         <ReactQueryDevtools />
+          </RainbowKitProvider>
       </QueryClientProvider>
+     </WagmiProvider>
     </ChakraProvider>
   </React.StrictMode>,
 );
