@@ -45,12 +45,12 @@ class ConfigsServices {
     return forge.pki.certificateFromPem(certChain);
   }
 
-  checkValidityDate(cert: forge.pki.Certificate): boolean {
-    const now = new Date();
-    const notBefore = new Date(cert.validity.notBefore);
-    const notAfter = new Date(cert.validity.notAfter);
-    return now >= notBefore && now <= notAfter;
-  }
+  // checkValidityDate(cert: forge.pki.Certificate): boolean {
+  //   const now = new Date();
+  //   const notBefore = new Date(cert.validity.notBefore);
+  //   const notAfter = new Date(cert.validity.notAfter);
+  //   return now >= notBefore && now <= notAfter;
+  // }
 
   getField(cert: forge.pki.Certificate, fieldName: "CN" | "O"): string {
     return cert.subject?.getField(fieldName)?.value;
