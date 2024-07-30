@@ -1,6 +1,6 @@
 import { mountStoreDevtool } from "simple-zustand-devtools";
 import { create } from "zustand";
-import { StringValues } from "../../services/calculateServices";
+import { StringValues } from "../services/calculateServices";
 
 interface ResultsStates {
   coeffs: { calculatedCoeffs: string[] };

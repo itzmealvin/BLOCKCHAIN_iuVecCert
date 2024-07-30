@@ -1,6 +1,6 @@
 import { mountStoreDevtool } from "simple-zustand-devtools";
 import { create } from "zustand";
-import { FileDetails, FileProps } from "../../services/FilesServices";
+import { FileDetails, FileProps } from "../services/FilesServices";
 
 interface FilesStates {
   filesProps: FileProps[];

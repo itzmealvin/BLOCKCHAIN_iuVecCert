@@ -1,6 +1,6 @@
 import { mountStoreDevtool } from "simple-zustand-devtools";
 import { create } from "zustand";
-import { Configs } from "../../services/ConfigsServices";
+import { Configs } from "../services/ConfigsServices";
 
 interface ConfigsStates {
   configs?: Configs;
