@@ -163,7 +163,7 @@ app.post("/proof", async (req, res) => {
     };
 
     const progressBar = new ProgressBar(
-      "PROOF: Processed [:bar] :current/:total chunks (:percent) ETA:: eta s \n",
+      "PROOF: Processed [:bar] :current/:total chunks (:percent) ETA: :eta s \n",
       {
         complete: "=",
         incomplete: "-",
