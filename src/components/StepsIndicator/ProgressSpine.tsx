@@ -12,7 +12,7 @@ import {
   StepTitle,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { StepsDetails } from "./useStepsStores";
+import { StepsDetails } from "../../hooks/useStepsStores";
 
 interface Props {
   stepDetails: StepsDetails[];

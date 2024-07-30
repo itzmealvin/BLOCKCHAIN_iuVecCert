@@ -1,17 +1,18 @@
 import { Box, Center, Heading, VStack } from "@chakra-ui/react";
-import CertsForm from "./CertsForm/CertsForm";
-import useWeb3AuthStore from "./Web3Auth/useWeb3AuthStore";
+import CertsForm from "../components/CertsForm";
+import { useEthersSigner } from "../services/BlockchainServices";
 
 const RevokeCerts = () => {
-  const { connectedAddress } = useWeb3AuthStore();
+const signer = useEthersSigner();
+
 
   return (
     <>
       <Box padding={10}>
-        <Heading as="h1" size="md" textAlign="center">
-          {!connectedAddress
+        <Heading as="h1" size="lg" textAlign="center" paddingBottom={10}>
+          {!signer
             ? "Connect a wallet to begin revoke certificate!"
-            : "Upload an embedded certificate to revoke it"}
+            : "Issuer Path - Revoking Certificate Validity"}
         </Heading>
       </Box>
       <Center>

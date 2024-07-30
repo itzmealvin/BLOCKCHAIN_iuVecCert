@@ -13,7 +13,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaCheckCircle, FaQuestionCircle, FaUniversity } from "react-icons/fa";
@@ -21,11 +20,11 @@ import { toast } from "react-toastify";
 import { z } from "zod";
 import CertCommitment from "../../compiled";
 import { useCommit } from "../../hooks/useCalculations";
-import BlockchainServices, { ContractProps } from "../../services/BlockchainServices";
-import useConfigsStore from "../ConfigsForm/useConfigsStore";
-import { useIssuerStore } from "../StepsIndicator/useStepsStores";
-import useWeb3AuthStore from "../Web3Auth/useWeb3AuthStore";
-import useResultsStore from "./useResultsStore";
+import BlockchainServices, { ContractProps, useEthersSigner } from "../../services/BlockchainServices";
+import useConfigsStore from "../../hooks/useConfigsStore";
+import { useIssuerStore } from "../../hooks/useStepsStores";
+import useWeb3Store from "../../hooks/useWeb3Store";
+import useResultsStore from "../../hooks/useResultsStore";
 
 const schema = z.object({
   batchDesc: z
@@ -54,11 +53,11 @@ const schema = z.object({
 type InputData = z.infer<typeof schema>;
 
 const DeployBlockchain = () => {
+  const signer = useEthersSigner();
   const {
-    connectedDeployer: currentDeployer,
     contractAddress,
     setContractAddress,
-  } = useWeb3AuthStore();
+  } = useWeb3Store();
   const { coeffs, setCommitResult } = useResultsStore();
   const { issuerCN } = useConfigsStore();
   const { toggleDone } = useIssuerStore();
@@ -82,7 +81,8 @@ const DeployBlockchain = () => {
   error ? toast.error(error.message) : null;
 
   const onHandleSubmit = (data: InputData) => {
-    if (commitObj?.challenge) {
+    if (!(signer && commitObj?.challenge)) {
+    } else {
       setCommitResult(commitObj);
       setContractToDeploy((existingContract) => ({
         ...existingContract,
@@ -100,9 +100,9 @@ const DeployBlockchain = () => {
   };
 
   const handleDeploy = async () => {
-    if (currentDeployer) {
+    if (signer) {
       const promiseResult = BlockchainServices.deployContract(
-        currentDeployer,
+        signer,
         contractToDeploy,
       );
       toast
@@ -191,14 +191,14 @@ const DeployBlockchain = () => {
       {contractAddress && txnHash && (
         <>
           <Text>
-            Transaction Hash:{" "}
+
             <Link
               color="blue.500"
               target="_blank"
               rel="noopener noreferrer"
               href={`https://sepolia.etherscan.io/tx/${txnHash}`}
             >
-              View on Sepolia Scan
+              View transaction on Sepolia Explorer
             </Link>
           </Text>
           <Text>

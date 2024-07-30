@@ -6,17 +6,18 @@ import useProof from "../../hooks/useProof";
 import fileDownload from "js-file-download";
 import FilesServices, { MetaDataObj } from "../../services/FilesServices";
 import { Proofs } from "../../services/proofService";
-import useFilesStore from "../CertsForm/useFilesStore";
-import useConfigsStore from "../ConfigsForm/useConfigsStore";
-import { useIssuerStore } from "../StepsIndicator/useStepsStores";
-import useWeb3AuthStore from "../Web3Auth/useWeb3AuthStore";
-import useResultsStore from "./useResultsStore";
+import useFilesStore from "../../hooks/useFilesStore";
+import useConfigsStore from "../../hooks/useConfigsStore";
+import { useIssuerStore } from "../../hooks/useStepsStores";
+import useWeb3Store from "../../hooks/useWeb3Store";
+import useResultsStore from "../../hooks/useResultsStore";
+import { resetIssuerStores } from "../../services/resetStore";
 
 const EmbedProof = () => {
   const { filesDetails, filesProps } = useFilesStore();
   const { coeffs, commit } = useResultsStore();
   const { configs } = useConfigsStore();
-  const { contractAddress } = useWeb3AuthStore();
+  const { contractAddress } = useWeb3Store();
   const { toggleDone } = useIssuerStore();
   const prepareProofObj: Proofs = {
     coeffs: coeffs.calculatedCoeffs,
@@ -46,14 +47,17 @@ const EmbedProof = () => {
         });
       setDisabled(!disabled);
       toggleDone();
+      resetIssuerStores();
     }
   };
 
   return (
     <>
-      <Heading as="h1" size="md">
+      {proofObj ? <Heading as="h1" size="md">
         Distribute the embedded certificates to the students, that's the end of this process
-      </Heading>
+      </Heading> : <Heading as="h1" size="md">
+        Generating proof parameters for the given polynomials per each file!
+      </Heading>}
       <Button
         colorScheme="blue"
         variant="solid"

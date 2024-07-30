@@ -3,7 +3,7 @@ import IssuerPage from "../pages/IssuerPage";
 import ErrorPage from "../pages/ErrorPage";
 import LandingPage from "../pages/LandingPage";
 import Layout from "../pages/Layout";
-import RevokeCerts from "./RevokeCerts";
+import RevokeCerts from "../pages/RevokeCerts";
 import VerifierPage from "../pages/VerifierPage";
 
 export const tabs = [

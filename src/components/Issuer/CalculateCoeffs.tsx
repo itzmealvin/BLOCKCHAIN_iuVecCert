@@ -3,9 +3,9 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useCoeffs } from "../../hooks/useCalculations";
 import { StringValues } from "../../services/calculateServices";
-import useFilesStore from "../CertsForm/useFilesStore";
-import { useIssuerStore } from "../StepsIndicator/useStepsStores";
-import useResultsStore from "./useResultsStore";
+import useFilesStore from "../../hooks/useFilesStore";
+import { useIssuerStore } from "../../hooks/useStepsStores";
+import useResultsStore from "../../hooks/useResultsStore";
 
 const CalculateCoeffs = () => {
   const { filesProps } = useFilesStore();

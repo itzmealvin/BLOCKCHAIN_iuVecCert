@@ -1,8 +1,8 @@
 import { Center, VStack } from "@chakra-ui/react";
-import CertsForm from "../components/CertsForm/CertsForm";
+import CertsForm from "../components/CertsForm";
 import Navigator from "../components/StepsIndicator/Navigator";
 import ProgressSpine from "../components/StepsIndicator/ProgressSpine";
-import { useVerifierStore, verifierSteps } from "../components/StepsIndicator/useStepsStores";
+import { useVerifierStore, verifierSteps } from "../hooks/useStepsStores";
 
 const VerifierPage = () => {
   const { isDone, currentStep, maxStep, nextStep, prevStep, resetStep } =

@@ -1,9 +1,9 @@
 import { Center, VStack } from "@chakra-ui/react";
-import CertsForm from "../components/CertsForm/CertsForm";
-import ConfigsForm from "../components/ConfigsForm/ConfigsForm";
+import CertsForm from "../components/CertsForm";
+import ConfigsForm from "../components/ConfigsForm";
 import Navigator from "../components/StepsIndicator/Navigator";
 import ProgressSpine from "../components/StepsIndicator/ProgressSpine";
-import { issuerSteps, useIssuerStore } from "../components/StepsIndicator/useStepsStores";
+import { issuerSteps, useIssuerStore } from "../hooks/useStepsStores";
 import CalculateCoeffs from "../components/Issuer/CalculateCoeffs";
 import DeployBlockchain from "../components/Issuer/DeployBlockchain";
 import EmbedProof from "../components/Issuer/EmbedProof";
