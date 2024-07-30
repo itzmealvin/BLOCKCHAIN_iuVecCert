@@ -3,6 +3,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import ConfirmModal from "../Elements/ConfirmModal";
+import { resetIssuerStores } from "../../services/resetStore";
 
 interface Props {
   isDone: boolean;
@@ -22,7 +23,7 @@ const Navigator = ({
                      resetStep,
                    }: Props) => {
   const onReset = () => {
-    resetStep();
+    resetIssuerStores();
     toast.success("All progress cleared!");
   };
 
