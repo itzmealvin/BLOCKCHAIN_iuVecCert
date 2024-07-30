@@ -136,7 +136,7 @@ const polyCommit = (
 };
 
 /*
- * @return A the coefficients to the quotient polynomial used to generate a
+ * @return The coefficients to the quotient polynomial used to generate a
  *         KZG proof.
  * @param coefficients The coefficients of the polynomial.
  * @param xVal The x-value for the polynomial evaluation proof.
@@ -483,7 +483,7 @@ const genCoefficients = (
 /*
  * Performs a pairing check in the style of EIP-197.
  * See: https://eips.ethereum.org/EIPS/eip-197
- * @return True if a EIP-197 style pairing check is valid, and false otherwise.
+ * @return True if an EIP-197 style pairing check is valid, and false otherwise.
  * @param inputs An array of PairingInputs such that
  * input[0] * input[1] * ... * input[n] = 1
  */
