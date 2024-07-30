@@ -1,5 +1,7 @@
-import { BrowserProvider, ethers, InterfaceAbi } from "ethers";
-import { toast } from "react-toastify";
+import { BrowserProvider, ethers, InterfaceAbi, JsonRpcSigner, verifyMessage } from "ethers";
+import { Account, Chain, Client, Transport } from "viem";
+import { Config, useConnectorClient } from "wagmi";
+import { useMemo } from "react";
 
 export interface ContractDetails {
   abi: InterfaceAbi;
@@ -7,67 +9,36 @@ export interface ContractDetails {
 }
 
 export interface ContractProps extends ContractDetails {
-  abi: InterfaceAbi;
   bytecode: string;
-  parameters: string[];
+  parameters?: string[];
 }
 
 class BlockchainServices {
   constructor(private _networkID = "0xaa36a7") {
   }
 
-  getProvider(network?: "sepolia") {
-    if (window.ethereum === null && network) {
-      toast.error("MetaMask is not installed! Only VERIFY mode available.");
-      return ethers.getDefaultProvider(network);
-    } else {
-      return new ethers.BrowserProvider(window.ethereum);
-    }
+  clientToSigner(client: Client<Transport, Chain, Account>) {
+    const { account, chain, transport } = client;
+    const network = {
+      chainId: chain.id,
+      name: chain.name,
+      ensAddress: chain.contracts?.ensRegistry?.address,
+    };
+    const provider = new BrowserProvider(transport, network);
+    return new JsonRpcSigner(provider, account.address);
   }
 
-  async isOnRightNetwork(wallet: BrowserProvider): Promise<boolean> {
-    const currentNetworkID = await wallet.send("eth_chainId", []);
-    if (currentNetworkID !== this._networkID) {
-      toast.warning("Please switch to the right network!");
-      return false;
-    }
-    return true;
-  }
-
-  async switchNetwork(wallet: BrowserProvider) {
-    wallet
-      .send("wallet_switchEthereumChain", [{ chainId: this._networkID }])
-      .catch(async (Error) => {
-        if (Error.code === 4902) {
-          await wallet.send("wallet_addEthereumChain", [
-            {
-              chainId: this._networkID,
-              rpcUrls: ["https://ethereum-sepolia.publicnode.com"],
-              chainName: "Sepolia",
-              nativeCurrency: {
-                name: "ETH",
-                symbol: "ETH",
-                decimals: 18,
-              },
-              blockExplorerUrls: ["https://sepolia.etherscan.io/"],
-            },
-          ]);
-        }
-      });
-  }
-
-  async performSignIn(wallet: BrowserProvider) {
-    const currentSigner = await wallet.getSigner();
+  async performSignIn(currentSigner: JsonRpcSigner, signInMsg?: string) {
     const currentAddress = currentSigner.address;
-    const signInMsg = `I hereby confirm I am the owner of address ${currentAddress} to use IU-VerCert!\n\nChain ID: ${
+    const message = signInMsg || `I hereby confirm I am the owner of address ${currentAddress} to use IU-VerCert!\n\nChain ID: ${
       this._networkID
     }\n\nIssued At: ${new Date().toLocaleString()}.`;
-    await wallet.send("personal_sign", [signInMsg, currentAddress]);
-    return { signer: currentSigner, address: currentAddress };
+    const sig = await currentSigner.signMessage(message);
+    return verifyMessage(message, sig) === currentAddress;
   }
 
   async deployContract(
-    deployer: ethers.Signer,
+    deployer: JsonRpcSigner,
     contractDetails: ContractProps,
   ): Promise<{ hash: string; address: string }> {
     const { abi, bytecode, parameters } = contractDetails;
@@ -82,33 +53,22 @@ class BlockchainServices {
     };
   }
 
-  getContract(
-    contractDetails: ContractDetails,
-    issuer?: ethers.Signer,
-  ): ethers.Contract | undefined {
-    const { abi, address } = contractDetails;
-    if (address && issuer) {
-      return new ethers.Contract(address, abi, issuer);
-    } else if (address) {
-      return new ethers.Contract(address, abi);
-    }
-  }
-
-  // @TODO: Implement revoke cert contract call
-  // async revokeCert(
-  //   hashValue: string,
-  //   commitContract: ethers.Contract
-  // ): Promise<void> {}
-
-  // @TODO: Implement verify challenge contract call
-  // async verifyChallenge(
-  //   commitContract: ethers.Contract
-  // ): Promise<void> {}
-
-  // @TODO: Implement verify cert contract call
-  // async verifyCert(
-  //  certParams: FileProps
-  // ): Promise<boolean> {}
+  // getContract(
+  //   contractDetails: ContractDetails,
+  //   issuer?: ethers.Signer
+  // ): ethers.Contract | undefined {
+  //   const { abi, address } = contractDetails;
+  //   if (address) {
+  //     return new ethers.Contract(address, abi, issuer);
+  //   }
+  //   return undefined;
+  // }
 }
 
-export default new BlockchainServices();
+const blockchainServices = new BlockchainServices();
+export default blockchainServices;
+
+export function useEthersSigner({ chainId }: { chainId?: number } = {}) {
+  const { data: client } = useConnectorClient<Config>({ chainId });
+  return useMemo(() => (client ? blockchainServices.clientToSigner(client) : undefined), [client]);
+}

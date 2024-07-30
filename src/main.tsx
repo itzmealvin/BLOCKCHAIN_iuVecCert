@@ -7,14 +7,10 @@ import { RouterProvider } from "react-router-dom";
 import router from "./components/route";
 import "./index.css";
 import theme from "./theme";
-import '@rainbow-me/rainbowkit/styles.css';
-import {
-  getDefaultConfig, RainbowKitProvider,
-} from "@rainbow-me/rainbowkit";
-import { WagmiProvider } from 'wagmi';
-import {
-sepolia
-} from 'wagmi/chains';
+import "@rainbow-me/rainbowkit/styles.css";
+import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { WagmiProvider } from "wagmi";
+import { sepolia } from "wagmi/chains";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,8 +24,8 @@ const queryClient = new QueryClient({
 });
 
 const config = getDefaultConfig({
-  appName: 'IU_VerCert',
-  projectId: 'PROJECT_ID',
+  appName: "IU_VerCert",
+  projectId: "PROJECT_ID",
   chains: [sepolia],
 });
 
@@ -38,13 +34,13 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
-        <RouterProvider router={router} />
-        <ReactQueryDevtools />
+        <QueryClientProvider client={queryClient}>
+          <RainbowKitProvider>
+            <RouterProvider router={router} />
+            <ReactQueryDevtools />
           </RainbowKitProvider>
-      </QueryClientProvider>
-     </WagmiProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
     </ChakraProvider>
   </React.StrictMode>,
 );
