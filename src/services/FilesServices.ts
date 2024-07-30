@@ -42,36 +42,34 @@ class FilesServices {
     return results;
   }
 
-  // async getMetaObj(files: File): Promise<MetaDataObj> {
-  //   return new Promise(async (resolve, reject) => {
-  //     try {
-  //       const bufferContent = await files.arrayBuffer();
-  //       const pdfDoc = await PDFDocument.load(bufferContent);
-  //       const fields = pdfDoc.getKeywords();
-  //       console.log(config);
-  //       if (commitHash && commitAddress && props && config) {
-  //         const parsedProps = JSON.parse(props);
-  //         const parsedConfig = JSON.parse(config);
-  //         const metaObj: MetaDataObj = {
-  //           commitAddress: commitAddress,
-  //           files: parsedProps,
-  //           config: parsedConfig,
-  //         };
-  //         console.log(metaObj);
-  //         resolve(metaObj);
-  //       } else {
-  //         reject(
-  //           new Error(
-  //             "Embedded certificate is missing some required field(s).",
-  //           ),
-  //         );
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //       reject(error);
-  //     }
-  //   });
-  // }
+  async getMetaObj(files: File): Promise<MetaDataObj> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const bufferContent = await files.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(bufferContent);
+        const fields = pdfDoc.getKeywords();
+        if (fields) {
+          const regex = /(0x[a-fA-F0-9]{40})|(\{[^}]+})/g;
+          const matches = fields.match(regex);
+          if (matches) {
+            const [address, object2, object3] = matches;
+            resolve({ commitAddress: address, config: JSON.parse(object2), files: JSON.parse(object3) });
+          } else {
+            reject(
+              new Error(
+                "Embedded certificate is missing some required field(s)"
+              )
+            );
+          }
+        } else {
+          reject(new Error("This is not an embedded certificate"));
+        }
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  }
 
   async generateFilesProps(files: FileList): Promise<FileDetails[]> {
     const results: FileDetails[] = [];
@@ -85,12 +83,6 @@ class FilesServices {
     return results;
   }
 
-  objectToUint8Array<T>(object: T): Uint8Array {
-    const stringContent = JSON.stringify(object);
-    const encoder = new TextEncoder();
-    return encoder.encode(stringContent);
-  }
-
   async embedAndZip(
     filesDetails: FileDetails[],
     metadataObjects: MetaDataObj,
@@ -100,8 +92,8 @@ class FilesServices {
       const pdfDoc = await PDFDocument.load(fileDetail.fileBuffer);
       const keywords = [
         metadataObjects.commitAddress,
-        JSON.stringify(metadataObjects.files[index]),
         JSON.stringify(metadataObjects.config),
+        JSON.stringify(metadataObjects.files[index]),
       ];
       pdfDoc.setKeywords(keywords);
       const pdfBytes = await pdfDoc.save();
