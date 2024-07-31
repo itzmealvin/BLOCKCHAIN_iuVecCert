@@ -1,13 +1,19 @@
 import cors from "cors";
+import crypto from "crypto";
 import express from "express";
 import os from "os";
+import ProgressBar from "progress";
 import { Worker } from "worker_threads";
 import FileParamsDto from "./dtos/FileParamsDto";
 import ProofsDto from "./dtos/ProofsDto";
 import ValuesDto from "./dtos/ValuesDto";
-import { commit, evaluateAt, genCoefficients, genProof, genVerifierContractParams } from "./libs/lib-kzg";
-import crypto from "crypto";
-import ProgressBar from "progress";
+import {
+  commit,
+  evaluateAt,
+  genCoefficients,
+  genProof,
+  genVerifierContractParams,
+} from "./libs/lib-kzg";
 import measureExecutionTime from "./libs/measureTime";
 
 const app = express();
@@ -151,10 +157,9 @@ app.post("/proof", async (req, res) => {
 
     const bigIntCoeffs = coeffs.map(BigInt);
     const bigIntCommit = commit.map(BigInt);
-    const chunkSize = Math.ceil(files.length / (CONCURRENT_WORKER * 2));
-    const chunks = chunkify(files, chunkSize);
+    const chunks = chunkify(files, CONCURRENT_WORKER);
     console.log(
-      `PROOFS: Will split ${files.length} file(s) into ${chunkSize} file(s) * ${chunks.length} chunks`,
+      `PROOFS: Will split ${files.length} file(s) into ${CONCURRENT_WORKER} file(s) * ${chunks.length} chunks`,
     );
     const resultProofs: ProofsDto = {
       coeffs: coeffs,
@@ -167,7 +172,7 @@ app.post("/proof", async (req, res) => {
       {
         complete: "=",
         incomplete: "-",
-        width: 30,
+        width: 20,
         total: chunks.length,
       },
     );
@@ -175,51 +180,65 @@ app.post("/proof", async (req, res) => {
     progressBar.render();
 
     const processChunks = async (chunks: FileParamsDto[][]) => {
-      for (const [chunkIndex, chunk] of chunks.entries()) {
-        await Promise.all(
-          chunk.map(
-            (subChunk, subIndex) =>
-              new Promise<void>((resolve, reject) => {
-                const workerIndex = subIndex % CONCURRENT_WORKER;
-                const worker = new Worker("./server/workers/worker.js", {
-                  workerData: {
-                    coeffs: bigIntCoeffs,
-                    chunks: subChunk,
-                    commit: bigIntCommit,
-                    path: "./ProofWorker.ts",
-                  },
-                });
-                worker.on("message", (proofParams) => {
-                  resultProofs.files.push(proofParams);
-                  resolve();
-                });
-                worker.on("error", (error) => {
-                  console.log(
-                    `PROOFS: Worker ${workerIndex} encountered an error on sub-chunk ${
-                      subIndex + 1
-                    }/${chunk.length} of chunk ${chunkIndex + 1}`,
-                  );
-                  reject(error);
-                });
-                worker.on("exit", (code) => {
-                  if (code !== 0) {
-                    reject(
-                      new Error(
-                        `PROOFS: Worker ${workerIndex} stopped with exit code ${code} on sub-chunk ${
-                          subIndex + 1
-                        }/${chunk.length} of chunk ${chunkIndex + 1}`,
-                      ),
-                    );
-                  }
-                });
-              }),
-          ),
-        );
-        progressBar.tick();
-      }
+      let activeWorkers = 0;
+      let currentChunkIndex = 0;
+
+      return new Promise<void>((resolve, reject) => {
+        const startWorker = (chunkIndex: number) => {
+          const chunk = chunks[chunkIndex];
+          const workerIndex = chunkIndex % CONCURRENT_WORKER;
+
+          const worker = new Worker("./server/workers/worker.js", {
+            workerData: {
+              coeffs: bigIntCoeffs,
+              chunks: chunk,
+              commit: bigIntCommit,
+              path: "./ProofWorker.ts",
+            },
+          });
+
+          activeWorkers++;
+
+          worker.on("message", (proofParams) => {
+            resultProofs.files.push(proofParams);
+            activeWorkers--;
+            progressBar.tick();
+
+            if (currentChunkIndex < chunks.length) {
+              startWorker(currentChunkIndex++);
+            } else if (activeWorkers === 0) {
+              resolve();
+            }
+          });
+
+          worker.on("error", (error) => {
+            console.log(
+              `PROOFS: Worker ${workerIndex} encountered an error on chunk ${chunkIndex}`,
+            );
+            activeWorkers--;
+            reject(error);
+          });
+
+          worker.on("exit", (code) => {
+            if (code !== 0) {
+              reject(
+                new Error(
+                  `PROOFS: Worker ${workerIndex} stopped with exit code ${code} on chunk ${chunkIndex}`,
+                ),
+              );
+            }
+          });
+        };
+
+        for (let i = 0; i < CONCURRENT_WORKER && i < chunks.length; i++) {
+          startWorker(currentChunkIndex++);
+        }
+      });
     };
 
-    const { timeTaken } = await measureExecutionTime(() => processChunks(chunks));
+    const { timeTaken } = await measureExecutionTime(() =>
+      processChunks(chunks),
+    );
     console.log(
       `PROOFS: Generated ${coeffs.length} proof(s) in ${timeTaken}ms`,
     );
