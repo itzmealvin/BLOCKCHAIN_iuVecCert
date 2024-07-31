@@ -157,13 +157,13 @@ app.post("/proof", async (req, res) => {
 
     const bigIntCoeffs = coeffs.map(BigInt);
     const bigIntCommit = commit.map(BigInt);
-    const chunks = chunkify(files, CONCURRENT_WORKER);
+    const chunks = chunkify(files, CONCURRENT_WORKER * 10);
     console.log(
-      `PROOFS: Will split ${files.length} file(s) into ${CONCURRENT_WORKER} file(s) * ${chunks.length} chunks`,
+      `PROOFS: Will split ${files.length} file(s) into ${1} file(s) * ${chunks.length} chunks`,
     );
     const resultProofs: ProofsDto = {
       coeffs: coeffs,
-      files: [],
+      files: new Array<FileParamsDto>(),
       commit: commit,
     };
 
@@ -200,13 +200,16 @@ app.post("/proof", async (req, res) => {
           activeWorkers++;
 
           worker.on("message", (proofParams) => {
-            resultProofs.files.push(proofParams);
+            resultProofs.files.push(...proofParams);
             activeWorkers--;
             progressBar.tick();
 
             if (currentChunkIndex < chunks.length) {
               startWorker(currentChunkIndex++);
             } else if (activeWorkers === 0) {
+              resultProofs.files.sort(
+                (a, b) => parseInt(a.fileIndex) - parseInt(b.fileIndex),
+              );
               resolve();
             }
           });
