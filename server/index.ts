@@ -157,9 +157,10 @@ app.post("/proof", async (req, res) => {
 
     const bigIntCoeffs = coeffs.map(BigInt);
     const bigIntCommit = commit.map(BigInt);
-    const chunks = chunkify(files, CONCURRENT_WORKER * 10);
+    const chunkSize = Math.round(files.length / (CONCURRENT_WORKER * 2));
+    const chunks = chunkify(files, chunkSize);
     console.log(
-      `PROOFS: Will split ${files.length} file(s) into ${1} file(s) * ${chunks.length} chunks`,
+      `PROOFS: Will split ${files.length} file(s) into ${chunkSize} file(s) * ${chunks.length} chunks`,
     );
     const resultProofs: ProofsDto = {
       coeffs: coeffs,
