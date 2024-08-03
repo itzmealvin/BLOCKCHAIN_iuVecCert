@@ -2,6 +2,7 @@ import { BrowserProvider, ethers, InterfaceAbi, JsonRpcSigner, verifyMessage } f
 import { Account, Chain, Client, Transport } from "viem";
 import { Config, useConnectorClient } from "wagmi";
 import { useMemo } from "react";
+import { SiweMessage } from "siwe";
 
 export interface ContractDetails {
   abi: InterfaceAbi;
@@ -28,11 +29,22 @@ class BlockchainServices {
     return new JsonRpcSigner(provider, account.address);
   }
 
+  createSiweMessage(address: string, statement: string) {
+    const message = new SiweMessage({
+      domain: "IU-VerCert",
+      address,
+      statement,
+      uri: "http://localhost:5173/issuer",
+      version: "1",
+      chainId: parseInt(this._networkID),
+    });
+    return message.prepareMessage();
+  }
+
   async performSignIn(currentSigner: JsonRpcSigner, signInMsg?: string) {
     const currentAddress = currentSigner.address;
-    const message = signInMsg || `I hereby confirm I am the owner of address ${currentAddress} to use IU-VerCert!\n\nChain ID: ${
-      this._networkID
-    }\n\nIssued At: ${new Date().toLocaleString()}.`;
+    const message = signInMsg || this.createSiweMessage(currentAddress,
+      "I hereby confirm I am the owner of address and agree to the ToS of IU-VerCert!");
     const sig = await currentSigner.signMessage(message);
     return verifyMessage(message, sig) === currentAddress;
   }
@@ -53,16 +65,14 @@ class BlockchainServices {
     };
   }
 
-  // getContract(
-  //   contractDetails: ContractDetails,
-  //   issuer?: ethers.Signer
-  // ): ethers.Contract | undefined {
-  //   const { abi, address } = contractDetails;
-  //   if (address) {
-  //     return new ethers.Contract(address, abi, issuer);
-  //   }
-  //   return undefined;
-  // }
+  getContract(
+    address: string, abi: InterfaceAbi, signer?: JsonRpcSigner,
+  ): ethers.Contract | undefined {
+    if (signer) {
+      return new ethers.Contract(address, abi, signer);
+    }
+    return new ethers.Contract(address, abi, ethers.getDefaultProvider());
+  }
 }
 
 const blockchainServices = new BlockchainServices();
