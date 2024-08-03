@@ -11,3 +11,11 @@ export const resetIssuerStores = () => {
   useWeb3Store.getState().resetAddress();
   useFilesStore.getState().resetFiles();
 };
+
+export const resetVerifierStores = () => {
+  useConfigsStore.getState().resetConfig();
+  useIssuerStore.getState().resetStep();
+  useResultsStore.getState().resetResults();
+  useWeb3Store.getState().resetAddress();
+  useFilesStore.getState().resetFiles();
+};
