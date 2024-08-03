@@ -13,7 +13,7 @@ interface ConfigsActions {
   resetConfig: () => void;
 }
 
-const initialState: ConfigsStates = { issuerCN: "" };
+const initialState: ConfigsStates = { configs: {} as Configs, issuerCN: "" };
 
 const useConfigsStore = create<ConfigsStates & ConfigsActions>((set) => ({
   ...initialState,

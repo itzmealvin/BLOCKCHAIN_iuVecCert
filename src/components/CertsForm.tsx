@@ -4,8 +4,13 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod";
 import FilesServices, { FileDetails, FileProps, MetaDataObj } from "../services/FilesServices";
-import { useIssuerStore } from "../hooks/useStepsStores";
+import { useIssuerStore, useVerifierStore } from "../hooks/useStepsStores";
 import useFilesStore from "../hooks/useFilesStore";
+import { useEthersSigner } from "../services/BlockchainServices";
+import useConfigsStore from "../hooks/useConfigsStore";
+import useWeb3Store from "../hooks/useWeb3Store";
+import CardInfo from "./Elements/CardInfo";
+import { useState } from "react";
 
 const schema = (mode: "CREATE" | "VERIFY") => {
   return z.object({
@@ -24,10 +29,22 @@ interface Props {
   mode: "CREATE" | "VERIFY";
 }
 
+export interface SimplifiedObject {
+  commitAddress: string;
+  account: string;
+  fileHashes: string[];
+}
+
 const CertsForm = ({ mode }: Props) => {
   const { setFilesProps, setFilesDetails } = useFilesStore();
-  const { isDone, toggleDone } = useIssuerStore();
+  const [metaObj, setMetaObj] = useState({} as MetaDataObj);
+  const { setContractAddress } = useWeb3Store();
+  const { isDone: isIssuerDone, toggleDone: toggleIssuerDone } = useIssuerStore();
+  const { isDone: isVerifierDone, toggleDone: toggleVerifierDone } = useVerifierStore();
+  const { setConfigs, setIssuerCN } = useConfigsStore();
+  const [success, setSuccess] = useState(false);
   const chosenSchema = schema(mode);
+  const signer = useEthersSigner();
   type InputSchema = z.infer<typeof chosenSchema>;
 
   const {
@@ -36,6 +53,17 @@ const CertsForm = ({ mode }: Props) => {
     formState: { errors },
     reset,
   } = useForm<InputSchema>({ resolver: zodResolver(chosenSchema) });
+
+  const extractData = (metadataObject: MetaDataObj): SimplifiedObject => {
+    const { commitAddress, config, files } = metadataObject;
+    const fileHashes = files.map(file => file.fileHash);
+
+    return {
+      commitAddress,
+      account: config.account,
+      fileHashes,
+    };
+  };
 
   const onCreateSubmit = (data: InputSchema) => {
     const resultPromises: [Promise<FileDetails[]>, Promise<FileProps[]>] = [
@@ -53,7 +81,7 @@ const CertsForm = ({ mode }: Props) => {
         setFilesDetails(detailsArray);
         setFilesProps(propsArray);
         reset();
-        if (!isDone) toggleDone();
+        if (!isIssuerDone) toggleIssuerDone();
       })
       .catch((error): void => {
         toast.error(error);
@@ -72,9 +100,13 @@ const CertsForm = ({ mode }: Props) => {
         error: "An unknown error occurred!",
       })
       .then((res): void => {
-        console.log(res);
+        setSuccess(true);
+        setMetaObj(res);
+        setConfigs(res.config);
+        setFilesProps(res.files);
+        setContractAddress(res.commitAddress);
         reset();
-        if (!isDone) toggleDone();
+        if (!isVerifierDone) toggleVerifierDone();
       })
       .catch((error): void => {
         toast.error(error);
@@ -114,6 +146,9 @@ const CertsForm = ({ mode }: Props) => {
           </Button>
         </HStack>
       </form>
+      {metaObj && success && (
+        <CardInfo dataObject={extractData(metaObj)}>File details</CardInfo>
+      )}
     </>
   );
 };

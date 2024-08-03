@@ -1,10 +1,11 @@
 import { Box, Card, CardBody, CardHeader, Heading, Stack, StackDivider, Text } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { Configs } from "../../services/ConfigsServices";
+import { SimplifiedObject } from "../CertsForm";
 
 interface Props {
   children: ReactNode;
-  dataObject: Configs;
+  dataObject: Configs | SimplifiedObject;
 }
 
 const CardInfo = ({ children, dataObject }: Props) => {
