@@ -49,34 +49,6 @@ contract CertsCommitment {
         challengeProof[1] = _challengeProof1;
     }
 
-//    function getIssueTime() external view returns (uint256) {
-//        return issueTime;
-//    }
-//
-//    function getIssuer() external view returns (address) {
-//        return issuer;
-//    }
-//
-//    function getIssuerCN() external view returns (string memory) {
-//        return issuerCN;
-//    }
-//
-//    function getBatchDesc() external view returns (string memory) {
-//        return batchDesc;
-//    }
-//
-//    function getCommitment() external view returns (uint256[2] memory) {
-//        return commitment;
-//    }
-//
-//    function getChallenge() external view returns (uint256[2] memory) {
-//        return [challengeIndex, challengeValue];
-//    }
-//
-//    function getChallengeProof() external view returns (uint256[2] memory) {
-//        return challengeProof;
-//    }
-
     function revoke(string memory _hash) external onlyIssuer isValid(_hash) {
         isRevoked[_hash] = true;
     }
