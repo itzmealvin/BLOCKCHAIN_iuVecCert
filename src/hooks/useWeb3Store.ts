@@ -12,9 +12,7 @@ interface Web3AuthActions {
 }
 
 const initialState: Web3AuthStates = {
-
   contractAddress: "",
-
 };
 
 const useWeb3Store = create<Web3AuthStates & Web3AuthActions>((set) => ({

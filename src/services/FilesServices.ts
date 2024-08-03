@@ -53,12 +53,12 @@ class FilesServices {
           const matches = fields.match(regex);
           if (matches) {
             const [address, object2, object3] = matches;
-            resolve({ commitAddress: address, config: JSON.parse(object2), files: JSON.parse(object3) });
+            resolve({ commitAddress: address, config: JSON.parse(object2), files: [JSON.parse(object3)] });
           } else {
             reject(
               new Error(
-                "Embedded certificate is missing some required field(s)"
-              )
+                "Embedded certificate is missing some required field(s)",
+              ),
             );
           }
         } else {

@@ -7,13 +7,7 @@ import { Worker } from "worker_threads";
 import FileParamsDto from "./dtos/FileParamsDto";
 import ProofsDto from "./dtos/ProofsDto";
 import ValuesDto from "./dtos/ValuesDto";
-import {
-  commit,
-  evaluateAt,
-  genCoefficients,
-  genProof,
-  genVerifierContractParams,
-} from "./libs/lib-kzg";
+import { commit, evaluateAt, genCoefficients, genProof, genVerifierContractParams } from "./libs/lib-kzg";
 import measureExecutionTime from "./libs/measureTime";
 
 const app = express();
