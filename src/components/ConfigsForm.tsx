@@ -8,6 +8,7 @@ import CardInfo from "./Elements/CardInfo";
 import { useIssuerStore } from "../hooks/useStepsStores";
 import useConfigsStore from "../hooks/useConfigsStore";
 import BlockchainServices, { useEthersSigner } from "../services/BlockchainServices";
+import { useState } from "react";
 
 const schema = z.object({
   configs: z.instanceof(FileList).refine((file) => file.length === 1, {
@@ -19,6 +20,7 @@ type InputSchema = z.infer<typeof schema>;
 
 const ConfigsForm = () => {
   const { configs, setConfigs, setIssuerCN } = useConfigsStore();
+  const [success, setSuccess] = useState<boolean>(false);
   const signer = useEthersSigner();
   const { isDone, toggleDone } = useIssuerStore();
 
@@ -44,6 +46,7 @@ const ConfigsForm = () => {
             toast.success(
               "Verification completed! You may proceed to the next step!",
             );
+            setSuccess(true);
             reset();
             toggleDone();
           } else {
@@ -98,7 +101,7 @@ const ConfigsForm = () => {
           </Button>
         </HStack>
       </form>
-      {configs && (
+      {success && configs && (
         <CardInfo dataObject={configs}>Configuration details</CardInfo>
       )}
     </>
