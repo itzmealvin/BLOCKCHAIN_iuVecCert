@@ -1,7 +1,7 @@
 require("module-alias/register");
 import * as galois from "@guildofweavers/galois";
 import assert from "assert";
-import { ec } from "elliptic";
+import {ec} from "elliptic";
 import * as ffjavascript from "ffjavascript";
 // import * as bn128 from "rustbn.js";
 
@@ -22,7 +22,7 @@ type Proof = G1Point;
 const G1 = ffjavascript.bn128.G1;
 // const G2 = ffjavascript.bn128.G2;
 const FIELD_SIZE = BigInt(
-  "21888242871839275222246405745257275088548364400416034343698204186575808495617",
+    "21888242871839275222246405745257275088548364400416034343698204186575808495617",
 );
 const srsg1DataRaw = require("@libkzg/taug1_65536.json");
 // const srsg2DataRaw = require("@libkzg/taug2_65536.json");
@@ -54,23 +54,23 @@ const srsg1DataRaw = require("@libkzg/taug1_65536.json");
  */
 
 const srsG1 = (depth: number): G1Point[] => {
-  assert(depth > 0);
-  assert(depth <= 65536);
+    assert(depth > 0);
+    assert(depth <= 65536);
 
-  const g1: G1Point[] = [];
-  for (let i = 0; i < depth; i++) {
-    g1.push([
-      BigInt(srsg1DataRaw[i][0]),
-      BigInt(srsg1DataRaw[i][1]),
-      BigInt(1),
-    ]);
-  }
+    const g1: G1Point[] = [];
+    for (let i = 0; i < depth; i++) {
+        g1.push([
+            BigInt(srsg1DataRaw[i][0]),
+            BigInt(srsg1DataRaw[i][1]),
+            BigInt(1),
+        ]);
+    }
 
-  assert(g1[0][0] === G1.g[0]);
-  assert(g1[0][1] === G1.g[1]);
-  assert(g1[0][2] === G1.g[2]);
+    assert(g1[0][0] === G1.g[0]);
+    assert(g1[0][1] === G1.g[1]);
+    assert(g1[0][2] === G1.g[2]);
 
-  return g1;
+    return g1;
 };
 
 /*
@@ -108,31 +108,31 @@ const srsG1 = (depth: number): G1Point[] => {
  * @param p The field size. Defaults to the BabyJub field size.
  */
 const commit = (coefficients: bigint[]): Commitment => {
-  const srs = srsG1(coefficients.length);
-  return polyCommit(coefficients, G1, srs);
+    const srs = srsG1(coefficients.length);
+    return polyCommit(coefficients, G1, srs);
 };
 
 const polyCommit = (
-  coefficients: bigint[],
-  G: G1Point | G2Point,
-  srs: G1Point[] | G2Point[],
+    coefficients: bigint[],
+    G: G1Point | G2Point,
+    srs: G1Point[] | G2Point[],
 ): G1Point | G2Point => {
-  let result = G.zero;
-  for (let i = 0; i < coefficients.length; i++) {
-    let coeff = BigInt(coefficients[i]);
-    assert(coeff >= BigInt(0));
+    let result = G.zero;
+    for (let i = 0; i < coefficients.length; i++) {
+        let coeff = BigInt(coefficients[i]);
+        assert(coeff >= BigInt(0));
 
-    result = G.affine(G.add(result, G.mulScalar(srs[i], coeff)));
+        result = G.affine(G.add(result, G.mulScalar(srs[i], coeff)));
 
-    //if (coeff < 0) {
-    //coeff = BigInt(-1) * coeff
-    //result = G.affine(G.add(result, G.neg(G.mulScalar(srs[i], coeff))))
-    //} else {
-    //result = G.affine(G.add(result, G.mulScalar(srs[i], coeff)))
-    //}
-  }
+        //if (coeff < 0) {
+        //coeff = BigInt(-1) * coeff
+        //result = G.affine(G.add(result, G.neg(G.mulScalar(srs[i], coeff))))
+        //} else {
+        //result = G.affine(G.add(result, G.mulScalar(srs[i], coeff)))
+        //}
+    }
 
-  return result;
+    return result;
 };
 
 /*
@@ -143,32 +143,32 @@ const polyCommit = (
  * @param p The field size. Defaults to the BabyJub field size.
  */
 const genQuotientPolynomial = (
-  coefficients: Coefficient[],
-  xVal: bigint,
-  p: bigint = FIELD_SIZE,
+    coefficients: Coefficient[],
+    xVal: bigint,
+    p: bigint = FIELD_SIZE,
 ): Coefficient[] => {
-  const field = galois.createPrimeField(p);
-  const poly = field.newVectorFrom(coefficients);
+    const field = galois.createPrimeField(p);
+    const poly = field.newVectorFrom(coefficients);
 
-  const yVal = field.evalPolyAt(poly, xVal);
-  const y = field.newVectorFrom([yVal]);
+    const yVal = field.evalPolyAt(poly, xVal);
+    const y = field.newVectorFrom([yVal]);
 
-  const x = field.newVectorFrom([0, 1].map(BigInt));
+    const x = field.newVectorFrom([0, 1].map(BigInt));
 
-  const z = field.newVectorFrom([xVal].map(BigInt));
+    const z = field.newVectorFrom([xVal].map(BigInt));
 
-  return field
-    .divPolys(field.subPolys(poly, y), field.subPolys(x, z))
-    .toValues();
+    return field
+        .divPolys(field.subPolys(poly, y), field.subPolys(x, z))
+        .toValues();
 };
 
 const evaluateAt = (
-  coefficients: Coefficient[],
-  xVal: bigint,
-  p: bigint = FIELD_SIZE,
+    coefficients: Coefficient[],
+    xVal: bigint,
+    p: bigint = FIELD_SIZE,
 ): bigint => {
-  const field = galois.createPrimeField(p);
-  return field.evalPolyAt(field.newVectorFrom(coefficients), xVal);
+    const field = galois.createPrimeField(p);
+    return field.evalPolyAt(field.newVectorFrom(coefficients), xVal);
 };
 
 /*
@@ -179,12 +179,12 @@ const evaluateAt = (
  * @param p The field size. Defaults to the BabyJub field size.
  */
 const genProof = (
-  coefficients: Coefficient[],
-  index: number | bigint,
-  p: bigint = FIELD_SIZE,
+    coefficients: Coefficient[],
+    index: number | bigint,
+    p: bigint = FIELD_SIZE,
 ): Proof => {
-  const quotient = genQuotientPolynomial(coefficients, BigInt(index), p);
-  return commit(quotient);
+    const quotient = genQuotientPolynomial(coefficients, BigInt(index), p);
+    return commit(quotient);
 };
 
 // const genZeroPoly = (
@@ -380,20 +380,20 @@ const genProof = (
 // };
 
 const genVerifierContractParams = (
-  commitment: Commitment,
-  proof: Proof,
-  index: number | bigint,
-  value: bigint,
+    commitment: Commitment,
+    proof: Proof,
+    index: number | bigint,
+    value: bigint,
 ) => {
-  return {
-    commitment: [
-      "0x" + commitment[0].toString(16),
-      "0x" + commitment[1].toString(16),
-    ],
-    proof: ["0x" + proof[0].toString(16), "0x" + proof[1].toString(16)],
-    index: "0x" + BigInt(index).toString(16),
-    value: "0x" + BigInt(value).toString(16),
-  };
+    return {
+        commitment: [
+            "0x" + commitment[0].toString(16),
+            "0x" + commitment[1].toString(16),
+        ],
+        proof: ["0x" + proof[0].toString(16), "0x" + proof[1].toString(16)],
+        index: "0x" + BigInt(index).toString(16),
+        value: "0x" + BigInt(value).toString(16),
+    };
 };
 
 // const genMultiVerifierContractParams = (
@@ -445,29 +445,29 @@ const genVerifierContractParams = (
  * @param p The field size. Defaults to the BabyJub field size.
  */
 const genCoefficients = (
-  values: bigint[],
-  p: bigint = FIELD_SIZE,
+    values: bigint[],
+    p: bigint = FIELD_SIZE,
 ): Coefficient[] => {
-  // Check the inputs
-  for (let value of values) {
-    assert(true);
-  }
+    // Check the inputs
+    for (let value of values) {
+        assert(true);
+    }
 
-  // Perform the interpolation
-  const field = galois.createPrimeField(p);
-  const x: bigint[] = [];
-  for (let i = 0; i < values.length; i++) {
-    x.push(BigInt(i));
-  }
-  const xVals = field.newVectorFrom(x);
-  const yVals = field.newVectorFrom(values);
-  const coefficients = field.interpolate(xVals, yVals).toValues();
+    // Perform the interpolation
+    const field = galois.createPrimeField(p);
+    const x: bigint[] = [];
+    for (let i = 0; i < values.length; i++) {
+        x.push(BigInt(i));
+    }
+    const xVals = field.newVectorFrom(x);
+    const yVals = field.newVectorFrom(values);
+    const coefficients = field.interpolate(xVals, yVals).toValues();
 
-  // Check the outputs
-  for (let coefficient of coefficients) {
-    assert(coefficient < FIELD_SIZE);
-  }
-  return coefficients;
+    // Check the outputs
+    for (let coefficient of coefficients) {
+        assert(coefficient < FIELD_SIZE);
+    }
+    return coefficients;
 };
 
 /*
@@ -516,21 +516,21 @@ const genCoefficients = (
 // };
 
 export {
-  commit,
-  evaluateAt,
-  FIELD_SIZE,
-  // genBabyJubField,
-  genCoefficients,
-  // genMultiProof,
-  // genMultiVerifierContractParams,
-  genProof,
-  // genChallengeProof,
-  genQuotientPolynomial,
-  genVerifierContractParams,
-  // genZeroPoly,
-  // isValidPairing,
-  // verify,
-  // verifyMulti,
-  // verifyViaEIP197,
+    commit,
+    evaluateAt,
+    FIELD_SIZE,
+    // genBabyJubField,
+    genCoefficients,
+    // genMultiProof,
+    // genMultiVerifierContractParams,
+    genProof,
+    // genChallengeProof,
+    genQuotientPolynomial,
+    genVerifierContractParams,
+    // genZeroPoly,
+    // isValidPairing,
+    // verify,
+    // verifyMulti,
+    // verifyViaEIP197,
 };
-export type { Coefficient, Commitment, Proof }; // export Polynomial
+export type {Coefficient, Commitment, Proof}; // export Polynomial
