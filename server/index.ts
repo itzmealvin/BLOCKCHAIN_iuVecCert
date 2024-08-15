@@ -142,9 +142,9 @@ app.post("/proof", async (req, res) => {
             files.slice(i * indexSize, i * indexSize + indexSize),
         );
         const resultProofs: ProofsDto = {
-            coeffs: coeffs,
+            coeffs: [],
             files: [],
-            commit: commit,
+            commit: [],
         };
         const workerPromises = chunks.map((chunk, index) => {
             return new Promise<void>((resolve, reject) => {
