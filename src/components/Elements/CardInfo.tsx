@@ -6,11 +6,12 @@ import {SimplifiedObject} from "../CertsForm";
 interface Props {
     children: ReactNode;
     dataObject: Configs | SimplifiedObject;
+    mode: "CREATE" | "VERIFY";
 }
 
-const CardInfo = ({children, dataObject}: Props) => {
+const CardInfo = ({children, dataObject, mode}: Props) => {
     return (
-        <Box maxWidth="40%" margin="auto">
+        <Box maxWidth={mode === "CREATE" ? "40%" : ""} margin="auto">
             <Card>
                 <CardHeader>
                     <Heading size="md">{children}</Heading>

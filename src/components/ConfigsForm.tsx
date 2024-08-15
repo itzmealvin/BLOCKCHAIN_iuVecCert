@@ -102,7 +102,7 @@ const ConfigsForm = () => {
                 </HStack>
             </form>
             {success && configs && (
-                <CardInfo dataObject={configs}>Configuration details</CardInfo>
+                <CardInfo mode="CREATE" dataObject={configs}>Configuration details</CardInfo>
             )}
         </>
     );
