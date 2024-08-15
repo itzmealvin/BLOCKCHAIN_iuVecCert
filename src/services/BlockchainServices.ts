@@ -1,4 +1,4 @@
-import {BrowserProvider, ethers, InterfaceAbi, JsonRpcSigner, verifyMessage} from "ethers";
+import {BrowserProvider, ethers, InterfaceAbi, JsonRpcProvider, JsonRpcSigner, verifyMessage} from "ethers";
 import {Account, Chain, Client, Transport} from "viem";
 import {Config, useConnectorClient} from "wagmi";
 import {useMemo} from "react";
@@ -66,7 +66,7 @@ class BlockchainServices {
     }
 
     getContract(
-        address: string, abi: InterfaceAbi, signer?: JsonRpcSigner,
+        address: string, abi: InterfaceAbi, signer: JsonRpcSigner | JsonRpcProvider,
     ): ethers.Contract | undefined {
         if (signer) {
             return new ethers.Contract(address, abi, signer);
