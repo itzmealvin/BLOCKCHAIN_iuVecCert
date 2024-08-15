@@ -44,10 +44,12 @@ const EmbedProof = () => {
                 })
                 .then((res) => {
                     fileDownload(res, `${contractAddress}_embedded.zip`);
-                });
-            setDisabled(!disabled);
-            toggleDone();
-            resetIssuerStores();
+                }).finally(() => {
+                setDisabled(!disabled);
+                toggleDone();
+                resetIssuerStores();
+            });
+
         }
     };
 

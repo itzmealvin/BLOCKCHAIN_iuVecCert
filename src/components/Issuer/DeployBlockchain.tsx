@@ -99,7 +99,7 @@ const DeployBlockchain = () => {
         setDisabled(false);
     };
 
-    const handleDeploy = async () => {
+    const handleDeploy = () => {
         if (signer) {
             const promiseResult = BlockchainServices.deployContract(
                 signer,
@@ -114,9 +114,9 @@ const DeployBlockchain = () => {
                 .then((res) => {
                     setTxnHash(res.hash);
                     setContractAddress(res.address);
+                    toggleDone()
                 })
-                .catch((error) => toast.error(error));
-            toggleDone();
+
         } else {
             toast.error("No wallet detected! Use Connect Wallet button to connect!");
         }
@@ -183,6 +183,7 @@ const DeployBlockchain = () => {
                             variant="outline"
                             type="submit"
                             alignContent="center"
+                            disabled={!commitObj?.challenge}
                         >
                             SUBMIT
                         </Button>
