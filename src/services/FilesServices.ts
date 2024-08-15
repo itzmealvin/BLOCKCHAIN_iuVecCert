@@ -42,6 +42,23 @@ class FilesServices {
         return results;
     }
 
+    async hasKeywordField(files: FileList): Promise<boolean> {
+        return new Promise(async (resolve) => {
+            try {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const metadata = await this.getMetaObj(file);
+                    if (metadata) {
+                        break;
+                    }
+                }
+                resolve(false);
+            } catch (error) {
+                resolve(true)
+            }
+        });
+    }
+
     async getMetaObj(files: File): Promise<MetaDataObj> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -65,7 +82,6 @@ class FilesServices {
                     reject(new Error("This is not an embedded certificate"));
                 }
             } catch (error) {
-                console.log(error);
                 reject(error);
             }
         });
@@ -89,10 +105,11 @@ class FilesServices {
     ): Promise<Uint8Array> {
         const zip = new JSZip();
         const promises = filesDetails.map(async (fileDetail, index) => {
+            const {account, ...filteredConfig} = metadataObjects.config;
             const pdfDoc = await PDFDocument.load(fileDetail.fileBuffer);
             const keywords = [
                 metadataObjects.commitAddress,
-                JSON.stringify(metadataObjects.config),
+                JSON.stringify(filteredConfig),
                 JSON.stringify(metadataObjects.files[index]),
             ];
             pdfDoc.setKeywords(keywords);
