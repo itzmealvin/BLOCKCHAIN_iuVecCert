@@ -1,6 +1,6 @@
 import useConfigsStore from "../hooks/useConfigsStore";
 import useResultsStore from "../hooks/useResultsStore";
-import {useIssuerStore} from "../hooks/useStepsStores";
+import {useIssuerStore, useVerifierStore} from "../hooks/useStepsStores";
 import useWeb3Store from "../hooks/useWeb3Store";
 import useFilesStore from "../hooks/useFilesStore";
 
@@ -14,8 +14,7 @@ export const resetIssuerStores = () => {
 
 export const resetVerifierStores = () => {
     useConfigsStore.getState().resetConfig();
-    useIssuerStore.getState().resetStep();
-    useResultsStore.getState().resetResults();
+    useVerifierStore.getState().resetStep();
     useWeb3Store.getState().resetAddress();
     useFilesStore.getState().resetFiles();
 };

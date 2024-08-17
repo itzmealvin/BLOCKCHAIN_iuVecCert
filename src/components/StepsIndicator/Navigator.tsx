@@ -20,7 +20,6 @@ const Navigator = ({
                        maxStep,
                        prevStep,
                        nextStep,
-
                    }: Props) => {
     const onReset = () => {
         resetIssuerStores();

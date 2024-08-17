@@ -6,7 +6,7 @@ import {SimplifiedObject} from "../CertsForm";
 interface Props {
     children: ReactNode;
     dataObject: Configs | SimplifiedObject;
-    mode: "CREATE" | "VERIFY";
+    mode: "CREATE" | "VERIFY" | "REVOKE";
 }
 
 const CardInfo = ({children, dataObject, mode}: Props) => {
