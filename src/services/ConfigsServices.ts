@@ -1,4 +1,4 @@
-import forge from "node-forge";
+import {md, pki, util} from "node-forge";
 
 export interface Configs {
     account: string;
@@ -41,8 +41,8 @@ class ConfigsServices {
         });
     }
 
-    extractCertChain(certChain: string): forge.pki.Certificate {
-        return forge.pki.certificateFromPem(certChain);
+    extractCertChain(certChain: string): pki.Certificate {
+        return pki.certificateFromPem(certChain);
     }
 
     // checkValidityDate(cert: forge.pki.Certificate): boolean {
@@ -52,8 +52,45 @@ class ConfigsServices {
     //   return now >= notBefore && now <= notAfter;
     // }
 
-    getField(cert: forge.pki.Certificate, fieldName: "CN" | "O"): string {
+    getField(cert: pki.Certificate, fieldName: "CN" | "O"): string {
         return cert.subject?.getField(fieldName)?.value;
+    }
+
+    splitCertificates(pemString: string): string[] {
+        const certs = pemString
+            .split(/(?=-----BEGIN CERTIFICATE-----)/)
+            .map(cert => cert.trim())
+            .filter(cert => cert.includes('-----BEGIN CERTIFICATE-----') && cert.includes('-----END CERTIFICATE-----'));
+        return certs;
+    }
+
+    verifyX509Chain(
+        certificateChain: string[],
+    ): boolean {
+        try {
+            const rootCACertificate = pki.certificateFromPem(certificateChain[1]);
+            const endEntityCertificate = pki.certificateFromPem(certificateChain[0]);
+            return rootCACertificate.verify(endEntityCertificate);
+            // const caStore = forge.pki.createCaStore([rootCACertificate]);
+            // try {
+            //     return forge.pki.verifyCertificateChain(caStore, [endEntityCertificate]);
+            // } catch (error) {
+            //     console.error('Verification failed:', error);
+            //     return false;
+            // }
+        } catch (error) {
+            console.error('Verification failed:', error);
+            return false;
+        }
+    }
+
+    verifySignature(msg: string, sgnt: string, endEntityCert: string): boolean {
+        const pbKeyPem = pki.publicKeyToPem(pki.certificateFromPem(endEntityCert).publicKey);
+        const pbKey = pki.publicKeyFromPem(pbKeyPem);
+        let msgMd = md.sha256.create();
+        msgMd.update(msg, 'utf8');
+        return pbKey.verify(msgMd.digest().bytes(),
+            util.decode64(sgnt));
     }
 }
 
