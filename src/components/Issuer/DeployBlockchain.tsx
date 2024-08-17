@@ -25,6 +25,7 @@ import useConfigsStore from "../../hooks/useConfigsStore";
 import {useIssuerStore} from "../../hooks/useStepsStores";
 import useWeb3Store from "../../hooks/useWeb3Store";
 import useResultsStore from "../../hooks/useResultsStore";
+import HelperService from "../../services/HelperService";
 
 const schema = z.object({
     batchDesc: z
@@ -122,13 +123,6 @@ const DeployBlockchain = () => {
         }
     };
 
-    const truncateString = (str: string, num: number) => {
-        if (str.length <= num * 2) {
-            return str;
-        }
-        return str.slice(0, num) + "..." + str.slice(-num);
-    };
-
     return (
         <>
             {commitObj ?
@@ -157,12 +151,12 @@ const DeployBlockchain = () => {
                         <ListItem key="challenge">
                             <ListIcon as={FaQuestionCircle} color="black.500"/>
                             Challenge:
-                            ({truncateString(commitObj.challenge.index, 5)}, {truncateString(commitObj.challenge.value, 5)})
+                            ({HelperService.truncateString(commitObj.challenge.index, 5)}, {HelperService.truncateString(commitObj.challenge.value, 5)})
                         </ListItem>
                         <ListItem key="commitment">
                             <ListIcon as={FaCheckCircle} color="black.500"/>
                             Commitment:
-                            ({truncateString(commitObj.challenge.commitment[0], 5)}, {truncateString(commitObj.challenge.commitment[1], 5)})
+                            ({HelperService.truncateString(commitObj.challenge.commitment[0], 5)}, {HelperService.truncateString(commitObj.challenge.commitment[1], 5)})
                         </ListItem>
                     </List> </>
                 )}
