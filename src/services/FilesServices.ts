@@ -104,21 +104,30 @@ class FilesServices {
         metadataObjects: MetaDataObj,
     ): Promise<Uint8Array> {
         const zip = new JSZip();
-        const promises = filesDetails.map(async (fileDetail, index) => {
-            const {account, ...filteredConfig} = metadataObjects.config;
-            const pdfDoc = await PDFDocument.load(fileDetail.fileBuffer);
-            const keywords = [
-                metadataObjects.commitAddress,
-                JSON.stringify(filteredConfig),
-                JSON.stringify(metadataObjects.files[index]),
-            ];
-            pdfDoc.setKeywords(keywords);
-            const pdfBytes = await pdfDoc.save();
-            zip.file(`${fileDetail.fileName}_embedded.pdf`, pdfBytes);
-        });
-
-        await Promise.all(promises);
-
+        const batchSize = 200;
+        let batchStart = 0;
+        const processBatch = async () => {
+            const batch = filesDetails.slice(batchStart, batchStart + batchSize);
+            const promises = batch.map(async (fileDetail, index) => {
+                const {account, ...filteredConfig} = metadataObjects.config;
+                const pdfDoc = await PDFDocument.load(fileDetail.fileBuffer);
+                const keywords = [
+                    metadataObjects.commitAddress,
+                    JSON.stringify(filteredConfig),
+                    JSON.stringify(metadataObjects.files[batchStart + index]),
+                ];
+                pdfDoc.setKeywords(keywords);
+                const pdfBytes = await pdfDoc.save();
+                zip.file(`${fileDetail.fileName}_embedded.pdf`, pdfBytes);
+            });
+            await Promise.all(promises);
+            batchStart += batchSize;
+            if (batchStart < filesDetails.length) {
+                await new Promise(resolve => setTimeout(resolve, 0));
+                await processBatch();
+            }
+        };
+        await processBatch();
         return zip.generateAsync({type: "uint8array"});
     }
 }
