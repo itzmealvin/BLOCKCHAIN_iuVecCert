@@ -16,10 +16,9 @@ export const issuerSteps: StepsDetails[] = [
 
 export const verifierSteps: StepsDetails[] = [
     {title: "Step 1", description: "Upload Certificate"},
-    {title: "Step 2", description: "Verify Validity"},
-    {title: "Step 3", description: "Verify Organization"},
-    {title: "Step 4", description: "Verify Coefficients"},
-    {title: "Step 5", description: "Verify Certificate"},
+    {title: "Step 2", description: "Verify X.509 Chain"},
+    {title: "Step 3", description: "Verify Issuer"},
+    {title: "Step 4", description: "Verify Certificate"},
 ];
 
 interface StepsStates {
