@@ -1,4 +1,4 @@
-import {Box, Button, Center, Flex, Heading, VStack} from "@chakra-ui/react";
+import {Box, Button, Center, Heading, List, ListIcon, ListItem, VStack} from "@chakra-ui/react";
 import CertsForm from "../components/CertsForm";
 import BlockchainServices from "../services/BlockchainServices";
 import blockchainServices, {useEthersSigner} from "../services/BlockchainServices";
@@ -6,39 +6,39 @@ import useWeb3Store from "../hooks/useWeb3Store";
 import CertCommitment from "../compiled";
 import {toast} from "react-toastify";
 import useFilesStore from "../hooks/useFilesStore";
-import {resetVerifierStores} from "../services/resetStore";
-import {FaCheckCircle} from "react-icons/fa";
+import {resetIssuerStores} from "../services/resetStore";
+import {FaEthereum} from "react-icons/fa";
+import {useState} from "react";
 
 const RevokePage = () => {
     const signer = useEthersSigner();
+    const [isDisabled, setDisabled] = useState(false);
     const {contractAddress, issuerAddress} = useWeb3Store();
     const {filesProps} = useFilesStore();
 
     const onVerifySubmit = async () => {
+        setDisabled(true);
         try {
             if (signer && signer.address == issuerAddress) {
                 const contract = blockchainServices.getContract(contractAddress, CertCommitment.abi, signer);
-                if (contract && await BlockchainServices.performSignIn(signer, "I am the issuer of this batch deployment!")) {
-                    const resultPromise = contract.isRevoked(filesProps[0].fileHash);
-                    await toast.promise(resultPromise, {
-                        error: "This certificate has already been revoked!",
-                    });
+                if (contract && await BlockchainServices.performSignIn(signer, "I am the issuer of this deployment!")) {
                     const revokePromise = contract.revoke(filesProps[0].fileHash);
                     await toast.promise(revokePromise, {
                         pending: "Confirm transaction in your wallet",
                         success: "Revoked! Now it can't be used",
                         error: "Revoke failed! Try again later",
                     });
+                    resetIssuerStores();
                 } else {
-                    resetVerifierStores();
+                    resetIssuerStores();
                 }
             } else {
+                toast.error("Issuer address and current wallet address not match!")
             }
-            toast.error("Issuer address and current wallet address not match!")
         } catch (e) {
             toast.error("Verification process failed!");
-            resetVerifierStores();
         }
+        setDisabled(false);
     };
 
     return (
@@ -53,19 +53,19 @@ const RevokePage = () => {
             <Center>
                 <VStack spacing={5} alignContent="center">
                     <Button colorScheme="blue" variant="solid" type="submit" marginTop={3} onClick={onVerifySubmit}
-                            isDisabled={filesProps.length === 0 || !signer}>
+                            isDisabled={filesProps.length === 0 || !signer || isDisabled}>
                         REVOKE
                     </Button>
-                    <Heading as="h2" size="sx" textAlign="center">
-                        {!issuerAddress ? (
-                            "No issuer address found!"
-                        ) : (
-                            <Flex align="center" justify="center">
-                                <FaCheckCircle/> {`Found issuer address: ${issuerAddress}`}
-                            </Flex>
-                        )}
-                    </Heading>
-                    <CertsForm mode={"VERIFY"}></CertsForm>
+                    {issuerAddress && (
+                        <>
+                            <List spacing={3}>
+                                <ListItem>
+                                    <ListIcon as={FaEthereum} color="black.500"/>
+                                    Found Issuer Address: {issuerAddress}
+                                </ListItem>
+                            </List>
+                        </>)}
+                    <CertsForm mode={"REVOKE"}></CertsForm>
                 </VStack>
             </Center>
         </>
