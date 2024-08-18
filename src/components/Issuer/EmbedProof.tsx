@@ -43,7 +43,7 @@ const EmbedProof = () => {
                     error: "An unknown error occurred!",
                 })
                 .then((res) => {
-                    fileDownload(res, `${contractAddress}_embedded.zip`);
+                    fileDownload(res, `${filesDetails.length}_${contractAddress}.zip`);
                 }).finally(() => {
                 setDisabled(!disabled);
                 toggleDone();
