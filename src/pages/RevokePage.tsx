@@ -3,7 +3,7 @@ import CertsForm from "../components/CertsForm";
 import BlockchainServices from "../services/BlockchainServices";
 import blockchainServices, {useEthersSigner} from "../services/BlockchainServices";
 import useWeb3Store from "../hooks/useWeb3Store";
-import CertCommitment from "../compiled";
+import {CertCommitment} from "../compiled";
 import {toast} from "react-toastify";
 import useFilesStore from "../hooks/useFilesStore";
 import {resetIssuerStores} from "../services/resetStore";
@@ -21,7 +21,7 @@ const RevokePage = () => {
         try {
             if (signer && signer.address == issuerAddress) {
                 const contract = blockchainServices.getContract(contractAddress, CertCommitment.abi, signer);
-                if (contract && await BlockchainServices.performSignIn(signer, "I am the issuer of this deployment!")) {
+                if (contract && await BlockchainServices.performSignIn(signer, `I confirm to revoke this certificate hash: ${filesProps[0].fileHash}!`)) {
                     const revokePromise = contract.revoke(filesProps[0].fileHash);
                     await toast.promise(revokePromise, {
                         pending: "Confirm transaction in your wallet",

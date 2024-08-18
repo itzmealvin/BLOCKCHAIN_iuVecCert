@@ -18,7 +18,7 @@ import {useForm} from "react-hook-form";
 import {FaCheckCircle, FaQuestionCircle, FaUniversity} from "react-icons/fa";
 import {toast} from "react-toastify";
 import {z} from "zod";
-import CertCommitment from "../../compiled";
+import {CertCommitment} from "../../compiled";
 import {useCommit} from "../../hooks/useCalculations";
 import BlockchainServices, {ContractProps, useEthersSigner} from "../../services/BlockchainServices";
 import useConfigsStore from "../../hooks/useConfigsStore";
@@ -108,7 +108,7 @@ const DeployBlockchain = () => {
             );
             toast
                 .promise(promiseResult, {
-                    pending: "Contract is being deployed",
+                    pending: "Confirm transaction in your wallet",
                     success: "Contract deployed!",
                     error: "An unknown error occurred!",
                 })

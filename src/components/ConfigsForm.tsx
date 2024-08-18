@@ -60,7 +60,7 @@ const ConfigsForm = () => {
                     reset();
                 });
         } else {
-            toast.error("Signature not correct or signer not detected");
+            toast.error("Signature not correct or signer not detected!");
             reset();
         }
     };
