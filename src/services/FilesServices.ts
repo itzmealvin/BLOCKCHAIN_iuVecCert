@@ -27,7 +27,7 @@ class FilesServices {
             try {
                 const bufferContent = await files[i].arrayBuffer();
                 const hashContent = hashAsBigInt(
-                    HashType.KECCAK224,
+                    HashType.SHA224,
                     Buffer.from(bufferContent),
                 ).toString();
                 results.push({
@@ -99,6 +99,26 @@ class FilesServices {
         return results;
     }
 
+    naturalCompare(a: string, b: string): number {
+        const regex = /(\d+)|(\D+)/g;
+        const aParts = a.match(regex) || [];
+        const bParts = b.match(regex) || [];
+        while (aParts.length && bParts.length) {
+            const aPart = aParts.shift();
+            const bPart = bParts.shift();
+            if (aPart !== bPart) {
+                const aNum = parseInt(aPart!, 10);
+                const bNum = parseInt(bPart!, 10);
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    return aNum - bNum;
+                }
+                return aPart!.localeCompare(bPart!);
+            }
+        }
+        return aParts.length - bParts.length;
+    }
+
+
     async embedAndZip(
         filesDetails: FileDetails[],
         metadataObjects: MetaDataObj,
@@ -107,7 +127,9 @@ class FilesServices {
         const batchSize = 200;
         let batchStart = 0;
         const processBatch = async () => {
-            const batch = filesDetails.slice(batchStart, batchStart + batchSize);
+            const batch = filesDetails
+                .sort((a, b) => this.naturalCompare(a.fileName, b.fileName))
+                .slice(batchStart, batchStart + batchSize);
             const promises = batch.map(async (fileDetail, index) => {
                 const {account, ...filteredConfig} = metadataObjects.config;
                 const pdfDoc = await PDFDocument.load(fileDetail.fileBuffer);

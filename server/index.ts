@@ -9,7 +9,7 @@ import measureExecutionTime from "./libs/measureTime";
 import {Worker} from "worker_threads";
 
 const app = express();
-const port = 8000;
+const port = 3000;
 const CONCURRENT_WORKER = os.cpus().length * 2;
 
 app.use(cors());
@@ -49,7 +49,7 @@ const genChallengeValue = (
     commitment: bigint[],
     randomValues: bigint[],
 ): bigint => {
-    const hash = crypto.createHash("sha256");
+    const hash = crypto.createHash("sha224");
     hash.update(commitment.join(""));
     randomValues.forEach((value) => hash.update(value.toString()));
     return BigInt("0x" + hash.digest("hex"));
@@ -137,7 +137,7 @@ app.post("/proof", async (req, res) => {
         const bigIntCoeffs = coeffs.map(BigInt);
         const bigIntCommit = commit.map(BigInt);
         const indexSize = Math.ceil(files.length / CONCURRENT_WORKER);
-        console.log(`PROOFS: Will split ${files.length} file(s) into ${indexSize} file(s) * ${CONCURRENT_WORKER} chunks`);
+        console.log(`PROOFS: Will split ${files.length} file(s) into ${indexSize} file(s) * ${CONCURRENT_WORKER} chunks!`);
         const chunks = Array.from({length: Math.ceil(files.length / indexSize)}, (_v, i) =>
             files.slice(i * indexSize, i * indexSize + indexSize),
         );
@@ -164,13 +164,13 @@ app.post("/proof", async (req, res) => {
                 });
 
                 worker.on("error", (error) => {
-                    console.log(`PROOFS: Worker ${index} encountered an ${error}`);
+                    console.log(`PROOFS: Worker ${index} encountered an ${error}!`);
                     reject(error);
                 });
 
                 worker.on("exit", (code) => {
                     if (code !== 0) {
-                        reject(new Error(`PROOFS: Worker ${worker} stopped with exit code ${code}`));
+                        reject(new Error(`PROOFS: Worker ${worker} stopped with exit code ${code}`!));
                     }
                 });
             });
