@@ -11,7 +11,7 @@ import useConfigsStore from "../hooks/useConfigsStore";
 import useWeb3Store from "../hooks/useWeb3Store";
 import CardInfo from "./Elements/CardInfo";
 import {useState} from "react";
-import CertCommitment from "../compiled";
+import {CertCommitment} from "../compiled";
 import {JsonRpcProvider} from "ethers";
 import {resetIssuerStores, resetVerifierStores} from "../services/resetStore";
 
@@ -30,7 +30,6 @@ const schema = (mode: "CREATE" | "VERIFY" | "REVOKE") => {
 
 interface Props {
     mode: "CREATE" | "VERIFY" | "REVOKE";
-    onTriggerButtonClick?: () => void;
 }
 
 export interface SimplifiedObject {
@@ -39,7 +38,7 @@ export interface SimplifiedObject {
     "file Index"?: number[];
 }
 
-const CertsForm = ({mode, onTriggerButtonClick}: Props) => {
+const CertsForm = ({mode}: Props) => {
     const {setFilesProps, setFilesDetails} = useFilesStore();
     const [metaObj, setMetaObj] = useState({} as MetaDataObj);
     const {setContractAddress, setIssuerAddress} = useWeb3Store();
@@ -136,13 +135,14 @@ const CertsForm = ({mode, onTriggerButtonClick}: Props) => {
                     reset();
                     if (mode === "VERIFY") {
                         setConfigs(res.config);
+                        if (!isVerifierDone) toggleVerifierDone();
                         setTimeout(() => {
                             nextStep();
-                        }, 3000);
+                        }, 2000);
                     }
                 }
             } catch (error) {
-                toast.error("An error occurred")
+                toast.error("An error occurred!")
             }
         })();
     };
@@ -177,8 +177,7 @@ const CertsForm = ({mode, onTriggerButtonClick}: Props) => {
                         />
                         <FormErrorMessage>{errors.certificates?.message}</FormErrorMessage>
                     </FormControl>
-                    <Button colorScheme="blue" variant="solid" type="submit" marginTop={3}
-                            onClick={onTriggerButtonClick}>
+                    <Button colorScheme="blue" variant="solid" type="submit" marginTop={3}>
                         PROCESS
                     </Button>
                 </HStack>
