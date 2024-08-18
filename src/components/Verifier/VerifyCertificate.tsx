@@ -51,7 +51,6 @@ const VerifyIssuer = () => {
                         toast.error("Challenge does not pass verification failed!");
                         return;
                     }
-                    ;
                 } catch (error) {
                     toast.error("An error occurred!");
                 }

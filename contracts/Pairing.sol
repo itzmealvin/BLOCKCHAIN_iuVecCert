@@ -51,7 +51,6 @@ library Pairing {
                 invalid()
             }
         }
-
         require(success, "pairing-add-failed");
     }
 

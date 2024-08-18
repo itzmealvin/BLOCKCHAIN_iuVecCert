@@ -57,11 +57,10 @@ class ConfigsServices {
     }
 
     splitCertificates(pemString: string): string[] {
-        const certs = pemString
+        return pemString
             .split(/(?=-----BEGIN CERTIFICATE-----)/)
             .map(cert => cert.trim())
             .filter(cert => cert.includes('-----BEGIN CERTIFICATE-----') && cert.includes('-----END CERTIFICATE-----'));
-        return certs;
     }
 
     verifyX509Chain(
