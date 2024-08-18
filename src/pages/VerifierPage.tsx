@@ -7,7 +7,7 @@ import VerifyIssuer from "../components/Verifier/VerifyIssuer";
 import VerifyCertificate from "../components/Verifier/VerifyCertificate";
 
 const VerifierPage = () => {
-    const {isDone, currentStep, maxStep, resetStep} =
+    const {currentStep} =
         useVerifierStore();
     return (
         <>
