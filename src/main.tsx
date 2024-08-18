@@ -10,6 +10,7 @@ import "./index.css";
 import theme from "./theme";
 import {getDefaultConfig, RainbowKitProvider} from "@rainbow-me/rainbowkit";
 import {WagmiProvider} from "wagmi";
+import { Analytics } from "@vercel/analytics/react"
 import {sepolia} from "wagmi/chains";
 
 const queryClient = new QueryClient({
@@ -36,6 +37,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <WagmiProvider config={config}>
                 <QueryClientProvider client={queryClient}>
                     <RainbowKitProvider>
+                        <Analytics/>
                         <ReactQueryDevtools/>
                         <RouterProvider router={router}/>
                     </RainbowKitProvider>
