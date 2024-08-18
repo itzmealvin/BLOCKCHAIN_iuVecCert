@@ -52,4 +52,12 @@ contract CertsCommitment {
     function revoke(string memory _hash) external onlyIssuer isValid(_hash) {
         isRevoked[_hash] = true;
     }
+
+    function getCommitment() external view returns (uint256[2] memory) {
+        return commitment;
+    }
+
+    function getChallengeProof() external view returns (uint256[2] memory) {
+        return challengeProof;
+    }
 }
