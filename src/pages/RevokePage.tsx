@@ -1,4 +1,4 @@
-import {Box, Button, Center, Heading, List, ListIcon, ListItem, VStack} from "@chakra-ui/react";
+import {Box, Button, Center, Heading, Link as ChakraLink, List, ListIcon, ListItem, VStack} from "@chakra-ui/react";
 import CertsForm from "../components/CertsForm";
 import BlockchainServices from "../services/BlockchainServices";
 import blockchainServices, {useEthersSigner} from "../services/BlockchainServices";
@@ -9,6 +9,7 @@ import useFilesStore from "../hooks/useFilesStore";
 import {resetIssuerStores} from "../services/resetStore";
 import {FaEthereum} from "react-icons/fa";
 import {useState} from "react";
+import {Link as ReactRouterLink} from "react-router-dom";
 
 const RevokePage = () => {
     const signer = useEthersSigner();
@@ -66,6 +67,13 @@ const RevokePage = () => {
                             </List>
                         </>)}
                     <CertsForm mode={"REVOKE"}></CertsForm>
+                    {isDisabled && (
+                        <Button colorScheme="blue" variant="ghost">
+                            <ChakraLink as={ReactRouterLink} to="/">
+                                Return to Homepage
+                            </ChakraLink>
+                        </Button>
+                    )}
                 </VStack>
             </Center>
         </>

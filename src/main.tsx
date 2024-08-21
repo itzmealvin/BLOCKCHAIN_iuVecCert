@@ -10,7 +10,7 @@ import "./index.css";
 import theme from "./theme";
 import {getDefaultConfig, RainbowKitProvider} from "@rainbow-me/rainbowkit";
 import {WagmiProvider} from "wagmi";
-import { Analytics } from "@vercel/analytics/react"
+import {Analytics} from "@vercel/analytics/react"
 import {sepolia} from "wagmi/chains";
 
 const queryClient = new QueryClient({

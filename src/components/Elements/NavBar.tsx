@@ -13,10 +13,13 @@ const NavBar = () => {
             borderRadius={40}
         >
             <HStack>
-                <Image src={logo} boxSize="50px" marginRight={2}/>
+                <ChakraLink as={NavLink} key="landing" to="/">
+                    <Image src={logo} boxSize="50px" marginRight={2}/>
+                </ChakraLink>
                 <Heading as="h1" size="lg">
                     IU-VerCert
                 </Heading>
+
             </HStack>
             <HStack spacing={4}>
                 {tabs.map((tab) => (
