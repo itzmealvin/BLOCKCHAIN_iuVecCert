@@ -1,7 +1,7 @@
 {
-  "name": "iu-vercert-server",
+  "name": "iuveccert-server",
   "version": "1.0.0",
-  "description": "A server implementation for IU-VerCert",
+  "description": "A server implementation for IU-VecCert",
   "main": "index.ts",
   "scripts": {
     "start": "tsx watch index.ts"

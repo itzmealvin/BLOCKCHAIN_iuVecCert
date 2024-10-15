@@ -17,7 +17,7 @@ const NavBar = () => {
                     <Image src={logo} boxSize="50px" marginRight={2}/>
                 </ChakraLink>
                 <Heading as="h1" size="lg">
-                    IU-VerCert
+                    IU-VecCert
                 </Heading>
 
             </HStack>
