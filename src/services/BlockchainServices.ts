@@ -31,7 +31,7 @@ class BlockchainServices {
 
     createSiweMessage(address: string, statement: string) {
         const message = new SiweMessage({
-            domain: "IU-VerCert",
+            domain: "IU-VecCert",
             address,
             statement,
             uri: "http://localhost:5173/issuer",
@@ -44,7 +44,7 @@ class BlockchainServices {
     async performSignIn(currentSigner: JsonRpcSigner, signInMsg?: string) {
         const currentAddress = currentSigner.address;
         const message = signInMsg || this.createSiweMessage(currentAddress,
-            "I hereby confirm I am the owner of address and agree to the ToS of IU-VerCert!");
+            "I hereby confirm I am the owner of address and agree to the ToS of IU-VecCert!");
         const sig = await currentSigner.signMessage(message);
         return verifyMessage(message, sig) === currentAddress;
     }

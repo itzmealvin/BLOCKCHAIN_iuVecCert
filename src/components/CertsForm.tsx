@@ -109,7 +109,7 @@ const CertsForm = ({mode}: Props) => {
             data.certificates[0],
         );
         toast.promise(resultPromise, {
-            error: "Not a valid IU-VerCert proof file!",
+            error: "Not a valid IU-VecCert proof file!",
         }).then(() => {
         });
         (async () => {
