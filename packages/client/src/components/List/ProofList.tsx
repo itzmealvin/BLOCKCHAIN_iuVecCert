@@ -16,7 +16,7 @@ import { useEffect, useMemo, useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { Verifier } from "../../../../compiled/index.ts";
-import { FileProof, FileResult, Proof } from "../../models/File.ts";
+import { FileResult, Proof } from "../../models/File.ts";
 import {
   decodeChallenge,
   getContractInstance,
@@ -37,138 +37,67 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
       getContractInstance(
         "0x700AD4e9C64682562A0020ceF44C1A1440680519",
         Verifier.abi,
-        provider,
+        provider
       ),
-    [],
+    []
   );
 
   useEffect(() => {
-    const verifyProof = async (fileProof: FileProof, name: string) => {
+    const verifyProof = async (fileProof: Proof, name: string) => {
       try {
         const proofData: string[] = [];
-        const pointsChallenges: (Proof | undefined)[] = [];
         const verifyChallengesResult: (boolean | undefined)[] = [];
         const verifyPointsResult: (boolean | undefined)[] = [];
 
-        const layerChallenges = await Promise.all(
-          fileProof.indices.map((index) =>
-            index >= 0 ? contract.getChallengeAtIndex(index) : undefined
-          ),
-        );
-        const decodedChallenges = layerChallenges.map((challenge) =>
-          challenge ? decodeChallenge(challenge) : undefined
-        );
-        for (const challenge of decodedChallenges) {
-          if (challenge) {
-            try {
-              const result = await verifyContract.verify(
-                challenge.commitment,
-                challenge.proof,
-                challenge.index,
-                challenge.value,
-              );
-              verifyChallengesResult.push(result);
-            } catch (error) {
-              console.error("Verification failed for a challenge:", error);
-              verifyChallengesResult.push(undefined);
-            }
-          } else {
+        const rootChallenge = await contract.getRootChallenge();
+        const decodedChallenge = decodeChallenge(rootChallenge);
+
+        if (rootChallenge) {
+          try {
+            const result = await verifyContract.verify(
+              rootChallenge.commitment,
+              rootChallenge.proof,
+              rootChallenge.index,
+              rootChallenge.value
+            );
+            verifyChallengesResult.push(result);
+          } catch (error) {
+            console.error("Verification failed for a challenge:", error);
             verifyChallengesResult.push(undefined);
           }
         }
 
-        if (
-          verifyChallengesResult[0] &&
-          fileProof.layer2Point &&
-          fileProof.rootPoint &&
-          decodedChallenges[0]?.commitment &&
-          decodedChallenges[1]?.commitment &&
-          decodedChallenges[2]?.commitment
-        ) {
-          proofData.push(`${name}/Layer 3 Challenge`);
-          proofData.push(`${name}/Layer 2 Challenge`);
-          proofData.push(`${name}/Root Challenge`);
-          pointsChallenges.push(
-            {
-              ...fileProof.truePoint,
-              commitment: decodedChallenges[0].commitment,
-            },
-            {
-              ...fileProof.layer2Point,
-              commitment: decodedChallenges[1].commitment,
-            },
-            {
-              ...fileProof.rootPoint,
-              commitment: decodedChallenges[2].commitment,
-            },
-          );
-        } else if (
-          verifyChallengesResult[1] &&
-          fileProof.rootPoint &&
-          decodedChallenges[1]?.commitment &&
-          decodedChallenges[2]?.commitment
-        ) {
-          proofData.push(`${name}/Layer 2 Challenge`);
-          proofData.push(`${name}/Root Challenge`);
-          pointsChallenges.push(
-            undefined,
-            {
-              ...fileProof.truePoint,
-              commitment: decodedChallenges[1].commitment,
-            },
-            {
-              ...fileProof.rootPoint,
-              commitment: decodedChallenges[2].commitment,
-            },
-          );
-        } else if (
-          verifyChallengesResult[2] &&
-          decodedChallenges[2]?.commitment
-        ) {
-          proofData.push(`${name}/Root Challenge`);
-          pointsChallenges.push(undefined, undefined, {
-            ...fileProof.truePoint,
-            commitment: decodedChallenges[2].commitment,
-          });
-        }
+        proofData.push(`${name}/Root Challenge`);
         setProofData((prevProofData) =>
           [...prevProofData, ...proofData].filter(
-            (item, index, self) => self.indexOf(item) === index,
+            (item, index, self) => self.indexOf(item) === index
           )
         );
 
-        for (const point of pointsChallenges) {
-          if (point) {
-            try {
-              const result = await verifyContract.verify(
-                point.commitment,
-                point.proof,
-                point.index,
-                point.value,
-              );
-              verifyPointsResult.push(result);
-            } catch (error) {
-              console.error("Verification failed for a challenge:", error);
-              verifyPointsResult.push(undefined);
-            }
-          } else {
+        const pointChallenge = {
+          ...fileProof,
+          commitment: decodedChallenge.commitment,
+        };
+
+        if (pointChallenge) {
+          try {
+            const result = await verifyContract.verify(
+              pointChallenge.commitment,
+              pointChallenge.proof,
+              pointChallenge.index,
+              pointChallenge.value
+            );
+            verifyPointsResult.push(result);
+          } catch (error) {
+            console.error("Verification failed for a challenge:", error);
             verifyPointsResult.push(undefined);
           }
         }
 
-        if (verifyPointsResult[0]) {
-          proofData.push(`${name}/Layer 3 (leaf) Point`);
-          proofData.push(`${name}/Layer 2 Point`);
-          proofData.push(`${name}/Root Point`);
-        } else if (verifyChallengesResult[1]) {
-          proofData.push(`${name}/Layer 2 (leaf) Point`);
-          proofData.push(`${name}/Root Point`);
-        } else if (verifyChallengesResult[2]) {
-          proofData.push(`${name}/Root (leaf) Point`);
-        }
+        proofData.push(`${name}/Root (leaf) Point`);
         setProofData((prevProofData) =>
           [...prevProofData, ...proofData].filter(
-            (item, index, self) => self.indexOf(item) === index,
+            (item, index, self) => self.indexOf(item) === index
           )
         );
       } catch (error) {
@@ -181,12 +110,12 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
       try {
         await verifyProof(
           fileResult.fileDetail.certFileProof,
-          fileResult.fileDetail.certName,
+          fileResult.fileDetail.certName
         );
         await Promise.all(
           fileResult.fileDetail.appendixFileProofs.map((proof, index) =>
             verifyProof(proof, fileResult.fileDetail.appendixFiles[index])
-          ),
+          )
         );
 
         setDone(true);
@@ -194,7 +123,7 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
       } catch (error) {
         console.error(error);
         toast.error(
-          "IUVecCert Error: Can't verify the given PDF certificate/appendix(s)",
+          "IUVecCert Error: Can't verify the given PDF certificate/appendix(s)"
         );
       }
     };
@@ -233,33 +162,31 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
           </Tbody>
         </Table>
       </TableContainer>
-      {isDone
-        ? (
-          <>
-            <Confetti
-              width={globalThis.innerWidth}
-              height={globalThis.innerHeight}
-            />
-            <Button
-              colorScheme="green"
-              variant="solid"
-              onClick={handleClick}
-              mt={3}
-              isDisabled={!isDone}
-            >
-              CONTINUE
-            </Button>
-          </>
-        )
-        : (
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="md"
+      {isDone ? (
+        <>
+          <Confetti
+            width={globalThis.innerWidth}
+            height={globalThis.innerHeight}
           />
-        )}
+          <Button
+            colorScheme="green"
+            variant="solid"
+            onClick={handleClick}
+            mt={3}
+            isDisabled={!isDone}
+          >
+            CONTINUE
+          </Button>
+        </>
+      ) : (
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="md"
+        />
+      )}
     </>
   );
 };

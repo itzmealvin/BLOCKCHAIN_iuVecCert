@@ -6,13 +6,9 @@ import {
   Issuer,
   ValidityPeriod,
 } from "../models/Certificate.ts";
-/**
- * @ts-expect-error: Pure JavaScript library without declaration file
- */
+// @ts-expect-error: Pure JavaScript library without declaration file
 import { getCertificatesInfoFromPDF } from "./pdf-verify/certificateDetails.js";
-/**
- * @ts-expect-error: Pure JavaScript library without declaration file
- */
+// @ts-expect-error: Pure JavaScript library without declaration file
 import { verifyPDF } from "./pdf-verify/verifyPDF.js";
 
 /**

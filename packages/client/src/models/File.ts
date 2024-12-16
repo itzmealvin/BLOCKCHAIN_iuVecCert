@@ -8,9 +8,9 @@ export interface Proof {
   commitment: string[];
 }
 
-export interface AppendixFileKeywords extends FileProof {
+export interface AppendixFileKeywords {
   mainComponent: boolean;
-  truePoint: Proof[];
+  truePoint: Proof;
 }
 
 export interface CertFileKeywords extends AppendixFileKeywords {
@@ -32,10 +32,10 @@ export interface FileDetails {
   certName: string;
   certHash: string;
   certBuffer: Uint8Array;
-  certFileProof: FileProof;
+  certFileProof: Proof;
   appendixFiles: string[];
   appendixHashes: string[];
-  appendixFileProofs: FileProof[];
+  appendixFileProofs: Proof[];
   appendixBuffers: Uint8Array[];
 }
 
