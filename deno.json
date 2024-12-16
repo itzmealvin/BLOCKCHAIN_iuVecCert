@@ -1,0 +1,13 @@
+{
+  "license": "MIT",
+  "description": "IUVecCert: A scalable issuance protocol using TypeScript",
+  "tasks": {
+    "check": "deno lint --fix && deno fmt && deno publish --dry-run --allow-dirty",
+    "compile": "deno run -A --node-modules-dir npm:hardhat compile && cp ./packages/compiled/contracts/CertCommitment.sol/CertsCommitment.json  ./packages/issuer/static/CertsCommitment.json"
+  },
+  "workspace": ["./packages/issuer"],
+  "nodeModulesDir": "auto",
+  "imports": {
+    "hardhat": "npm:hardhat@^2.22.16"
+  }
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IUVecCert ISSUER - Browser Companion</title>
+    <link href="diploma.png" rel="icon" type="image/png" />
+    <link href="bootstrap.min.css" rel="stylesheet" />
+  </head>
+  <body
+    class="d-flex align-items-center justify-content-center vh-100 bg-light"
+  >
+    <div class="text-center">
+      <h1 class="text-center display-4">IUVecCert ISSUER</h1>
+      <span
+        id="spinner"
+        class="spinner-border text-dark d-none"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      <p id="appStatus" class="lead my-3 d-block">
+        Connect your wallet to deploy CertCommitment contract securely
+      </p>
+      <button id="connectWalletButton" type="button" class="btn btn-primary">
+        Connect wallet
+      </button>
+      <p id="walletStatus" class="mt-3"></p>
+      <button
+        class="btn btn-danger d-none"
+        type="button"
+        id="deployContractButton"
+        disabled
+      >
+        Deploy contract
+      </button>
+      <p id="contractStatus" class="mt-3"></p>
+      <p
+        id="emojiStatus"
+        class="fs-1"
+        data-bs-toggle="tooltip"
+        data-bs-title="Proceed if the emojis match what you see on the console window"
+      >
+      </p>
+    </div>
+    <script src="bootstrap.bundle.min.js"></script>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

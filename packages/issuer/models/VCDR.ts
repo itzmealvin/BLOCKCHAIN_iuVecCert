@@ -1,0 +1,31 @@
+import type { OmitFileDetails } from "./File.ts";
+import type { ChallengeParams, Vector } from "./Vector.ts";
+
+export interface SavedVectorCommitmentData {
+  vectorData: Vector;
+  details: OmitFileDetails[];
+  certDirectory: string;
+}
+
+export interface VectorCommitmentDeploymentRequest {
+  issuerCN: string;
+  description: string;
+  challenge: ChallengeParams;
+  grantedAddress: string;
+  lastOperation: "built" | "deployed";
+}
+
+export interface DeploymentReceipt {
+  from: string;
+  nonce: number;
+  blockNumber: number;
+  blockTimestamp: string;
+  status: number;
+  confirmations: number;
+  contractAddress: string;
+}
+
+export interface VectorCommitmentDeploymentResponse
+  extends VectorCommitmentDeploymentRequest {
+  deploymentReceipt: DeploymentReceipt;
+}
