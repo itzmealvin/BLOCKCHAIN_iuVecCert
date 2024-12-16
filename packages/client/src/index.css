@@ -1,0 +1,11 @@
+body {
+  padding: 20px !important;
+}
+
+::file-selector-button {
+  display: none;
+}
+
+input[type="file"] {
+  padding-top: 7px;
+}

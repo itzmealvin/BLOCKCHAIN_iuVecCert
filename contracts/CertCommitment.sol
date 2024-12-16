@@ -1,63 +1,121 @@
-// SPDX-License-Identifier: MIT
-// Modified from https://github.com/appliedzkp/semaphore/blob/master/contracts/sol/verifier.sol
+// SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.0;
 
+/**
+ * @title CertsCommitment
+ * @author Quang-Dieu Nguyen
+ * @notice Contract to manage challenge and revocation for certificates.
+ */
 contract CertsCommitment {
-
+    // State variables
     uint256 public issueTime;
     address public issuer;
     string public issuerCN;
     string public batchDesc;
-    uint256[2] public commitment;
-    uint256 public challengeIndex;
-    uint256 public challengeValue;
-    uint256[2] public challengeProof;
-    mapping(string => bool) public isRevoked;
 
-    modifier onlyIssuer() {
-        require(msg.sender == issuer, "You are not the issuer!");
-        _;
+    // Structs
+    struct GPoint {
+        uint256 X;
+        uint256 Y;
     }
 
-    modifier isValid(string memory _hash) {
+    struct Challenge {
+        uint256 index;
+        uint256 value;
+        GPoint proof;
+        GPoint commitment;
+    }
+
+    struct Revoked {
+        bool status;
+        string reason;
+    }
+
+    Challenge public rootChallenge;
+    mapping(string => Revoked) public isRevoked;
+
+    // Modifiers
+    /**
+     * @notice Ensures only the issuer can execute certain functions.
+     */
+    modifier onlyIssuer() {
         require(
-            isRevoked[_hash] != true,
-            "This certificate is revoked and cannot be use!"
+            msg.sender == issuer,
+            "CertsCommitment: Caller is not the issuer"
         );
         _;
     }
 
-    constructor (
+    /**
+     * @notice Ensures the certificate is not revoked.
+     */
+    modifier isValid(string memory _hash) {
+        require(
+            !isRevoked[_hash].status,
+            "CertsCommitment: Certificate is revoked"
+        );
+        _;
+    }
+
+    // Constructor
+    /**
+     * @notice Initializes the contract with issuer information and pre-allocates challenge slots.
+     * @param _issuerCN Common name of the issuer.
+     * @param _batchDesc Description of the certificate batch.
+     * @param _rootChallenge challenge to add.
+     */
+    constructor(
         string memory _issuerCN,
         string memory _batchDesc,
-        uint256 _commitment0,
-        uint256 _commitment1,
-        uint256 _challengeIndex,
-        uint256 _challengeValue,
-        uint256 _challengeProof0,
-        uint256 _challengeProof1
+        Challenge memory _rootChallenge
     ) {
         issueTime = block.timestamp;
         issuer = msg.sender;
         issuerCN = _issuerCN;
         batchDesc = _batchDesc;
-        commitment[0] = _commitment0;
-        commitment[1] = _commitment1;
-        challengeIndex = _challengeIndex;
-        challengeValue = _challengeValue;
-        challengeProof[0] = _challengeProof0;
-        challengeProof[1] = _challengeProof1;
+        rootChallenge = _rootChallenge;
     }
 
-    function revoke(string memory _hash) external onlyIssuer isValid(_hash) {
-        isRevoked[_hash] = true;
+    /**
+     * @notice Revoke a certificate by its hash.
+     * @param _hash Unique hash identifying the certificate.
+     * @param _reason Reason for revocation.
+     */
+    function revoke(
+        string calldata _hash,
+        string calldata _reason
+    ) external onlyIssuer isValid(_hash) {
+        isRevoked[_hash] = Revoked({status: true, reason: _reason});
     }
 
-    function getCommitment() external view returns (uint256[2] memory) {
-        return commitment;
-    }
-
-    function getChallengeProof() external view returns (uint256[2] memory) {
-        return challengeProof;
+    /**
+     * @notice Returns the challenge for a given index.
+     * @return index Challenge index.
+     * @return value Challenge value.
+     * @return proofX X-coordinate of the proof point.
+     * @return proofY Y-coordinate of the proof point.
+     * @return commitX X-coordinate of the commitment point.
+     * @return commitY Y-coordinate of the commitment point.
+     */
+    function getRootChallenge()
+        external
+        view
+        returns (
+            uint256 index,
+            uint256 value,
+            uint256 proofX,
+            uint256 proofY,
+            uint256 commitX,
+            uint256 commitY
+        )
+    {
+        return (
+            rootChallenge.index,
+            rootChallenge.value,
+            rootChallenge.proof.X,
+            rootChallenge.proof.Y,
+            rootChallenge.commitment.X,
+            rootChallenge.commitment.Y
+        );
     }
 }

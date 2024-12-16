@@ -1,0 +1,50 @@
+import forge from "node-forge";
+import { extractSignature } from "./extractSignature.js";
+import { getMessageFromSignature, preparePDF } from "./general.js";
+
+const mapEntityAttributes = (attrs) => {
+  const typeMapping = {
+    "0.9.2342.19200300.100.1.1": "ID",
+    "2.5.4.12": "role",
+  };
+
+  return attrs.reduce((agg, { type, name, value }) => {
+    if (!name) {
+      const mappedType = typeMapping[type] || type;
+      agg[mappedType] = value;
+    } else {
+      agg[name] = value;
+    }
+    return agg;
+  }, {});
+};
+
+const extractSingleCertificateDetails = (cert) => {
+  const { issuer, subject, validity } = cert;
+  return {
+    issuedBy: mapEntityAttributes(issuer.attributes),
+    issuedTo: mapEntityAttributes(subject.attributes),
+    validityPeriod: validity,
+    pemCertificate: forge.pki.certificateToPem(cert),
+  };
+};
+
+export const extractCertificatesDetails = (certs) =>
+  certs.map(extractSingleCertificateDetails).map((cert, i) => {
+    if (i) return cert;
+    return {
+      clientCertificate: true,
+      ...cert,
+    };
+  });
+
+export const getCertificatesInfoFromPDF = (pdf) => {
+  const pdfBuffer = preparePDF(pdf);
+  const { signatureStr } = extractSignature(pdfBuffer);
+
+  return signatureStr.map((signature) => {
+    const newLocal = getMessageFromSignature(signature);
+    const { certificates } = newLocal;
+    return extractCertificatesDetails(certificates);
+  });
+};

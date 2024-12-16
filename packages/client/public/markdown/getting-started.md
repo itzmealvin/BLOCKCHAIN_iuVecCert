@@ -1,11 +1,6 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url]
-[![License][license-shield]][license-url]
-
 # @iuveccert
 
-> The all-in-one tooling for scalable certificate issuance using Vector
-> Commitment.
+## The all-in-one tooling for scalable certificate issuance using Verkle Tree.
 
 <p align="center">
 <a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/issues/new?labels=bug&template=bug-report---.md"         target="_blank"
@@ -16,18 +11,9 @@
 
 <a id="readme-top" ></a>
 
-<!-- ABOUT THE PROJECT -->
+### Built With
 
-## About The Project
-
-[![Product Name Screen Shot][product-screenshot]]()
-
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
-
-## Built With
-
-### CLIENT
+#### CLIENT
 
 - [![React][React.js]][React-url]
 - [![nvm][nvm]][nvm-url]
@@ -36,7 +22,7 @@
 - [![ChakraUI][ChakraUI]][ChakraUI-url]
 - [![TypeScript][TypeScript]][TypeScript-url]
 
-### GENERATOR + ISSUER
+#### GENERATOR + ISSUER
 
 - [![Deno][Deno]][Deno-url]
 - [![TypeScript][TypeScript]][TypeScript-url]
@@ -45,21 +31,11 @@
 <p align="right">(<a href="#readme-top"         target="_blank"
           rel="noopener noreferrer">back to top</a>)</p>
 
-<!-- GETTING STARTED -->
-
-## Getting Started
-
-**For more details on how to installation/usage/examples, please refer to the
-`README.md` of each respective IUVecCert components**
-
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
-
 <!-- INSTALLATION -->
 
-## Installation
+### Installation
 
-1. Install [Deno](https://deno.com) and [NodeJS](https://nodejs.org/en) via
+1. Install [Deno](https://deno.com) and [Node.js](https://nodejs.org/en) via
    [nvm](https://github.com/nvm-sh/nvm) to your machine.
 
    ```bash
@@ -86,7 +62,7 @@
 
 <!-- FEATURES -->
 
-## Features
+### Features
 
 - [x] **All-in-one tooling for certificate issuance**: A unified platform for
       generating, issuing, and verifying certificates, streamlining the process
@@ -96,8 +72,8 @@
 - [x] **Merge certificates in seconds**: Seamlessly generates multiple
       certificates from a single template document, saving time and ensuring
       professional presentation.
-- [x] **Vector Commitment**: Optimizes certificate proof storage and
-      computational time, enhancing scalability and performance.
+- [x] **Verkle Tree**: Optimizes certificate proof storage and computational
+      time, enhancing scalability and performance.
 - [x] **Embedded receipt**: Integrates proof certificates directly into a single
       PDF file for convenient sharing and storage.
 - [x] **Revocation**: Enables revoking invalid certificates, ensuring
@@ -123,7 +99,7 @@ for a full list of proposed features (and known issues).
 
 <!-- CONTRIBUTING -->
 
-## Contributing
+### Contributing
 
 Contributions are what make the open source community such an amazing place to
 learn, inspire, and create. Any contributions you make are **greatly
@@ -134,37 +110,18 @@ respective IUVecCert components**
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
-### Top contributors:
-
-<a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/graphs/contributors" target="_blank" rel="noopener noreferrer">
-  <img src="https://contrib.rocks/image?repo=itzmealvin/BLOCKCHAIN_iuVerCert" alt="contrib.rocks image" />
-</a>
-
 <!-- LICENSE -->
 
-## License
+### License
 
-Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
-
-<!-- CONTACT -->
-
-## Contact
-
-Quang-Dieu Nguyen (@itzmealvin) -
-[@itzmeclone](https://twitter.com/@itzmeclone) - nqdieu@proton.me
-
-Project Link:
-[https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert](https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert)
+Distributed under the GPLv3 License. See `LICENSE` page for more information.
 
 <p align="right">(<a href="#readme-top"         target="_blank"
           rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
 
-## Acknowledgments
+### Acknowledgments
 
 - [Dr. Tran Thanh Tung](mailto:tttung@hcmiu.edu.vn) for his support
 - [Wei Jie Koh's KZG library](https://github.com/weijiekoh/libkzg) for the
@@ -175,7 +132,7 @@ Project Link:
 
 <!-- PUBLISHED PAPER -->
 
-## Published Paper
+### Published Paper
 
 - [FDSE 2024](https://link.springer.com/chapter/10.1007/978-981-96-0434-0_8)
   > Nguyen, QD., Tran, TT. (2024). IU-VecCert: A Scalable Credentials Issuance
@@ -208,13 +165,13 @@ Project Link:
 [Vite-url]: https://vite.dev/
 [ChakraUI]: https://img.shields.io/badge/chakraui-000000?style=for-the-badge&logo=chakraui&logoColor=white
 [ChakraUI-url]: https://www.chakra-ui.com/
+[nvm]: https://img.shields.io/badge/nvm-000000?style=for-the-badge&logo=nvm&logoColor=white
+[nvm-url]: https://github.com/nvm-sh/nvm
+[pnpm]: https://img.shields.io/badge/pnpm-000000?style=for-the-badge&logo=pnpm&logoColor=white
+[pnpm-url]: https://pnpm.io/
 [Deno]: https://img.shields.io/badge/deno-000000?style=for-the-badge&logo=deno&logoColor=white
 [Deno-url]: https://deno.com/
 [TypeScript]: https://img.shields.io/badge/typescript-000000?style=for-the-badge&logo=typescript&logoColor=white
 [TypeScript-url]: https://www.typescriptlang.org/
 [Express]: https://img.shields.io/badge/express.js-000000?style=for-the-badge&logo=express&logoColor=white
 [Express-url]: https://expressjs.com/
-[nvm]: https://img.shields.io/badge/nvm-000000?style=for-the-badge&logo=nvm&logoColor=white
-[nvm-url]: https://github.com/nvm-sh/nvm
-[pnpm]: https://img.shields.io/badge/pnpm-000000?style=for-the-badge&logo=pnpm&logoColor=white
-[pnpm-url]: https://pnpm.io/
