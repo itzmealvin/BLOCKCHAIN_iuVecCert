@@ -9,8 +9,14 @@ import DocsPage from "./pages/DocsPage.tsx";
 import Layout from "./pages/Layout.tsx";
 import Maintenance from "./pages/Maintenance.tsx";
 import RevokePage from "./pages/RevokePage.tsx";
-import VerifierPage from "./pages/VerifyPage.tsx";
 import SelectivePage from "./pages/SelectivePage.tsx";
+import VerifierPage from "./pages/VerifyPage.tsx";
+
+interface Tab {
+  path: string;
+  element: React.ReactElement;
+  name: string;
+}
 
 export const tabs = [
   { path: "verifier", element: <VerifierPage />, name: "Verify" },
@@ -35,7 +41,7 @@ export const tabs = [
     element: <ContactPage />,
     name: "Contact",
   },
-];
+].filter(Boolean) as Tab[];
 
 const router = createBrowserRouter([
   {
@@ -43,9 +49,11 @@ const router = createBrowserRouter([
     element: (
       <>
         <RouteChangeHandler />
-        {import.meta.env.VITE_MAINTENANCE_MODE === "true"
-          ? <Maintenance />
-          : <Layout />}
+        {import.meta.env.VITE_ENABLE_MAINTENANCE === "true" ? (
+          <Maintenance />
+        ) : (
+          <Layout />
+        )}
       </>
     ),
     errorElement: <ErrorPage />,
