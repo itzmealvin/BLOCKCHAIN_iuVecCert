@@ -12,6 +12,7 @@ interface Props {
   content: ReactNode;
   bgColor?: string;
 }
+
 const ReusableAccordionItem = ({ label, content, bgColor }: Props) => (
   <AccordionItem>
     <AccordionButton _expanded={{ bg: bgColor || "blue.400", color: "white" }}>

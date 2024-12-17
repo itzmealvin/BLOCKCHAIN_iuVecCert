@@ -5,7 +5,9 @@
   "exports": "./index.ts",
   "description": "IUVecCert ISSUER: CLI to issue embedded credentials securely by vector commitment written in TypeScript + Deno",
   "publish": {
-    "exclude": ["./credentials/5000"]
+    "exclude": [
+      "./credentials/5000"
+    ]
   },
   "tasks": {
     "check": "deno lint --fix && deno fmt && deno publish --dry-run --allow-dirty",

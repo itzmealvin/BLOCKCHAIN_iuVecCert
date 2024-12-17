@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>IUVecCert ISSUER - Browser Companion</title>
     <link href="diploma.png" rel="icon" type="image/png" />
     <link href="bootstrap.min.css" rel="stylesheet" />
@@ -13,36 +13,36 @@
     <div class="text-center">
       <h1 class="text-center display-4">IUVecCert ISSUER</h1>
       <span
-        id="spinner"
-        class="spinner-border text-dark d-none"
-        role="status"
         aria-hidden="true"
+        class="spinner-border text-dark d-none"
+        id="spinner"
+        role="status"
       ></span>
-      <p id="appStatus" class="lead my-3 d-block">
+      <p class="lead my-3 d-block" id="appStatus">
         Connect your wallet to deploy CredsCommitment contract securely
       </p>
-      <button id="connectWalletButton" type="button" class="btn btn-primary">
+      <button class="btn btn-primary" id="connectWalletButton" type="button">
         Connect wallet
       </button>
-      <p id="walletStatus" class="mt-3"></p>
+      <p class="mt-3" id="walletStatus"></p>
       <button
         class="btn btn-danger d-none"
-        type="button"
-        id="deployContractButton"
         disabled
+        id="deployContractButton"
+        type="button"
       >
         Deploy contract
       </button>
-      <p id="contractStatus" class="mt-3"></p>
+      <p class="mt-3" id="contractStatus"></p>
       <p
-        id="emojiStatus"
         class="fs-1"
-        data-bs-toggle="tooltip"
         data-bs-title="Proceed if the emojis match what you see on the console window"
+        data-bs-toggle="tooltip"
+        id="emojiStatus"
       >
       </p>
     </div>
     <script src="bootstrap.bundle.min.js"></script>
-    <script type="module" src="script.js"></script>
+    <script src="script.js" type="module"></script>
   </body>
 </html>

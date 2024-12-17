@@ -2,24 +2,21 @@
   "compilerOptions": {
     /* Language and Environment */
     "target": "ES2022",
-    "lib": ["ES2023"],
+    "lib": [
+      "ES2023"
+    ],
     "moduleDetection": "force",
-
     /* Modules */
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-
     /* Interop Constraints */
     "isolatedModules": true,
-
     /* Completeness */
     "skipLibCheck": true,
-
     /* Emit */
     "noEmit": true,
-
     /* Type Checking */
     "strict": true,
     "noImplicitAny": true,
@@ -33,5 +30,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["vite.config.ts"]
+  "include": [
+    "vite.config.ts"
+  ]
 }
