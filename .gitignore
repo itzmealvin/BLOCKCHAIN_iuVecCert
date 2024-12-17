@@ -6,6 +6,6 @@ embedded
 dist
 .env
 packages/issuer/credentials/5000/
-!packages/iuvercert-issuer/credentials/
+!packages/issuer/credentials/
 template.docx
 packages/issuer/requests/

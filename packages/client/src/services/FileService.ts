@@ -101,7 +101,7 @@ export const getProofObject = async (
     credKeywords: {} as CredFileKeywords,
   };
 
-  let savedCertID = "";
+  let savedCredID = "";
   let savedSalt = "";
 
   for (const file of Array.from(files)) {
@@ -138,7 +138,7 @@ export const getProofObject = async (
     } else {
       const credParsedObject = parsedObject as CredFileKeywords;
       result.credKeywords = credParsedObject;
-      savedCertID = credParsedObject.credID;
+      savedCredID = credParsedObject.credID;
       savedSalt = credParsedObject.salt;
       result.fileDetail.commitAddress = credParsedObject.commitAddress;
       result.fileDetail.requiredAppendixNames = credParsedObject.appendixFiles;
@@ -162,7 +162,7 @@ export const getProofObject = async (
   result.fileDetail.appendixHashes = result.fileDetail.appendixBuffers.map(
     (buffer, index) => {
       return getHash(
-        savedCertID,
+        savedCredID,
         result.fileDetail.appendixFiles[index],
         buffer,
         savedSalt,
