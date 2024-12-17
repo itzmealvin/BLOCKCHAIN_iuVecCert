@@ -171,8 +171,8 @@ _Options:_
   file name (required). Before processing, the command will locate this file
   from the `requests` folder.
 - `-o, —-output [directory]`: The path to the output ZIP result directory
-  (default: "../../embedded/")
-- `-d, --delete`: Delete the VCDRe and SVCD files for security (default: true)
+  (default: "../../embedded/").
+- `-d, --delete`: Delete the VCDRe and SVCD files for security (default: true).
 - `-h, —-help`: Displays help information for the command.
 
 _Example usage:_
@@ -228,7 +228,7 @@ Here are the steps to contribute:
 GitHub account.
 
 **2. Create a Feature Branch**: Generate a descriptive name for your branch, for
-instance, `@iuveccert/issuer-your-feature`
+instance, `@iuveccert/issuer-your-feature`.
 
 ```bash
 git checkout -b @iuveccert/issuer-your-feature

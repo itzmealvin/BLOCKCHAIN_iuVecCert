@@ -49,7 +49,7 @@ zero-cost with an intuitive UI for the end users.
    ```
 4. Run the program by using the given commands below. Vite should expose a
    localhost web server for development at
-   [http://localhost:5173/](http://localhost:5173/)
+   [http://localhost:5173/](http://localhost:5173/).
 
    ```bash
    corepack use pnpm@latest
@@ -70,7 +70,7 @@ zero-cost with an intuitive UI for the end users.
 ## Usage
 
 The client website is publicly accessible on
-[https://iuveccert.vercel.app](https://iuveccert.vercel.com)
+[https://iuveccert.vercel.app](https://iuveccert.vercel.com).
 
 <!-- FEATURES -->
 
@@ -82,7 +82,7 @@ The client website is publicly accessible on
 - [x] **Revocation**: Enables revoking invalid credentials, ensuring reliability
       and control over credentials.
 - [x] **Security from blockchain**: Secures credentials with blockchain
-      technology for tamper-proof and transparent validation.d
+      technology for tamper-proof and transparent validation.
 - [x] **Non-interactive verification**: Supports verification without
       interaction with the issuer, simplifying the process for verifiers.
 - [x] **Zero-cost verification**: Enables credential verification without
@@ -113,7 +113,7 @@ Here are the steps to contribute:
 GitHub account.
 
 **2. Create a Feature Branch**: Generate a descriptive name for your branch, for
-instance, `@iuveccert/client-your-feature`
+instance, `@iuveccert/client-your-feature`:
 
 ```bash
 git checkout -b @iuveccert/client-your-feature
