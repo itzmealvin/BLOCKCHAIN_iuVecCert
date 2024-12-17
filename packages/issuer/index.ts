@@ -2,6 +2,7 @@ import { InvalidArgumentError, program } from "commander";
 import open from "open";
 import type {
   DeploymentReceipt,
+  SavedVectorCommitmentData,
   VectorCommitmentDeploymentRequest,
   VectorCommitmentDeploymentResponse,
 } from "./models/VCDR.ts";
@@ -29,7 +30,6 @@ import {
   zipAndEmbed,
 } from "./helper/sync.ts";
 import { oraSpinner, waitForUserDecision } from "./libs/logger.ts";
-import type { SavedVectorCommitmentData } from "./models/VCDR.ts";
 
 program
   .name("iuveccert")

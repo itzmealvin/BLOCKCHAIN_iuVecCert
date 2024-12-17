@@ -7,9 +7,8 @@ class VerifyPDFError extends Error {
     VERIFY_SIGNATURE: "VERIFY_SIGNATURE",
     UNSUPPORTED_SUBFILTER: "UNSUPPORTED_SUBFILTER",
   };
-
-  type;
   static TYPE_PARSE;
+  type;
 
   constructor(msg, type = VerifyPDFError.TYPES.TYPE_UNKNOWN) {
     super(msg);

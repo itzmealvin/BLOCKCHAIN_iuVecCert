@@ -11,6 +11,7 @@ import Maintenance from "./pages/Maintenance.tsx";
 import RevokePage from "./pages/RevokePage.tsx";
 import SelectivePage from "./pages/SelectivePage.tsx";
 import VerifierPage from "./pages/VerifyPage.tsx";
+import React from "react";
 
 interface Tab {
   path: string;

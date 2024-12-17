@@ -98,16 +98,16 @@ contract CredsCommitment {
      * @return commitY Y-coordinate of the commitment point.
      */
     function getRootChallenge()
-        external
-        view
-        returns (
-            uint256 index,
-            uint256 value,
-            uint256 proofX,
-            uint256 proofY,
-            uint256 commitX,
-            uint256 commitY
-        )
+    external
+    view
+    returns (
+        uint256 index,
+        uint256 value,
+        uint256 proofX,
+        uint256 proofY,
+        uint256 commitX,
+        uint256 commitY
+    )
     {
         return (
             rootChallenge.index,

@@ -5,6 +5,7 @@ import {
   type Proof,
 } from "../libs/kzg.ts";
 import type { ChunkWorkerData } from "../models/Worker.ts";
+
 const worker = self as unknown as Worker;
 
 /**
