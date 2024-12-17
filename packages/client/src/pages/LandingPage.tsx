@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 const words = [
-  "easy-to-implement",
+  "implement-easy",
   "constant-size-proof",
   "non-interactive-verification",
 ];
@@ -52,7 +52,7 @@ const LandingPage = () => {
           bgClip="text"
         >
           A Scalable Credential Issuance Protocol <br />
-          Made {currentWord} with IUVecCert
+          Make {currentWord} with IUVecCert
         </Heading>
       </CardHeader>
       <CardBody>

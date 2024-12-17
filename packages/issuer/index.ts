@@ -9,7 +9,13 @@ import type {
 import cors from "cors";
 // @ts-types="@types/express"
 import express from "express";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { resolve } from "node:path";
 import { extractAddress, verifyPermission } from "./helper/config.ts";
 import { encodeChallenge } from "./helper/contract.ts";
@@ -169,7 +175,7 @@ program
       const svcd: SavedVectorCommitmentData = {
         vectorData,
         details: ommitedFileDetails,
-        credDirectory: credDir,
+        credDir,
       };
       saveJsonAsBin(svcd, outputSVCDFile);
       oraSpinner.succeed(
@@ -371,6 +377,11 @@ program
     "output ZIP result directory path",
     "../../embedded/",
   )
+  .option(
+    "-d, --delete",
+    "delete the VCDRe and SVCD files for security",
+    true,
+  )
   .action(async (options) => {
     try {
       if (!options.permission.endsWith(".pdf")) {
@@ -446,11 +457,11 @@ program
       oraSpinner.succeed(`READ: Input SVCD file from ${svcdFile}`);
 
       oraSpinner.start(
-        `READING: PDF credential(s) from directory ${svcd.credDirectory} as group`,
+        `READING: PDF credential(s) from directory ${svcd.credDir} as group`,
       );
       const loader = loadCertFolderFromSVCD(svcd);
       oraSpinner.succeed(
-        `READ: ${loader.length} PDF credential groups from directory ${svcd.credDirectory}`,
+        `READ: ${loader.length} PDF credential groups from directory ${svcd.credDir}`,
       );
 
       const zippedData = await zipAndEmbed(
@@ -471,6 +482,17 @@ program
       oraSpinner.succeed(
         `SAVED: Zipped ${loader.length} embedded PDF credential groups to ${outputFile}`,
       );
+
+      if (options.delete) {
+        oraSpinner.start(
+          "DELETING: Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)",
+        );
+        unlinkSync(vcdreFile);
+        unlinkSync(svcdFile);
+        oraSpinner.succeed(
+          "DELETED: Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)",
+        );
+      }
       Deno.exit(0);
     } catch (error: unknown) {
       if (error instanceof Error) {

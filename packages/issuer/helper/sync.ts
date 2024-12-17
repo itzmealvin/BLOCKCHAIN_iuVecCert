@@ -245,10 +245,10 @@ export const loadCertFolderFromSVCD = (
   svcd: SavedVectorCommitmentData,
 ): FileDetails[] => {
   return svcd.details.map((detail) => {
-    const credBuffer = readFileSync(join(svcd.credDirectory, detail.credFile));
+    const credBuffer = readFileSync(join(svcd.credDir, detail.credFile));
 
     const appendixBuffers = detail.appendixFiles.map((file) =>
-      readFileSync(join(svcd.credDirectory, file))
+      readFileSync(join(svcd.credDir, file))
     );
 
     return {
