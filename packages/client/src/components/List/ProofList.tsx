@@ -35,7 +35,7 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
   const verifyContract = useMemo(
     () =>
       getContractInstance(
-        "0x56B6DE2Aefa9463413d547E1bcE9271948e321B2",
+        "0xF98cbFAf6C804cD3928d4B575C050B1E72314c3D",
         Verifier.abi,
         provider,
       ),
