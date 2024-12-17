@@ -64,12 +64,12 @@ const SelectivePage = () => {
     [fileResult],
   );
 
-  const certFile = useMemo(
+  const credFile = useMemo(
     () =>
-      hasFileResult && fileResult.fileDetail.certBuffer
-        ? { data: fileResult.fileDetail.certBuffer.slice() }
+      hasFileResult && fileResult.fileDetail.credBuffer
+        ? { data: fileResult.fileDetail.credBuffer.slice() }
         : null,
-    [hasFileResult, fileResult?.fileDetail?.certBuffer],
+    [hasFileResult, fileResult?.fileDetail?.credBuffer],
   );
 
   const handleCheckboxChange = (index: number, isChecked: boolean) => {
@@ -90,35 +90,35 @@ const SelectivePage = () => {
   const handleDownload = async () => {
     setLoading(true);
     try {
-      const newNames = fileResult.certKeywords.appendixFiles.filter((_, idx) =>
+      const newNames = fileResult.credKeywords.appendixFiles.filter((_, idx) =>
         checkedItems.includes(idx)
       );
-      const newHashes = fileResult.certKeywords.appendixHashes.filter(
+      const newHashes = fileResult.credKeywords.appendixHashes.filter(
         (_, idx) => checkedItems.includes(idx),
       );
 
-      const certDoc = await PDFDocument.load(fileResult.fileDetail.certBuffer);
-      certDoc.setKeywords([
+      const credDoc = await PDFDocument.load(fileResult.fileDetail.credBuffer);
+      credDoc.setKeywords([
         JSON.stringify({
-          ...fileResult.certKeywords,
+          ...fileResult.credKeywords,
           appendixNames: newNames,
           appendixHashes: newHashes,
         }),
       ]);
-      await certDoc.attach(
+      await credDoc.attach(
         fileResult.fileDetail.permissionBuffer,
         "SIGNED.pdf",
       );
-      await certDoc.attach(fileResult.fileDetail.certBuffer, "CERT.pdf");
+      await credDoc.attach(fileResult.fileDetail.credBuffer, "CERT.pdf");
 
-      const pdfBytes = await certDoc.save();
+      const pdfBytes = await credDoc.save();
       setStep(2);
-      fileDownload(pdfBytes, `${fileResult.fileDetail.certName}`);
+      fileDownload(pdfBytes, `${fileResult.fileDetail.credName}`);
       setStep(3);
     } catch (error) {
       console.error(error);
       toast.error(
-        "IUVecCert Error: Cannot generate requested embedded certificate",
+        "IUVecCert Error: Cannot generate requested embedded credential",
       );
     } finally {
       toast.success(
@@ -138,9 +138,9 @@ const SelectivePage = () => {
       <VStack justifyContent="center" spacing={10}>
         <ProgressSpine
           stepDetails={[
-            { title: "Step 1", description: "Upload Certificate" },
+            { title: "Step 1", description: "Upload Credential" },
             { title: "Step 2", description: "Select Components" },
-            { title: "Step 3", description: "Preview New Certificate" },
+            { title: "Step 3", description: "Preview New Credential" },
           ]}
           currentStep={step}
         />
@@ -148,16 +148,16 @@ const SelectivePage = () => {
           <VStack spacing={5} align="center">
             {!hasFileResult
               ? <UploadForm mode="REVOKE" setStep={() => setStep(1)} />
-              : fileResult.certKeywords.appendixFiles.length > 0
+              : fileResult.credKeywords.appendixFiles.length > 0
               ? (
                 <HStack spacing={20}>
                   <VStack>
                     <Heading as="h2" size="lg">
-                      Certificate Preview
+                      Credential Preview
                     </Heading>
                     <Document
-                      file={certFile}
-                      loading="Loading PDF Certificate..."
+                      file={credFile}
+                      loading="Loading PDF Credential..."
                     >
                       <Page
                         pageNumber={1}
@@ -177,9 +177,9 @@ const SelectivePage = () => {
                         Select Appendix(s) to Disclose
                       </Heading>
                       <Heading as="h3" size="md">
-                        {`Disclosed ${checkedItems.length} over ${fileResult.certKeywords.appendixFiles.length} presented components`}
+                        {`Disclosed ${checkedItems.length} over ${fileResult.credKeywords.appendixFiles.length} presented components`}
                       </Heading>
-                      {fileResult.certKeywords.appendixFiles.map(
+                      {fileResult.credKeywords.appendixFiles.map(
                         (name, index) => (
                           <Checkbox
                             key={index}
@@ -210,7 +210,7 @@ const SelectivePage = () => {
                             </AlertDialogHeader>
                             <AlertDialogBody>
                               Are you sure? This action is irreversible unless
-                              you keep the original certificate
+                              you keep the original credential
                             </AlertDialogBody>
                             <AlertDialogFooter>
                               <Button ref={cancelRef} onClick={onClose}>

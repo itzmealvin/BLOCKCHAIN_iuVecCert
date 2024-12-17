@@ -3,30 +3,30 @@ import InfoTile from "../components/InfoTile.tsx";
 
 const tiles = [
   {
-    title: "All-in-one tooling for certificate issuance",
+    title: "All-in-one tooling for credentials issuance",
     description:
-      "Provides a unified platform for generating, issuing, and verifying certificates. This tool streamlines the whole process, reducing manual effort and ensuring consistency. Users benefit from reduced administrative overhead and optimized workflows",
+      "Provides a unified platform for issuing, and verifying credentials. This tool streamlines the whole process, reducing manual effort and ensuring consistency. Users benefit from reduced administrative overhead and optimized workflows",
+    colSpan: 5,
+    rowSpan: 1,
+  },
+  {
+    title: "Constant size proof",
+    description:
+      "IUVecCert delivers constant-size proofs regardless of the number of credentials issued, ensuring minimal overhead for issuers and seamless verification for users. This approach enhances scalability and performance",
     colSpan: 3,
     rowSpan: 1,
   },
   {
-    title: "Certificate validator",
+    title: "Revocation",
     description:
-      "Enables validation of merged certificates, ensuring authenticity and integrity from a data file. Issuers can validate credentials instantly, improving trust and reducing the risk of fraud",
-    colSpan: 2,
+      "Provides a mechanism for revoking credentials when necessary, ensuring that invalid credentials can no longer be used. Issuers benefit from enhanced control and reliability of the certification process",
+    colSpan: 1,
     rowSpan: 1,
   },
   {
-    title: "Merge certificates in seconds",
+    title: "Vector Commitment",
     description:
-      "Allows issuers to generate multiple certificates from a single template document seamlessly. This feature is especially helpful for issuers who need to present consolidated credentials, saving time and ensuring a professional appearance. (*) Test conducted on specialized hardware",
-    colSpan: 4,
-    rowSpan: 1,
-  },
-  {
-    title: "Verkle Tree",
-    description:
-      "Implements Verkle Tree structures to optimize certificate proof storage and computational time. This ensures fast access and reduces storage overhead, benefiting users by enhancing scalability and performance",
+      "IUVecCert leverages vector commitments to keep the proof storage constant, while dealing with reasonable computational efficiency. This ensures secure, fast, and scalable issuance and verification of credentials",
     colSpan: 2,
     rowSpan: 1,
   },
@@ -38,29 +38,15 @@ const tiles = [
   {
     title: "Embedded receipt",
     description:
-      "Facilitates the direct integration of the proof certificates into one easy PDF file. Learners can embed certificates into platforms without having to hold separate digital files",
-    colSpan: 2,
-    rowSpan: 1,
-  },
-  {
-    title: "Revocation",
-    description:
-      "Provides a mechanism for revoking certificates when necessary, ensuring that invalid credentials can no longer be used. Issuers benefit from enhanced control and reliability of the certification process",
-    colSpan: 1,
-    rowSpan: 1,
-  },
-  {
-    title: "Security from blockchain",
-    description:
-      "Leverages blockchain technology to secure certificates with tamper-proof mechanisms. Users gain confidence in the immutability and transparency of their credentials",
+      "Facilitates the direct integration of the proof credentials into one easy PDF file. Learners can embed credentials into platforms without having to hold separate digital files",
     colSpan: 2,
     rowSpan: 1,
   },
 
   {
-    title: "Selective disclosure",
+    title: "Security from blockchain",
     description:
-      "Allows learners to share specific parts of their certificates while keeping other details private. This feature ensures privacy and enhances their control over their data",
+      "Leverages blockchain technology to secure credentials with tamper-proof mechanisms. Users gain confidence in the immutability and transparency of their credentials",
     colSpan: 3,
     rowSpan: 1,
   },
@@ -92,14 +78,21 @@ const tiles = [
   {
     title: "Zero-cost verification",
     description:
-      "Enables verification of certificates without incurring additional costs, utilizing efficient cryptographic techniques. This feature benefits issuers and verifiers by minimizing operational expenses",
+      "Enables verification of credentials without incurring additional costs, utilizing efficient cryptographic techniques. This feature benefits issuers and verifiers by minimizing operational expenses",
     colSpan: 4,
     rowSpan: 1,
   },
   {
     title: "Scalable design",
     description:
-      "Ensures that the system can handle a growing number of users and certificates without performance degradation. This scalability guarantees a smooth user experience even as demand increases",
+      "Ensures that the system can handle a growing number of users and credentials without performance degradation. This scalability guarantees a smooth user experience even as demand increases",
+    colSpan: 3,
+    rowSpan: 1,
+  },
+  {
+    title: "Easy to use",
+    description:
+      "IUVecCert simplifies the credentials issuance process, ensuring that issuers and users can interact seamlessly without requiring extensive technical knowledge. The intuitive design guarantees ease of use for all end users",
     colSpan: 2,
     rowSpan: 1,
   },

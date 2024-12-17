@@ -7,7 +7,7 @@ import { CertificateResult } from "../models/Certificate.ts";
 
 import {
   AppendixFileKeywords,
-  CertFileKeywords,
+  CredFileKeywords,
   FileDetails,
   FileResult,
   Proof,
@@ -15,11 +15,11 @@ import {
 import { verifyPermission } from "./ConfigService.ts";
 
 /**
- * Extract attachments from a certificate or appendix(s)
+ * Extract attachments from a credential or appendix(s)
  * @param inputBuffer The PDF buffer to be extracted
  */
 const extractAttachments = async (
-  inputBuffer: Uint8Array
+  inputBuffer: Uint8Array,
 ): Promise<Uint8Array[]> => {
   const pdfDoc = await pdfjs.getDocument({ data: inputBuffer }).promise;
   const attachments = await pdfDoc.getAttachments();
@@ -34,7 +34,7 @@ const extractAttachments = async (
 
   if (!(hasConfig && hasCert) && !hasAppendix) {
     throw new Error(
-      "Either both SIGNED.pdf and CERT.pdf must be present, or APPENDIX.pdf must be present alone"
+      "Either both SIGNED.pdf and CERT.pdf must be present, or APPENDIX.pdf must be present alone",
     );
   }
 
@@ -52,19 +52,19 @@ const extractAttachments = async (
 
 /**
  * Calculate the hash string in hex from a PDF file with random salt
- * @param certID The certificate ID to be calculated
+ * @param credID The credential ID to be calculated
  * @param type The type of this PDF file
  * @param bufferContent The buffer of this PDF file
  * @param salt The random 16 bytes salt of this PDF file
  */
 const getHash = (
-  certID: string,
+  credID: string,
   type: string,
   bufferContent: Uint8Array,
-  salt: string
+  salt: string,
 ): string => {
   const contentWithSalt = Buffer.concat([
-    Buffer.from(certID, "utf-8"),
+    Buffer.from(credID, "utf-8"),
     Buffer.from(type, "utf-8"),
     bufferContent,
     Buffer.from(salt, "utf-8"),
@@ -79,7 +79,7 @@ const getHash = (
  */
 export const getProofObject = async (
   files: FileList,
-  mode: "VERIFY" | "REVOKE" | "SELECTIVE"
+  mode: "VERIFY" | "REVOKE" | "SELECTIVE",
 ): Promise<FileResult> => {
   const result = {
     fileDetail: {
@@ -87,10 +87,10 @@ export const getProofObject = async (
       permissionBuffer: new Uint8Array(),
       commitAddress: "",
       contractInstance: {} as Contract,
-      certName: "",
-      certHash: "",
-      certBuffer: new Uint8Array(),
-      certFileProof: {} as Proof,
+      credName: "",
+      credHash: "",
+      credBuffer: new Uint8Array(),
+      credFileProof: {} as Proof,
       requiredAppendixNames: [],
       requiredAppendixHashes: [],
       appendixFiles: [],
@@ -98,7 +98,7 @@ export const getProofObject = async (
       appendixFileProofs: [],
       appendixBuffers: [],
     } as FileDetails,
-    certKeywords: {} as CertFileKeywords,
+    credKeywords: {} as CredFileKeywords,
   };
 
   let savedCertID = "";
@@ -118,7 +118,7 @@ export const getProofObject = async (
       !keywordField.endsWith("}")
     ) {
       throw new Error(
-        `File "${file.name}" is missing embedded certificate data`
+        `File "${file.name}" is missing embedded credential data`,
       );
     }
 
@@ -136,26 +136,26 @@ export const getProofObject = async (
       result.fileDetail.appendixFiles.push(file.name.split(".")[1]);
       result.fileDetail.appendixFileProofs.push(appendixParsedObject.truePoint);
     } else {
-      const certParsedObject = parsedObject as CertFileKeywords;
-      result.certKeywords = certParsedObject;
-      savedCertID = certParsedObject.certID;
-      savedSalt = certParsedObject.salt;
-      result.fileDetail.commitAddress = certParsedObject.commitAddress;
-      result.fileDetail.requiredAppendixNames = certParsedObject.appendixFiles;
+      const credParsedObject = parsedObject as CredFileKeywords;
+      result.credKeywords = credParsedObject;
+      savedCertID = credParsedObject.credID;
+      savedSalt = credParsedObject.salt;
+      result.fileDetail.commitAddress = credParsedObject.commitAddress;
+      result.fileDetail.requiredAppendixNames = credParsedObject.appendixFiles;
       result.fileDetail.requiredAppendixHashes =
-        certParsedObject.appendixHashes;
-      result.fileDetail.certName = file.name;
-      result.fileDetail.certHash = getHash(
-        certParsedObject.certID,
+        credParsedObject.appendixHashes;
+      result.fileDetail.credName = file.name;
+      result.fileDetail.credHash = getHash(
+        credParsedObject.credID,
         "R",
         attachments[1],
-        certParsedObject.salt
+        credParsedObject.salt,
       );
-      result.fileDetail.certBuffer = attachments[1];
-      const { truePoint } = certParsedObject;
-      result.fileDetail.certFileProof = {
+      result.fileDetail.credBuffer = attachments[1];
+      const { truePoint } = credParsedObject;
+      result.fileDetail.credFileProof = {
         ...truePoint,
-        value: result.fileDetail.certHash,
+        value: result.fileDetail.credHash,
       };
     }
   }
@@ -165,9 +165,9 @@ export const getProofObject = async (
         savedCertID,
         result.fileDetail.appendixFiles[index],
         buffer,
-        savedSalt
+        savedSalt,
       );
-    }
+    },
   );
   result.fileDetail.appendixFileProofs.map((appendixFileProof, index) => {
     appendixFileProof.value = result.fileDetail.appendixHashes[index];
@@ -175,10 +175,10 @@ export const getProofObject = async (
 
   if (mode === "VERIFY") {
     const mismatchedNames = result.fileDetail.requiredAppendixNames.filter(
-      (name) => !result.fileDetail.appendixFiles.includes(name)
+      (name) => !result.fileDetail.appendixFiles.includes(name),
     );
     const mismatchedHashes = result.fileDetail.requiredAppendixHashes.filter(
-      (hash) => !result.fileDetail.appendixHashes.includes(hash)
+      (hash) => !result.fileDetail.appendixHashes.includes(hash),
     );
     const requiredLength = result.fileDetail.requiredAppendixNames.length;
     const foundLength = result.fileDetail.appendixFiles.length;
@@ -187,13 +187,13 @@ export const getProofObject = async (
       throw new Error(
         `Missing appendix(s) detected.\nRequired appendix names: ${
           mismatchedNames.join(", ") || "None"
-        }`
+        }`,
       );
     }
 
     if (requiredLength !== foundLength) {
       throw new Error(
-        `Not enough appendix(s) detected. Required: ${requiredLength}/ Found: ${foundLength}`
+        `Not enough appendix(s) detected. Required: ${requiredLength}/ Found: ${foundLength}`,
       );
     }
   }

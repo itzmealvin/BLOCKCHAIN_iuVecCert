@@ -112,7 +112,7 @@ const ContactPage = () => {
         </form>
       </CardBody>
       <CardFooter>
-        <Heading size="xs" textAlign="center" mb={8}>
+        <Heading size="xs" textAlign="center">
           We typically response within 24 hours from your sending time
         </Heading>
       </CardFooter>

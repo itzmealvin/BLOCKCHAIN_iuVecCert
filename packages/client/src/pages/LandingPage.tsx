@@ -6,9 +6,29 @@ import {
   Heading,
   Link,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
+const words = [
+  "easy-to-implement",
+  "constant-size-proof",
+  "non-interactive-verification",
+];
+
 const LandingPage = () => {
+  const [currentWord, setCurrentWord] = useState(words[0]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWord((prevWord) => {
+        const currentIndex = words.indexOf(prevWord);
+        return words[(currentIndex + 1) % words.length];
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const buttonContents = [
     {
       path: "docs",
@@ -31,8 +51,8 @@ const LandingPage = () => {
           bgGradient="linear(to-r, blue.300, green.600, yellow.500)"
           bgClip="text"
         >
-          A Verkle Tree Certificate Issuance Protocol <br />
-          Made easy with IUVecCert
+          A Scalable Credential Issuance Protocol <br />
+          Made {currentWord} with IUVecCert
         </Heading>
       </CardHeader>
       <CardBody>

@@ -23,8 +23,8 @@ const limit = PLimit(cores * 2);
 const { getDocument } = await getResolvedPDFJS();
 
 /**
- * Check if a PDF certificate has requirement attachments.
- * @param fileBuffer The PDF certificate buffer to be checked
+ * Check if a PDF credential has requirement attachments.
+ * @param fileBuffer The PDF credential buffer to be checked
  */
 const hasAttachments = async (fileBuffer: Uint8Array): Promise<boolean> => {
   const pdfDoc = await getDocument({ data: new Uint8Array(fileBuffer) })
@@ -38,18 +38,18 @@ const hasAttachments = async (fileBuffer: Uint8Array): Promise<boolean> => {
 };
 
 /**
- * Check if a PDF certificate has a proper keywordField and attachments exist, then extract its field value(s)
- * @param fileBuffer The PDF certificate buffer to be checked
- * @param fields The PDF certificate field(s) to be extracted value from
+ * Check if a PDF credential has a proper keywordField and attachments exist, then extract its field value(s)
+ * @param fileBuffer The PDF credential buffer to be checked
+ * @param fields The PDF credential field(s) to be extracted value from
  */
 export const detectProofObject = async (
   fileBuffer: Buffer,
   fields?: string[],
 ): Promise<[boolean, string]> => {
-  const certDoc = await PDFDocument.load(fileBuffer);
-  const keywordField = certDoc.getKeywords();
-  const form = certDoc.getForm();
-  const certID = fields
+  const credDoc = await PDFDocument.load(fileBuffer);
+  const keywordField = credDoc.getKeywords();
+  const form = credDoc.getForm();
+  const credID = fields
     ? fields
       .map((field) => {
         const textField = form.getTextField(field);
@@ -65,25 +65,25 @@ export const detectProofObject = async (
         keywordField?.endsWith("}") &&
         hasAttachmentsFlag,
     ),
-    certID,
+    credID,
   ];
 };
 
 /**
  * Calculate the hash string in hex from a PDF file with random salt
- * @param certID The certificate ID to be calculated
+ * @param credID The credential ID to be calculated
  * @param type The type of this PDF file
  * @param bufferContent The buffer of this PDF file
  * @param salt The random 16 bytes salt of this PDF file
  */
 export const getHash = (
-  certID: string,
+  credID: string,
   type: string,
   bufferContent: Buffer | Uint8Array,
   salt: string,
 ): string => {
   const contentWithSalt = Buffer.concat([
-    Buffer.from(certID, "utf-8"),
+    Buffer.from(credID, "utf-8"),
     Buffer.from(type, "utf-8"),
     bufferContent,
     Buffer.from(salt, "utf-8"),
@@ -103,11 +103,11 @@ export const buildVectorCommitment = async (
 
   const startTime = performance.now();
 
-  hashValues.forEach(({ certHash, appendixHashes }) => {
+  hashValues.forEach(({ credHash, appendixHashes }) => {
     leafLayer.push({
       proof: [],
       index: leafLayer.length.toString(),
-      value: certHash,
+      value: credHash,
     });
 
     appendixHashes.forEach((hash) => {
@@ -122,11 +122,11 @@ export const buildVectorCommitment = async (
   const values = leafLayer.flat().map((leaf) => BigInt(leaf.value));
   const coeffValues = genCoefficients(values);
   const commitValue = commit(coeffValues);
-  const leafChunks: Proof[][] = chunkArray(leafLayer, cores);
+  const leafChunks: Proof[][] = chunkArray(leafLayer, cores * 2);
 
   const processedChunks: Proof[] = [];
   const progressBar = new ProgressBar(
-    `PROCESSING: ${hashValues} values`,
+    `PROCESSING: ${hashValues.length} values`,
     leafChunks.length,
   );
   const chunkPromises = leafChunks.map((leafChunk, index) =>

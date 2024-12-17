@@ -4,13 +4,13 @@
 
 # @iuveccert
 
-> The all-in-one tooling for scalable certificate issuance using Vector
+> The all-in-one tooling for scalable credentials issuance using Vector
 > Commitment.
 
 <p align="center">
-<a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/issues/new?labels=bug&template=bug-report---.md"         target="_blank"
+<a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues/new?labels=bug&template=bug-report---.md"         target="_blank"
           rel="noopener noreferrer">Report Bug</a>
-- <a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/issues/new?labels=enhancement&template=feature-request---.md"         target="_blank"
+- <a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues/new?labels=enhancement&template=feature-request---.md"         target="_blank"
           rel="noopener noreferrer">Request Feature</a>
 </p>
 
@@ -59,7 +59,7 @@
 
 ## Installation
 
-1. Install [Deno](https://deno.com) and [NodeJS](https://nodejs.org/en) via
+1. Install [Deno](https://deno.com) and [Node.js](https://nodejs.org/en) via
    [nvm](https://github.com/nvm-sh/nvm) to your machine.
 
    ```bash
@@ -70,12 +70,12 @@
 
 2. Clone the repo:
    ```bash
-   git clone https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert.git
-   cd BLOCKCHAIN_iuVerCert
+   git clone https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert.git
+   cd BLOCKCHAIN_iuVecCert
    ```
 3. Change git remote url to avoid accidental pushes to base project:
    ```bash
-   git remote set-url origin https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert.git
+   git remote set-url origin https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert.git
    git remote -v
    ```
 4. **OPTIONAL** To jump to the latest commit of the project:
@@ -88,34 +88,39 @@
 
 ## Features
 
-- [x] **All-in-one tooling for certificate issuance**: A unified platform for
-      generating, issuing, and verifying certificates, streamlining the process
+- [x] **All-in-one tooling for credentials issuance**: A unified platform for
+      generating, issuing, and verifying credentials, streamlining the process
       and reducing manual effort.
-- [x] **Certificate validator**: Ensures the authenticity and integrity of
-      merged certificates, enhancing trust and reducing fraud risks.
-- [x] **Merge certificates in seconds**: Seamlessly generates multiple
-      certificates from a single template document, saving time and ensuring
-      professional presentation.
-- [x] **Vector Commitment**: Optimizes certificate proof storage and
-      computational time, enhancing scalability and performance.
-- [x] **Embedded receipt**: Integrates proof certificates directly into a single
+- [x] **Constant size proof**: IUVecCert delivers constant-size proofs
+      regardless of the number of credentials issued, ensuring minimal overhead
+      for issuers and seamless verification for users. This approach enhances
+      scalability and performance
+- [x] **Revocation**: Enables revoking invalid credentials, ensuring reliability
+      and control over credentials.
+- [x] **Vector Commitment**: IUVecCert leverages Verkle Tree-based vector
+      commitments to optimize proof storage and computational efficiency. This
+      ensures secure, fast, and scalable issuance and verification of
+      credentials.
+- [x] **Embedded receipt**: Integrates proof credentials directly into a single
       PDF file for convenient sharing and storage.
-- [x] **Revocation**: Enables revoking invalid certificates, ensuring
-      reliability and control over credentials.
-- [x] **Security from blockchain**: Secures certificates with blockchain
+- [x] **Security from blockchain**: Secures credentials with blockchain
       technology for tamper-proof and transparent validation.
-- [x] **Selective disclosure**: Allows selective sharing of certificate details,
-      preserving privacy and control.
 - [x] **Scientifically proven**: The underlying technology is validated by
       prestigious scientific research and conferences.
 - [x] **Non-interactive verification**: Supports verification without
       interaction with the issuer, simplifying the process for verifiers.
-- [x] **Zero-cost verification**: Enables certificate verification without
+- [x] **Zero-cost verification**: Enables credential verification without
       additional costs through efficient cryptographic techniques.
 - [x] **Scalable design**: Ensures smooth performance even with a growing number
-      of users and certificates.
+      of users and credentials.
+- [x] **Easy to use**: IUVecCert simplifies the credentials issuance process,
+      ensuring that issuers and users can interact seamlessly without requiring
+      extensive technical knowledge. The intuitive design guarantees ease of use
+      for all end users.
+- [ ] **Selective disclosure**: Allows selective sharing of credential details,
+      preserving privacy and control.
 
-See the [open issues](https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/issues)
+See the [open issues](https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues)
 for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top"         target="_blank"
@@ -136,8 +141,8 @@ respective IUVecCert components**
 
 ### Top contributors:
 
-<a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/graphs/contributors" target="_blank" rel="noopener noreferrer">
-  <img src="https://contrib.rocks/image?repo=itzmealvin/BLOCKCHAIN_iuVerCert" alt="contrib.rocks image" />
+<a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/graphs/contributors" target="_blank" rel="noopener noreferrer">
+  <img src="https://contrib.rocks/image?repo=itzmealvin/BLOCKCHAIN_iuVecCert" alt="contrib.rocks image" />
 </a>
 
 <!-- LICENSE -->
@@ -157,7 +162,7 @@ Quang-Dieu Nguyen (@itzmealvin) -
 [@itzmeclone](https://twitter.com/@itzmeclone) - nqdieu@proton.me
 
 Project Link:
-[https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert](https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert)
+[https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert](https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert)
 
 <p align="right">(<a href="#readme-top"         target="_blank"
           rel="noopener noreferrer">back to top</a>)</p>
@@ -191,16 +196,16 @@ Project Link:
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/itzmealvin/BLOCKCHAIN_iuVerCert.svg?style=for-the-badge
-[contributors-url]: https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/itzmealvin/BLOCKCHAIN_iuVerCert.svg?style=for-the-badge
-[forks-url]: https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/network/members
-[stars-shield]: https://img.shields.io/github/stars/itzmealvin/BLOCKCHAIN_iuVerCert.svg?style=for-the-badge
-[stars-url]: https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/stargazers
-[issues-shield]: https://img.shields.io/github/issues/itzmealvin/BLOCKCHAIN_iuVerCert.svg?style=for-the-badge
-[issues-url]: https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/issues
-[license-shield]: https://img.shields.io/github/license/itzmealvin/BLOCKCHAIN_iuVerCert.svg?style=for-the-badge
-[license-url]: https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/itzmealvin/BLOCKCHAIN_iuVecCert.svg?style=for-the-badge
+[contributors-url]: https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/itzmealvin/BLOCKCHAIN_iuVecCert.svg?style=for-the-badge
+[forks-url]: https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/network/members
+[stars-shield]: https://img.shields.io/github/stars/itzmealvin/BLOCKCHAIN_iuVecCert.svg?style=for-the-badge
+[stars-url]: https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/stargazers
+[issues-shield]: https://img.shields.io/github/issues/itzmealvin/BLOCKCHAIN_iuVecCert.svg?style=for-the-badge
+[issues-url]: https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues
+[license-shield]: https://img.shields.io/github/license/itzmealvin/BLOCKCHAIN_iuVecCert.svg?style=for-the-badge
+[license-url]: https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/blob/master/LICENSE.txt
 [product-screenshot]: images/mainpage.png
 [React.js]: https://img.shields.io/badge/React-000000?style=for-the-badge&logo=react&logoColor=white
 [React-url]: https://reactjs.org/

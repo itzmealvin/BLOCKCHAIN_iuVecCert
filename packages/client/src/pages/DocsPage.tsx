@@ -19,25 +19,19 @@ const DocsPage = () => {
       title: "Getting Started",
       file: "getting-started.md",
       subheadings: [],
-      lastUpdate: "December 15th, 2024",
-    },
-    {
-      title: "Using @iuveccert/generator",
-      file: "using-generator.md",
-      subheadings: [],
-      lastUpdate: "December 15th, 2024",
+      lastUpdate: "December 17th, 2024",
     },
     {
       title: "Using @iuveccert/issuer",
       file: "using-issuer.md",
       subheadings: [],
-      lastUpdate: "December 15th, 2024",
+      lastUpdate: "December 17th, 2024",
     },
     {
       title: "Using @iuveccert/client",
       file: "using-client.md",
       subheadings: [],
-      lastUpdate: "December 15th, 2024",
+      lastUpdate: "December 17th, 2024",
     },
     {
       title: "Troubleshooting",
@@ -49,7 +43,7 @@ const DocsPage = () => {
       title: "License",
       file: "license.md",
       subheadings: [],
-      lastUpdate: "December 15th, 2024",
+      lastUpdate: "December 17th, 2024",
     },
   ];
 

@@ -13,9 +13,9 @@ export interface AppendixFileKeywords {
   truePoint: Proof;
 }
 
-export interface CertFileKeywords extends AppendixFileKeywords {
+export interface CredFileKeywords extends AppendixFileKeywords {
   salt: string;
-  certID: string;
+  credID: string;
   commitAddress: string;
   appendixFiles: string[];
   appendixHashes: string[];
@@ -29,10 +29,10 @@ export interface FileDetails {
   commitAddress: string;
   requiredAppendixNames: string[];
   requiredAppendixHashes: string[];
-  certName: string;
-  certHash: string;
-  certBuffer: Uint8Array;
-  certFileProof: Proof;
+  credName: string;
+  credHash: string;
+  credBuffer: Uint8Array;
+  credFileProof: Proof;
   appendixFiles: string[];
   appendixHashes: string[];
   appendixFileProofs: Proof[];
@@ -40,6 +40,6 @@ export interface FileDetails {
 }
 
 export interface FileResult {
-  certKeywords: CertFileKeywords;
+  credKeywords: CredFileKeywords;
   fileDetail: FileDetails;
 }

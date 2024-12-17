@@ -1,19 +1,19 @@
 import type { Proof } from "./Vector.ts";
 
 export interface OmitFileDetails {
-  certID: string;
+  credID: string;
   salt: string;
-  certFile: string;
+  credFile: string;
   appendixFiles: string[];
 }
 
 export interface FileDetails extends OmitFileDetails {
-  certBuffer: Uint8Array;
+  credBuffer: Uint8Array;
   appendixBuffers: Uint8Array[];
 }
 
 export interface FileHashes {
-  certHash: string;
+  credHash: string;
   appendixHashes: string[];
 }
 
@@ -24,7 +24,7 @@ export interface FileLoader {
 
 export interface FileKeywords {
   salt?: string;
-  certID?: string;
+  credID?: string;
   mainComponent: boolean;
   commitAddress?: string;
   appendixFiles?: string[];

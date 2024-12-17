@@ -27,7 +27,7 @@ import { Document, Page } from "react-pdf";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { z } from "zod";
-import { CertCommitment } from "../../../compiled/index.ts";
+import { CredsCommitment } from "../../../compiled/index.ts";
 import ProgressSpine from "../components/ProgressSpine.tsx";
 import ReuseableAccordionItem from "../components/ReusableAccordionItem.tsx";
 import UploadForm from "../components/UploadForm.tsx";
@@ -107,16 +107,16 @@ const RevokePage = () => {
     [fileResult],
   );
 
-  const certFile = useMemo(
+  const credFile = useMemo(
     () =>
-      hasFileResult && fileResult.fileDetail.certBuffer
-        ? { data: fileResult.fileDetail.certBuffer.slice() }
+      hasFileResult && fileResult.fileDetail.credBuffer
+        ? { data: fileResult.fileDetail.credBuffer.slice() }
         : null,
-    [hasFileResult, fileResult?.fileDetail?.certBuffer],
+    [hasFileResult, fileResult?.fileDetail?.credBuffer],
   );
 
   const fieldData = useFormData(
-    hasFileResult ? fileResult?.fileDetail?.certBuffer : null,
+    hasFileResult ? fileResult?.fileDetail?.credBuffer : null,
   );
 
   const finalSchema = schema(fieldData);
@@ -142,11 +142,11 @@ const RevokePage = () => {
     setLoading(true);
     const commitmentContract = getContractInstance(
       fileResult.fileDetail.commitAddress,
-      CertCommitment.abi,
+      CredsCommitment.abi,
       signer,
     );
     const revokeTxn = commitmentContract.revoke(
-      fileResult.fileDetail.certHash,
+      fileResult.fileDetail.credHash,
       inputData.revokeReason,
     );
     await toast
@@ -177,14 +177,14 @@ const RevokePage = () => {
       <Box pt={10}>
         <Heading as="h1" size="2xl" textAlign="center" pb={10}>
           {!signer
-            ? "Connect your wallet to revoke certificate securely"
-            : "IUVecCert CLIENT - Revoke Certificate"}
+            ? "Connect your wallet to revoke credential securely"
+            : "IUVecCert CLIENT - Revoke Credential"}
         </Heading>
       </Box>
       <VStack justifyContent="center" spacing={10}>
         <ProgressSpine
           stepDetails={[
-            { title: "Step 1", description: "Upload Certificate" },
+            { title: "Step 1", description: "Upload Credential" },
             { title: "Step 2", description: "Enter Details" },
             { title: "Step 3", description: "Wait Confirmation" },
           ]}
@@ -198,11 +198,11 @@ const RevokePage = () => {
                 <HStack spacing={20}>
                   <VStack>
                     <Heading as="h2" size="lg">
-                      Certificate Preview
+                      Credential Preview
                     </Heading>
                     <Document
-                      file={certFile}
-                      loading="Loading PDF Certificate..."
+                      file={credFile}
+                      loading="Loading PDF Credential..."
                     >
                       <Page
                         pageNumber={1}
@@ -222,7 +222,7 @@ const RevokePage = () => {
                         Enter revoke details
                       </Heading>
                       <Heading as="h3" size="md">
-                        Type exactly what you see on the certificate beside
+                        Type exactly what you see on the credential beside
                       </Heading>
                       <Accordion defaultIndex={[]} allowMultiple allowToggle>
                         <ReuseableAccordionItem
@@ -231,7 +231,7 @@ const RevokePage = () => {
                         />
                         <ReuseableAccordionItem
                           label="View hash value"
-                          content={fileResult.fileDetail.certHash}
+                          content={fileResult.fileDetail.credHash}
                         />
                       </Accordion>
                       <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -306,7 +306,7 @@ const RevokePage = () => {
                         <AlertDialogOverlay>
                           <AlertDialogContent>
                             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                              Revoke Certificate
+                              Revoke Credential
                             </AlertDialogHeader>
                             <AlertDialogBody>
                               Are you sure? This action is irreversible and will

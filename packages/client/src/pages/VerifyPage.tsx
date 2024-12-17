@@ -10,7 +10,7 @@ import {
   Tabs,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { Document, Page } from "react-pdf";
 import ContractList from "../components/List/ContractList.tsx";
 import PermissionList from "../components/List/PermissionList.tsx";
@@ -21,44 +21,19 @@ import useFileStore from "../hooks/useFileStore.ts";
 
 const VerifierPage = () => {
   const { fileResult } = useFileStore();
-  const [isRendered, setIsRendered] = useState(false);
   const [step, setStep] = useState(0);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    if (!isRendered || !canvasRef.current) {
-      return;
-    }
-    const ctx = canvasRef.current.getContext("2d");
-    if (!ctx) return;
-    const { width, height } = canvasRef.current;
-
-    ctx.save();
-    ctx.globalAlpha = 0.4;
-    ctx.fillStyle = "rgba(150, 150, 150, 0.5)";
-    ctx.textAlign = "center";
-    ctx.font = `${Math.max(width, height) / 60}px Arial`;
-    ctx.translate(width / 2, height / 2);
-    ctx.rotate((-45 * Math.PI) / 180);
-    for (let x = -width; x < width * 5; x += width / 5) {
-      for (let y = -height; y < height * 5; y += height / 5) {
-        ctx.fillText("VERIFIED", x, y);
-      }
-    }
-    ctx.restore();
-  }, [isRendered, step]);
 
   const hasFileResult = useMemo(
     () => Object.keys(fileResult).length !== 0,
     [fileResult],
   );
 
-  const certFile = useMemo(
+  const credFile = useMemo(
     () =>
-      hasFileResult && fileResult.fileDetail.certBuffer
-        ? { data: fileResult.fileDetail.certBuffer.slice() }
+      hasFileResult && fileResult.fileDetail.credBuffer
+        ? { data: fileResult.fileDetail.credBuffer.slice() }
         : null,
-    [hasFileResult, fileResult?.fileDetail?.certBuffer],
+    [hasFileResult, fileResult?.fileDetail?.credBuffer],
   );
 
   const appendixFiles = useMemo(
@@ -75,17 +50,17 @@ const VerifierPage = () => {
     <>
       <Box pt={10}>
         <Heading as="h1" size="2xl" textAlign="center" pb={10}>
-          IUVecCert CLIENT - Verify Certificate
+          IUVecCert CLIENT - Verify Credential
         </Heading>
       </Box>
       <VStack justifyContent="center" spacing={10}>
         <ProgressSpine
           stepDetails={[
-            { title: "Step 1", description: "Upload Certificate(s)" },
+            { title: "Step 1", description: "Upload Credential(s)" },
             { title: "Step 2", description: "Confirm Issuer Permission" },
             { title: "Step 3", description: "Confirm Contract Information" },
             { title: "Step 4", description: "Check Verkle Proof" },
-            { title: "Step 5", description: "View Valid Certificate Group" },
+            { title: "Step 5", description: "View Valid Credential Group" },
           ]}
           currentStep={step}
         />
@@ -101,12 +76,12 @@ const VerifierPage = () => {
               <HStack spacing={20}>
                 <VStack>
                   <Heading as="h2" size="lg">
-                    Certificate {step === 5 ? "Group" : ""} preview
+                    Credential {step === 5 ? "Group" : ""} preview
                   </Heading>
 
                   <Tabs variant="soft-rounded" colorScheme="green">
                     <TabList>
-                      <Tab>CERTIFICATE</Tab>
+                      <Tab>CREDENTIAL</Tab>
                       {fileResult.fileDetail.appendixFiles.map(
                         (appendixFile, index) => (
                           <Tab key={index} isDisabled={step !== 5}>
@@ -117,16 +92,15 @@ const VerifierPage = () => {
                     </TabList>
                     <TabPanels>
                       <TabPanel>
-                        <Document file={certFile} loading="Loading PDF...">
+                        <Document
+                          file={credFile}
+                          loading="Loading PDF Credential..."
+                        >
                           <Page
                             pageNumber={1}
                             renderAnnotationLayer={false}
                             renderTextLayer={false}
                             scale={0.7}
-                            onRenderSuccess={() => {
-                              setIsRendered(true);
-                            }}
-                            canvasRef={step === 5 ? canvasRef : undefined}
                           />
                         </Document>
                       </TabPanel>
@@ -134,17 +108,13 @@ const VerifierPage = () => {
                         <TabPanel key={index}>
                           <Document
                             file={appendixFile}
-                            loading="Loading PDF..."
+                            loading="Loading PDF Credential..."
                           >
                             <Page
                               pageNumber={1}
                               renderAnnotationLayer={false}
                               renderTextLayer={false}
                               scale={0.7}
-                              onRenderSuccess={() => {
-                                setIsRendered(true);
-                              }}
-                              canvasRef={step === 5 ? canvasRef : undefined}
                             />
                           </Document>
                         </TabPanel>

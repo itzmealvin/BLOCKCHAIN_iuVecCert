@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 /**
  * Hook to be used to build the form data
- * @param inputBuffer The PDF certificate buffer to be extracted from
+ * @param inputBuffer The PDF credential buffer to be extracted from
  */
 export const useFormData = (inputBuffer: Uint8Array | null) => {
   const [formData, setFormData] = useState<{ [key: string]: string } | null>(
@@ -15,8 +15,8 @@ export const useFormData = (inputBuffer: Uint8Array | null) => {
     const loadFormData = async () => {
       if (!inputBuffer) return;
 
-      const certDoc = await PDFDocument.load(inputBuffer);
-      const form = certDoc.getForm();
+      const credDoc = await PDFDocument.load(inputBuffer);
+      const form = credDoc.getForm();
       const fieldData: { [key: string]: string } = {};
 
       form.getFields().forEach((field) => {

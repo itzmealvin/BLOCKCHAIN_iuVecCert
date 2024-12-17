@@ -35,11 +35,11 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
   const verifyContract = useMemo(
     () =>
       getContractInstance(
-        "0x700AD4e9C64682562A0020ceF44C1A1440680519",
+        "0x56B6DE2Aefa9463413d547E1bcE9271948e321B2",
         Verifier.abi,
-        provider
+        provider,
       ),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
               rootChallenge.commitment,
               rootChallenge.proof,
               rootChallenge.index,
-              rootChallenge.value
+              rootChallenge.value,
             );
             verifyChallengesResult.push(result);
           } catch (error) {
@@ -70,7 +70,7 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
         proofData.push(`${name}/Root Challenge`);
         setProofData((prevProofData) =>
           [...prevProofData, ...proofData].filter(
-            (item, index, self) => self.indexOf(item) === index
+            (item, index, self) => self.indexOf(item) === index,
           )
         );
 
@@ -85,7 +85,7 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
               pointChallenge.commitment,
               pointChallenge.proof,
               pointChallenge.index,
-              pointChallenge.value
+              pointChallenge.value,
             );
             verifyPointsResult.push(result);
           } catch (error) {
@@ -94,28 +94,28 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
           }
         }
 
-        proofData.push(`${name}/Root (leaf) Point`);
+        proofData.push(`${name}/Leaf Point`);
         setProofData((prevProofData) =>
           [...prevProofData, ...proofData].filter(
-            (item, index, self) => self.indexOf(item) === index
+            (item, index, self) => self.indexOf(item) === index,
           )
         );
       } catch (error) {
         console.error(error);
-        toast.error("IUVecCert Error: Can't verify the given PDF certificate");
+        toast.error("IUVecCert Error: Can't verify the given PDF credential");
       }
     };
 
     const performVerification = async () => {
       try {
         await verifyProof(
-          fileResult.fileDetail.certFileProof,
-          fileResult.fileDetail.certName
+          fileResult.fileDetail.credFileProof,
+          fileResult.fileDetail.credName,
         );
         await Promise.all(
           fileResult.fileDetail.appendixFileProofs.map((proof, index) =>
             verifyProof(proof, fileResult.fileDetail.appendixFiles[index])
-          )
+          ),
         );
 
         setDone(true);
@@ -123,7 +123,7 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
       } catch (error) {
         console.error(error);
         toast.error(
-          "IUVecCert Error: Can't verify the given PDF certificate/appendix(s)"
+          "IUVecCert Error: Can't verify the given PDF credential/appendix(s)",
         );
       }
     };
@@ -162,31 +162,33 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
           </Tbody>
         </Table>
       </TableContainer>
-      {isDone ? (
-        <>
-          <Confetti
-            width={globalThis.innerWidth}
-            height={globalThis.innerHeight}
+      {isDone
+        ? (
+          <>
+            <Confetti
+              width={globalThis.innerWidth}
+              height={globalThis.innerHeight}
+            />
+            <Button
+              colorScheme="green"
+              variant="solid"
+              onClick={handleClick}
+              mt={3}
+              isDisabled={!isDone}
+            >
+              CONTINUE
+            </Button>
+          </>
+        )
+        : (
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="md"
           />
-          <Button
-            colorScheme="green"
-            variant="solid"
-            onClick={handleClick}
-            mt={3}
-            isDisabled={!isDone}
-          >
-            CONTINUE
-          </Button>
-        </>
-      ) : (
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="md"
-        />
-      )}
+        )}
     </>
   );
 };

@@ -1,6 +1,6 @@
 # @iuveccert/issuer (v1.0.0)
 
-> CLI to issue embedded certificates securely by vector commitment.
+> CLI to issue embedded credentials securely by vector commitment.
 
 <a id="readme-top"></a>
 
@@ -9,9 +9,9 @@
 ## About The Project
 
 **@iuveccert/issuer** is a Command-Line Interface (CLI) tool designed to issue
-certificates utilizing the vector commitment structure. This tool facilitates
-the efficient generation and organization of certificates while integrating
-smart contract compatibility with CertCommitment descriptions.
+credentials utilizing the vector commitment structure. This tool facilitates the
+efficient generation and organization of credentials while integrating smart
+contract compatibility with CertCommitment descriptions.
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
@@ -35,12 +35,12 @@ smart contract compatibility with CertCommitment descriptions.
 
 2. Clone the repo:
    ```bash
-   git clone --branch @iuveccert/issuer https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert.git
-   cd BLOCKCHAIN_iuVerCert
+   git clone --branch @iuveccert/issuer https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert.git
+   cd BLOCKCHAIN_iuVecCert
    ```
 3. Change git remote url to avoid accidental pushes to base project:
    ```bash
-   git remote set-url origin https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert.git
+   git remote set-url origin https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert.git
    git remote -v
    ```
 4. Run the program by using the given commands below.
@@ -74,36 +74,34 @@ _Options:_
 
 - `-p, —-permission [file]`: The name of the input PDF permission file (default:
   "issuerPermission.pdf").
-- `-c, —-cert <directory>`: The path name of the input original PDF
-  certificate(s) directory (required). Before processing, the command will
-  locate this file from the `certificates` folder.
-- `-i, —-index <number>`: The index to slice the PDF certificate group(s) to be
+- `-c, —-cred <directory>`: The path name of the input original PDF
+  credential(s) directory (required). Before processing, the command will locate
+  this file from the `credentials` folder.
+- `-i, —-index <number>`: The index to slice the PDF credential group(s) to be
   processed. It must be larger than 2.
 - `-d, —-description <message>`: The name of the input CertCommitment smart
   contract description (required). It must be in the form `[S{1-3}AY{2425}]`.
 - `-f, —-fields [name…]`: The field(s) to be used as ID for each PDF
-  certificate(s) (default: ["serial"]).
-- `-m, —-mode [type]`: vector commitment build mode (available choices:
-  "default", "cost", "time", default: "default").
+  credential(s) (default: ["serial"]).
 - `-h, —-help`: Displays help information for the command.
 
 _Example usage:_
 
 ```bash
-deno run force-build -c 5000 -d S1AY2223 -i 100 -m time
+deno run force-build -c 5000 -d S1AY2223 -i 100
 ```
 
-This will build from the first 100 PDF certificate grouped by the `serial` field
-(certificate + appendix(s)) inside `certificates/5000` folder with
+This will build from the first 100 PDF credential grouped by the `serial` field
+(credential + appendix(s)) inside `credentials/5000` folder with
 `issuerPermission.pdf` permission file check for issuer common name and
 description for `Semester 1 Academic
-Year 2022-2023` using the time preferred
-mode, then saves the output VCDR file that containing smart contract parameters
-to the `/requests/1734194856_time_S1AY2223.vcdr` path and SVCD file to the
-`requests/1734194856_time_S1AY2223.svcd` path.
+Year 2022-2023`, then saves the output VCDR
+file that containing smart contract parameters to the
+`requests/1734401217_S1AY2223.vcdr` path and SVCD file to the
+`requests/1734401217_S1AY2223.svcd` path.
 
 **NOTICE:** You must ensure the input **field** is presented on the PDF
-certificate form, otherwise the command will throw field not found error.
+credential form, otherwise the command will throw field not found error.
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
@@ -136,24 +134,19 @@ _Options:_
 _Example usage:_
 
 ```bash
-deno run force-deploy -v 1734194856_time_S1AY2223.vcdr
+deno run force-deploy -v 1734401217_S1AY2223.vcdr
 ```
 
-This will use the `requests/1734194856_time_S1AY2223.vcdr` vector commitment
+This will use the `requests/1734401217_S1AY2223.vcdr` vector commitment
 Deployment Request (VCDR) smart contract parameters and perform address
 checking, expose an internal server to transmit between the wallet extension and
 the program to receive the smart contract deployment receipt, and append it to
-the original `requests/1734194856_time_S1AY2223.vcdr` Vector Commitment
-Deployment Request (VCDR) file.
-
-**NOTICE:** Due to the size limit of Solidity call stack, if the total of files
-surpass **2 197** for `time` mode or **36 481** for `default` mode, you will
-have to perform additional transaction to push the remaining challenges into the
-smart contract.
+the original `requests/1734401217_S1AY2223.vcdr` Vector Commitment Deployment
+Request (VCDR) file.
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
-### Embed certificates securely from a Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)
+### Embed credentials securely from a Vector Commitment Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)
 
 **Command syntax:**
 
@@ -169,32 +162,30 @@ deno run force-embed [options]
 
 _Options:_
 
-- `-p, —permission [file]`: The name of the input PDF permission file (default:
+- `-p, —-permission [file]`: The name of the input PDF permission file (default:
   "issuerPermission.pdf").
-- `-v, —vcdre <file>`: The name of the input vector commitment Deployment
-  Response (VCDRe) file name. Before processing, the command will locate this
-  file from the `requests` folder.
-- `-s, —svcd <file>`: The name of the input saved Secret Verkle Data (SVCD) file
-  name. Before processing, the command will locate this file from the `requests`
-  folder.
-- `-o, —output [directory]`: The path to the output ZIP result directory
+- `-v, -—vcdre <file>`: The name of the input vector commitment Deployment
+  Response (VCDRe) file name (required). Before processing, the command will
+  locate this file from the `requests` folder.
+- `-s, —-svcd <file>`: The name of the input saved Secret Verkle Data (SVCD)
+  file name (required). Before processing, the command will locate this file
+  from the `requests` folder.
+- `-o, —-output [directory]`: The path to the output ZIP result directory
   (default: "../../embedded/")
 - `-h, —-help`: Displays help information for the command.
 
 _Example usage:_
 
 ```bash
-deno run force-embed -v 1734194856_time_S1AY2223.vcdr -s 1734194856_time_S1AY2223.svcd
+deno run force-embed -v 1734401217_S1AY2223.vcdr -s 1734401217_S1AY2223.svcd
 ```
 
-This will perform checks on the vector commitment Deployment Response (VCDR)
-file `/requests/1734194856_time_S1AY2223.vcdr` together with
-`issuerPermission.pdf` permission file, then reload the PDF certificate group(s)
-from the Saved Verkle Data (SVCD) file
-`/requests/1734194856_time_S1AY2223.svcd`, then embed the information to each
-PDF certificates and appendix(s), saves the output ZIP file to the
-`/../../embedded/embedded_time_100_0xd706F5904dC1Ff06D5528108646f6F57D2D9E72d.zip`
-path.
+This will perform checks on the Vector Commitment Deployment Response (VCDR)
+file `/requests/1734401217_S1AY2223.vcdr` together with `issuerPermission.pdf`
+permission file, then reload the PDF credential group(s) from the Saved Vector
+Commitment Data (SVCD) file `/requests/1734401217_S1AY2223.svcd`, then embed the
+information to each PDF credentials and appendix(s), saves the output ZIP file
+to the `embedded/embedded_100_0x58b6C0c2BAbBd1c6926B26C5E8e4636d476CEdD4.zip`.
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
@@ -202,20 +193,19 @@ path.
 
 ## Features
 
-- [x] **Certificate Issuance**: Facilitates the issuance of certificates through
+- [x] **Credential Issuance**: Facilitates the issuance of credentials through
       smart contract descriptions, facilitating seamless integration with
       CertCommitment.
-- [x] **Vector Commitment Integration**: Supports various vector commitment
-      build modes (`default`, `cost`, `time`) to strike a balance between
-      deployment costs and computation time.
-- [x] **Batch Processing**: Enables the concurrent processing of multiple
-      certificates using index slicing.
+- [x] **Vector Commitment Integration**: Supports vector commitment for constant
+      proof size and non-interactive verification process.
+- [x] **Batch Processing**: Enables the selective processing of multiple
+      credentials using index slicing.
 - [x] **Strict Issuer Verification**: Implements stringent verification through
       external PDF permission files.
 - [x] **Lightweight and Fast**: Designed for optimal performance and
       scalability.
 
-See the [open issues](https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/issues)
+See the [open issues](https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues)
 for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
