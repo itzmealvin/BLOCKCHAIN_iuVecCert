@@ -117,7 +117,7 @@ const PermissionList = ({ fileResult, handleClick }: Props) => {
               ? (
                 <>
                   Only check all the boxes if these fields match what you see on
-                  the certificate beside
+                  the credential beside
                   {showObjects.map(
                     (showObject, index) =>
                       Object.keys(showObject).length > 0 &&

@@ -12,7 +12,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod";
-import { CertCommitment } from "../../../compiled/index.ts";
+import { CredsCommitment } from "../../../compiled/index.ts";
 import { useEthersSigner } from "../hooks/useBlockchain.ts";
 import useFileStore from "../hooks/useFileStore.ts";
 import {
@@ -23,14 +23,14 @@ import { getProofObject } from "../services/FileService.ts";
 
 const schema = (mode: "VERIFY" | "REVOKE" | "SELECTIVE") => {
   return z.object({
-    certificates: z
+    credentials: z
       .instanceof(FileList)
       .refine(
         (file) => (mode === "VERIFY" ? file?.length >= 1 : file?.length === 1),
         {
           message: mode === "VERIFY"
-            ? "Please upload one certificate with its appendix(s)"
-            : "Please upload only one certificate to be processed",
+            ? "Please upload one credential with its appendix(s)"
+            : "Please upload only one credential to be processed",
         },
       ),
   });
@@ -61,12 +61,17 @@ const UploadForm = ({ mode, setStep }: Props) => {
   ) => {
     setLoading(true);
     toast
-      .promise(getProofObject(data.certificates, mode), {})
+      .promise(getProofObject(data.credentials, mode), {})
       .then(async (result) => {
         try {
+          if (!result.fileDetail.commitAddress) {
+            throw new Error(
+              "IUVecCert Error: Cannot retrieve CredsCommitment contract address from this file",
+            );
+          }
           const contract = getContractInstance(
             result.fileDetail.commitAddress,
-            CertCommitment.abi,
+            CredsCommitment.abi,
             provider,
           );
           const contractDeployer = await contract.issuer();
@@ -85,12 +90,12 @@ const UploadForm = ({ mode, setStep }: Props) => {
             return;
           }
           const [isRevoked, reason] = await contract.isRevoked(
-            result.fileDetail.certHash,
+            result.fileDetail.credHash,
           );
 
           if (isRevoked) {
             toast.error(
-              `IUVecCert Error: This PDF certificate has already been revoked. Reason: ${reason}`,
+              `IUVecCert Error: This PDF credential has already been revoked. Reason: ${reason}`,
             );
             setLoading(false);
             return;
@@ -100,6 +105,7 @@ const UploadForm = ({ mode, setStep }: Props) => {
           setStep();
           reset();
         } catch (error) {
+          toast.error(`IUVecCert Error: ${error}`);
           console.error(error);
         } finally {
           setLoading(false);
@@ -122,25 +128,25 @@ const UploadForm = ({ mode, setStep }: Props) => {
     <>
       <Heading as="h2" size="lg">
         {mode === "VERIFY"
-          ? "Upload embedded certificate and appendix(s) to verify"
+          ? "Upload embedded credential and appendix(s) to verify"
           : mode === "REVOKE"
-          ? "Upload embedded certificate to revoke"
-          : "Upload embedded certificate to selective disclose"}
+          ? "Upload embedded credential to revoke"
+          : "Upload embedded credential to selective disclose"}
       </Heading>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <VStack spacing={5}>
-          <FormControl isInvalid={!!errors.certificates}>
-            <FormLabel htmlFor="certificates">
-              Embedded Certificate{mode === "VERIFY" ? "/Appendix(s)" : ""}
+          <FormControl isInvalid={!!errors.credentials}>
+            <FormLabel htmlFor="credentials">
+              Embedded Credential{mode === "VERIFY" ? "/Appendix(s)" : ""}
             </FormLabel>
             <Input
-              {...register("certificates")}
-              id="certificates"
+              {...register("credentials")}
+              id="credentials"
               type="file"
               accept=".pdf"
               multiple={true}
             />
-            <FormErrorMessage>{errors.certificates?.message}</FormErrorMessage>
+            <FormErrorMessage>{errors.credentials?.message}</FormErrorMessage>
           </FormControl>
 
           <Button

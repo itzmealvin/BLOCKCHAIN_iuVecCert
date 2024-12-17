@@ -49,11 +49,9 @@ const router = createBrowserRouter([
     element: (
       <>
         <RouteChangeHandler />
-        {import.meta.env.VITE_ENABLE_MAINTENANCE === "true" ? (
-          <Maintenance />
-        ) : (
-          <Layout />
-        )}
+        {import.meta.env.VITE_ENABLE_MAINTENANCE === "true"
+          ? <Maintenance />
+          : <Layout />}
       </>
     ),
     errorElement: <ErrorPage />,

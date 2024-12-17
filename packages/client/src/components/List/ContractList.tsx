@@ -46,16 +46,19 @@ const ContractList = ({ contract, fileResult, handleClick }: Props) => {
 
   useEffect(() => {
     if (contractData.length > 0) {
-      const initialCheckedState = contractData.reduce((acc, data) => {
-        if (data.passed !== true) {
-          Object.entries(data).forEach(([key]) => {
-            if (key === "found" || key === "extracted") {
-              acc[`${data.field}_${key}`] = false;
-            }
-          });
-        }
-        return acc;
-      }, {} as Record<string, boolean>);
+      const initialCheckedState = contractData.reduce(
+        (acc, data) => {
+          if (data.passed !== true) {
+            Object.entries(data).forEach(([key]) => {
+              if (key === "found" || key === "extracted") {
+                acc[`${data.field}_${key}`] = false;
+              }
+            });
+          }
+          return acc;
+        },
+        {} as Record<string, boolean>,
+      );
       setCheckedItems(initialCheckedState);
     }
   }, [contractData]);

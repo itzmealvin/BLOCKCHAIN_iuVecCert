@@ -7,7 +7,7 @@ const socialLinks = [
   {
     name: "GitHub",
     icon: <FaGithub />,
-    link: "https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/",
+    link: "https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/",
   },
   { name: "Email", icon: <FaMailBulk />, link: "mailto: nqdieu@proton.me" },
 ];

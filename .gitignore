@@ -1,5 +1,10 @@
 .DS_Store
 .idea
 node_modules
-certificates
+credentials
+embedded
 dist
+packages/issuer/credentials/5000/
+!packages/iuvercert-issuer/credentials/
+template.docx
+packages/issuer/requests/

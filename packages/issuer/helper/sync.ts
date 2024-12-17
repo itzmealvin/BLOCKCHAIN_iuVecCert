@@ -17,8 +17,8 @@ import type {
   SavedVectorCommitmentData,
 } from "../models/VCDR.ts";
 import type { Vector } from "../models/Vector.ts";
-import { cores, detectProofObject, getHash } from "./certs.ts";
 import { calculateContractAddress } from "./contract.ts";
+import { cores, detectProofObject, getHash } from "./cred.ts";
 
 const concurrencyLimit = Math.max(1, cores * 5);
 
@@ -40,38 +40,38 @@ const groupFilesByPrefix = (fileNames: string[]): Record<string, string[]> => {
 
 /**
  * Process each grouped files
- * @param certFiles The PDF certificate file name(s) to be processed
- * @param certFolderPath The PDF certificate root folder
- * @param fields The PDF certificate field(s) to be extracted value from
+ * @param credFiles The PDF credential file name(s) to be processed
+ * @param credFolderPath The PDF credential root folder
+ * @param fields The PDF credential field(s) to be extracted value from
  */
 const processGroup = async (
-  certFiles: string[],
-  certFolderPath: string,
+  credFiles: string[],
+  credFolderPath: string,
   fields: string[],
 ): Promise<{ hashes: FileHashes; details: FileDetails }> => {
-  const certFile = certFiles.find((file) => {
+  const credFile = credFiles.find((file) => {
     return file.includes("(R)") && file.split(".").length === 3;
   });
 
-  if (!certFile) {
+  if (!credFile) {
     throw new Error(
-      "No required certificate file detected with three components!",
+      "No required credential file detected with three components!",
     );
   }
 
-  const certBuffer = readFileSync(join(certFolderPath, certFile));
+  const credBuffer = readFileSync(join(credFolderPath, credFile));
 
-  const appendixFiles = certFiles.filter(
+  const appendixFiles = credFiles.filter(
     (file) =>
       !file.includes("(R)") &&
       file.match(/\.([^.]+)\.pdf$/) &&
       file.split(".").length === 3,
   );
   const appendixBuffers = appendixFiles.map((file) =>
-    readFileSync(join(certFolderPath, file))
+    readFileSync(join(credFolderPath, file))
   );
 
-  const [hasCertProof, certID] = await detectProofObject(certBuffer, fields);
+  const [hasCertProof, credID] = await detectProofObject(credBuffer, fields);
   const hasAppendixProof = await Promise.any(
     appendixBuffers.map(async (buffer) => {
       const [hasProof] = await detectProofObject(buffer);
@@ -80,27 +80,25 @@ const processGroup = async (
   );
 
   if (hasCertProof || hasAppendixProof) {
-    throw new Error(
-      "This directory contains an IUVecCert embedded certificate",
-    );
+    throw new Error("This directory contains an IUVecCert embedded credential");
   }
 
   const salt = randomBytes(16).toString("hex");
-  const certHash = getHash(certID, "R", certBuffer, salt);
+  const credHash = getHash(credID, "R", credBuffer, salt);
   const appendixHashes = appendixFiles.map((appendixFile, i) =>
-    getHash(certID, appendixFile.split(".")[1], appendixBuffers[i], salt)
+    getHash(credID, appendixFile.split(".")[1], appendixBuffers[i], salt)
   );
 
   return {
     hashes: {
-      certHash,
+      credHash,
       appendixHashes,
     },
     details: {
-      certID,
+      credID,
       salt,
-      certFile,
-      certBuffer,
+      credFile,
+      credBuffer,
       appendixFiles,
       appendixBuffers,
     },
@@ -108,17 +106,17 @@ const processGroup = async (
 };
 
 /**
- * Load the certificate folder and pre-process the file(s)
- * @param certFolderPath The PDF certificate root folder to be loaded
- * @param fields The PDF certificate field(s) to be extracted value from
- * @param index The slicing index to signal the number of PDF certificate to be processed
+ * Load the credential folder and pre-process the file(s)
+ * @param credFolderPath The PDF credential root folder to be loaded
+ * @param fields The PDF credential field(s) to be extracted value from
+ * @param index The slicing index to signal the number of PDF credential to be processed
  */
 export const loadCertFolder = async (
-  certFolderPath: string,
+  credFolderPath: string,
   fields: string[],
   index?: number,
 ): Promise<FileLoader> => {
-  const files = readdirSync(certFolderPath).sort(
+  const files = readdirSync(credFolderPath).sort(
     new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
       .compare,
   );
@@ -127,15 +125,15 @@ export const loadCertFolder = async (
   const fileHashes: FileLoader["fileHashes"] = [];
   const fileDetails: FileLoader["fileDetails"] = [];
   const progressBar = new ProgressBar(
-    `READING: PDF certificate(s) from directory ${certFolderPath} as group`,
+    `READING: PDF credential(s) from directory ${credFolderPath} as group`,
     index || Object.keys(groupedFiles).length,
   );
 
   await Promise.all(
     Object.entries(groupedFiles)
       .slice(0, index || Object.keys(groupedFiles).length)
-      .map(async ([_, certFiles]) => {
-        const result = await processGroup(certFiles, certFolderPath, fields);
+      .map(async ([_, credFiles]) => {
+        const result = await processGroup(credFiles, credFolderPath, fields);
         if (result) {
           fileHashes.push(result.hashes);
           fileDetails.push(result.details);
@@ -147,7 +145,7 @@ export const loadCertFolder = async (
   if (fileDetails.length < 2) {
     progressBar.fail();
     throw new Error(
-      "Detected fewer than 2 certificate groups, which is insufficient for issuance",
+      "Detected fewer than 2 credential groups, which is insufficient for issuance",
     );
   }
 
@@ -240,22 +238,22 @@ export const validateDeployment = async (
 };
 
 /**
- * Reload certificate folder from a Saved Vector Commitment Data (SVCD)
+ * Reload credential folder from a Saved Vector Commitment Data (SVCD)
  * @param svcd The SVCD to be processed from
  */
 export const loadCertFolderFromSVCD = (
   svcd: SavedVectorCommitmentData,
 ): FileDetails[] => {
   return svcd.details.map((detail) => {
-    const certBuffer = readFileSync(join(svcd.certDirectory, detail.certFile));
+    const credBuffer = readFileSync(join(svcd.credDirectory, detail.credFile));
 
     const appendixBuffers = detail.appendixFiles.map((file) =>
-      readFileSync(join(svcd.certDirectory, file))
+      readFileSync(join(svcd.credDirectory, file))
     );
 
     return {
       ...detail,
-      certBuffer,
+      credBuffer,
       appendixBuffers,
     };
   });
@@ -290,19 +288,19 @@ export const zipAndEmbed = async (
 ) => {
   const zipper = new JSZip();
   const progressBar = new ProgressBar(
-    `ZIPPING: ${details.length} embedded PDF certificate groups`,
+    `ZIPPING: ${details.length} embedded PDF credential groups`,
     details.length,
   );
 
   try {
     const embedTask = async (detail: FileDetails, index: number) => {
-      const certDoc = await PDFDocument.load(detail.certBuffer);
+      const credDoc = await PDFDocument.load(detail.credBuffer);
       const trueCertProof = getProofByIndex(index, vectorData);
 
       if (trueCertProof) {
         const proof: FileKeywords = {
           salt: detail.salt,
-          certID: detail.certID,
+          credID: detail.credID,
           mainComponent: true,
           commitAddress: contractAddress,
           appendixFiles: detail.appendixFiles.map((appendixName) => {
@@ -311,7 +309,7 @@ export const zipAndEmbed = async (
           }),
           appendixHashes: detail.appendixFiles.map((appendixFile, i) =>
             getHash(
-              detail.certID,
+              detail.credID,
               appendixFile.split(".")[1],
               detail.appendixBuffers[i],
               detail.salt,
@@ -324,11 +322,11 @@ export const zipAndEmbed = async (
           },
         };
         const keywords = [JSON.stringify(proof)];
-        await certDoc.attach(permission, "SIGNED.pdf");
-        await certDoc.attach(detail.certBuffer, "CERT.pdf");
-        certDoc.setKeywords(keywords);
-        const pdfBytes = await certDoc.save();
-        zipper.file(`EMBEDDED_${detail.certFile}`, pdfBytes);
+        await credDoc.attach(permission, "SIGNED.pdf");
+        await credDoc.attach(detail.credBuffer, "CERT.pdf");
+        credDoc.setKeywords(keywords);
+        const pdfBytes = await credDoc.save();
+        zipper.file(`EMBEDDED_${detail.credFile}`, pdfBytes);
       }
 
       for (let i = 0; i < detail.appendixBuffers.length; i++) {

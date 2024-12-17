@@ -1,4 +1,4 @@
-import CertCommitment from "./CertsCommitment.json" with { type: "json" };
+import CredsCommitment from "./CredsCommitment.json" with { type: "json" };
 import { ethers } from "./ethers.min.js";
 
 const tooltipTriggerList = document.querySelectorAll(
@@ -109,7 +109,7 @@ function pollForResult() {
           clearInterval(interval);
           parameters = await response.json();
           spinner.classList.add("d-none");
-          appStatus.textContent = "Deploy the CertCommitment contract now";
+          appStatus.textContent = "Deploy the CredsCommitment contract now";
           deployContractButton.disabled = false;
         }
       } catch (error) {
@@ -128,21 +128,20 @@ deployContractButton.addEventListener("click", async () => {
   appStatus.style.removeProperty("color");
   try {
     spinner.classList.remove("d-none");
-    appStatus.textContent = "Deploying your CertCommitment contract";
+    appStatus.textContent = "Deploying your CredsCommitment contract";
     deployContractButton.disabled = true;
 
     const challenge = parameters.result.challenge;
 
     const contractFactory = new ethers.ContractFactory(
-      CertCommitment.abi,
-      CertCommitment.bytecode,
+      CredsCommitment.abi,
+      CredsCommitment.bytecode,
       signer,
     );
     const contractInstance = await contractFactory.deploy(
       parameters.result.issuerCN,
       parameters.result.description,
       challenge,
-      totalChunks === 1,
     );
 
     const deployedContract = await contractInstance.deploymentTransaction()
@@ -175,7 +174,7 @@ deployContractButton.addEventListener("click", async () => {
     if (response.ok) {
       spinner.classList.add("d-none");
       appStatus.textContent =
-        "Smart contract deployed successfully. You can safely close this window";
+        "Smart contract CredsCommitment deployed successfully. You can safely close this window";
       deployContractButton.classList.add("d-none");
       contractStatus.style.color = "#198754";
       contractStatus.innerHTML =
@@ -185,7 +184,7 @@ deployContractButton.addEventListener("click", async () => {
     console.log(error);
     spinner.classList.add("d-none");
     appStatus.textContent =
-      `Failed to deploy CertCommitment contract. Error message: ${
+      `Failed to deploy CredsCommitment contract. Error message: ${
         truncatedMessage(error.message)
       }`;
     appStatus.style.color = "#dc3545";

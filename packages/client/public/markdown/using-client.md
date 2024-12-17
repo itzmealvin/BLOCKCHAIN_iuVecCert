@@ -1,20 +1,20 @@
 # @iuveccert/client (v1.0.0)
 
-## The client website for IUVecCert scalable issuance protocol, for verify,revoke and selective disclosure.
+> The client website for IUVecCert scalable credentials issuance protocol.
 
 <a id="readme-top"></a>
 
 <!-- ABOUT THE PROJECT -->
 
-### About The Project
+## About The Project
 
 **@iuveccert/client** is the client for IUVecCert protocol. It enables
-organizations to verify, revoke, and disclose certificates with precision and
-scalability, all at zero-cost with an intuitive UI for the end users.
+organizations to verify and revoke with precision and scalability, all at
+zero-cost with an intuitive UI for the end users.
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
-### Built with
+## Built with
 
 - [![React][React.js]][React-url]
 - [![nvm][nvm]][nvm-url]
@@ -27,9 +27,9 @@ scalability, all at zero-cost with an intuitive UI for the end users.
 
 <!-- INSTALLATION -->
 
-### Installation
+## Installation
 
-1. Install [NodeJS](https://nodejs.org/en) via
+1. Install [Node.js](https://nodejs.org/en) via
    [nvm](https://github.com/nvm-sh/nvm) to your machine.
 
    ```bash
@@ -39,12 +39,12 @@ scalability, all at zero-cost with an intuitive UI for the end users.
 
 2. Clone the repo:
    ```bash
-   git clone --branch @iuveccert/client https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert.git
-   cd BLOCKCHAIN_iuVerCert
+   git clone --branch @iuveccert/client https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert.git
+   cd BLOCKCHAIN_iuVecCert
    ```
 3. Change git remote url to avoid accidental pushes to base project:
    ```bash
-   git remote set-url origin https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert.git
+   git remote set-url origin https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert.git
    git remote -v
    ```
 4. Run the program by using the given commands below. Vite should expose a
@@ -67,45 +67,45 @@ scalability, all at zero-cost with an intuitive UI for the end users.
 
 <!-- USAGE -->
 
-### Usage
+## Usage
 
 The client website is publicly accessible on
 [https://iuveccert.vercel.app](https://iuveccert.vercel.com)
 
 <!-- FEATURES -->
 
-### Features
+## Features
 
 - [x] **Easy UX/UI**: Provides an intuitive and user-friendly interface,
       ensuring a seamless experience for end users while simplifying
       interactions with the platform.
-- [x] **Revocation**: Enables revoking invalid certificates, ensuring
-      reliability and control over credentials.
-- [x] **Security from blockchain**: Secures certificates with blockchain
-      technology for tamper-proof and transparent validation.
-- [x] **Selective disclosure**: Allows selective sharing of certificate details,
-      preserving privacy and control.
+- [x] **Revocation**: Enables revoking invalid credentials, ensuring reliability
+      and control over credentials.
+- [x] **Security from blockchain**: Secures credentials with blockchain
+      technology for tamper-proof and transparent validation.d
 - [x] **Non-interactive verification**: Supports verification without
       interaction with the issuer, simplifying the process for verifiers.
-- [x] **Zero-cost verification**: Enables certificate verification without
+- [x] **Zero-cost verification**: Enables credential verification without
       additional costs through efficient cryptographic techniques.
 - [x] **Scalable design**: Ensures smooth performance even with a growing number
-      of users and certificates.
+      of users and credentials.
+- [ ] **Selective disclosure**: Allows selective sharing of credential details,
+      preserving privacy and control.
 
-See the [open issues](https://github.com/itzmealvin/BLOCKCHAIN_iuVerCert/issues)
+See the [open issues](https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues)
 for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 
-### Contributing
+## Contributing
 
 Contributions are the lifeblood of the open-source community, fostering
 learning, inspiration, and innovation. Any contributions you make are **greatly
 appreciated**.
 
-#### How to Contribute
+## How to Contribute
 
 Here are the steps to contribute:
 
@@ -125,7 +125,8 @@ git checkout -b @iuveccert/client-your-feature
 errors:
 
 ```bash
-deno run check
+pnpm run check
+pnpm run test-build
 ```
 
 **5. Commit Your Changes**: Compose a concise commit message that encapsulates
@@ -149,7 +150,7 @@ git push origin @iuveccert/client-your-feature
 
   <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
-#### Additional Guidelines
+## Additional Guidelines
 
 - Please ensure that your contributions are thoroughly documented.
 - Feel free to engage in discussions within the **Discussions** tab prior to
@@ -157,9 +158,9 @@ git push origin @iuveccert/client-your-feature
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
-### License
+## License
 
-Distributed under the GPLv3 License. See `LICENSE` page for more information.
+Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 

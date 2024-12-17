@@ -12,6 +12,8 @@ import express from "express";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { extractAddress, verifyPermission } from "./helper/config.ts";
+import { encodeChallenge } from "./helper/contract.ts";
+import { buildVectorCommitment } from "./helper/cred.ts";
 import {
   loadCertFolder,
   loadCertFolderFromSVCD,
@@ -22,13 +24,11 @@ import {
 } from "./helper/sync.ts";
 import { oraSpinner, waitForUserDecision } from "./libs/logger.ts";
 import type { SavedVectorCommitmentData } from "./models/VCDR.ts";
-import { buildVectorCommitment } from "./helper/certs.ts";
-import { encodeChallenge } from "./helper/contract.ts";
 
 program
   .name("iuveccert")
   .description(
-    "IUVecCert ISSUER: CLI to issue embedded certificates securely by vector commitment",
+    "IUVecCert ISSUER: CLI to issue embedded credentials securely by vector commitment",
   )
   .version("1.0.0");
 
@@ -43,12 +43,12 @@ program
     "issuerPermission.pdf",
   )
   .requiredOption(
-    "-c, --cert <directory>",
-    "input original PDF certificate(s) directory path",
+    "-c, --cred <directory>",
+    "input original PDF credential(s) directory path",
   )
   .option(
     "-i, --index <number>",
-    "input index to slice the PDF certificates to be processed",
+    "input index to slice the PDF credentials to be processed",
   )
   .requiredOption(
     "-d, --description <message>",
@@ -56,7 +56,7 @@ program
   )
   .option(
     "-f, --fields [name...]",
-    "the field(s) to be used as identifier for each PDF certificate(s)",
+    "the field(s) to be used as identifier for each PDF credential(s)",
     ["serial"],
   )
   .action(async (options) => {
@@ -67,11 +67,11 @@ program
         );
       }
 
-      const certDir = "./certificates/" + options.cert;
+      const credDir = "./credentials/" + options.cred;
 
-      if (!existsSync(options.permission) || !existsSync(certDir)) {
+      if (!existsSync(options.permission) || !existsSync(credDir)) {
         throw new Error(
-          "Either the input PDF permission file name or the input original PDF certificate directory path does not exist",
+          "Either the input PDF permission file name or the input original PDF credential directory path does not exist",
         );
       }
 
@@ -127,7 +127,7 @@ program
       }
       oraSpinner.succeed(`EXTRACTED: Granted address ${grantedAddress}`);
 
-      const loader = await loadCertFolder(certDir, options.fields, parsedIndex);
+      const loader = await loadCertFolder(credDir, options.fields, parsedIndex);
 
       const vectorData = await buildVectorCommitment(loader.fileHashes);
 
@@ -141,7 +141,7 @@ program
 
       const timestamp = Math.floor(Date.now() / 1000);
       const outputVCDRFile = outputDir +
-        `${timestamp}_${options.mode}_${options.description}.vcdr`;
+        `${timestamp}_${options.description}.vcdr`;
       oraSpinner.start(
         `SAVING: Vector Commitment Deployment Request (VCDR) file to ${outputVCDRFile}`,
       );
@@ -158,18 +158,18 @@ program
       );
 
       const outputSVCDFile = outputDir +
-        `${timestamp}_${options.mode}_${options.description}.svcd`;
+        `${timestamp}_${options.description}.svcd`;
       oraSpinner.start(
         `SAVING: Saved Vector Commitment Data (SVCD) file to ${outputSVCDFile}`,
       );
       const ommitedFileDetails = loader.fileDetails.map(
         // deno-lint-ignore no-unused-vars
-        ({ certBuffer, appendixBuffers, ...rest }) => rest,
+        ({ credBuffer, appendixBuffers, ...rest }) => rest,
       );
       const svcd: SavedVectorCommitmentData = {
         vectorData,
         details: ommitedFileDetails,
-        certDirectory: certDir,
+        credDirectory: credDir,
       };
       saveJsonAsBin(svcd, outputSVCDFile);
       oraSpinner.succeed(
@@ -351,7 +351,7 @@ program
 program
   .command("embed")
   .description(
-    "Embed certificates securely from a Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)",
+    "Embed credentials securely from a Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)",
   )
   .option(
     "-p, --permission [file]",
@@ -446,11 +446,11 @@ program
       oraSpinner.succeed(`READ: Input SVCD file from ${svcdFile}`);
 
       oraSpinner.start(
-        `READING: PDF certificate(s) from directory ${svcd.certDirectory} as group`,
+        `READING: PDF credential(s) from directory ${svcd.credDirectory} as group`,
       );
       const loader = loadCertFolderFromSVCD(svcd);
       oraSpinner.succeed(
-        `READ: ${loader.length} PDF certificate groups from directory ${svcd.certDirectory}`,
+        `READ: ${loader.length} PDF credential groups from directory ${svcd.credDirectory}`,
       );
 
       const zippedData = await zipAndEmbed(
@@ -461,17 +461,15 @@ program
       );
 
       oraSpinner.start(
-        `SAVING: Zipped ${loader.length} embedded PDF certificate groups`,
+        `SAVING: Zipped ${loader.length} embedded PDF credential groups`,
       );
       const outputFile = resolve(
         options.output,
-        `embedded_${
-          vcdreFile.split("_")[1]
-        }_${loader.length}_${vcdre.deploymentReceipt.contractAddress}.zip`,
+        `embedded_${loader.length}_${vcdre.deploymentReceipt.contractAddress}.zip`,
       );
       writeFileSync(outputFile, zippedData);
       oraSpinner.succeed(
-        `SAVED: Zipped ${loader.length} embedded PDF certificate groups to ${outputFile}`,
+        `SAVED: Zipped ${loader.length} embedded PDF credential groups to ${outputFile}`,
       );
       Deno.exit(0);
     } catch (error: unknown) {

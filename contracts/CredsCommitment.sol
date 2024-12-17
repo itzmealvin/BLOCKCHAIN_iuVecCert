@@ -2,11 +2,11 @@
 pragma solidity ^0.8.0;
 
 /**
- * @title CertsCommitment
+ * @title CredsCommitment
  * @author Quang-Dieu Nguyen
- * @notice Contract to manage challenge and revocation for certificates.
+ * @notice Contract to manage challenge and revocation for credentials.
  */
-contract CertsCommitment {
+contract CredsCommitment {
     // State variables
     uint256 public issueTime;
     address public issuer;
@@ -41,18 +41,18 @@ contract CertsCommitment {
     modifier onlyIssuer() {
         require(
             msg.sender == issuer,
-            "CertsCommitment: Caller is not the issuer"
+            "CredsCommitment: Caller is not the issuer"
         );
         _;
     }
 
     /**
-     * @notice Ensures the certificate is not revoked.
+     * @notice Ensures the credential is not revoked.
      */
     modifier isValid(string memory _hash) {
         require(
             !isRevoked[_hash].status,
-            "CertsCommitment: Certificate is revoked"
+            "CredsCommitment: Credential is revoked"
         );
         _;
     }
@@ -61,8 +61,8 @@ contract CertsCommitment {
     /**
      * @notice Initializes the contract with issuer information and pre-allocates challenge slots.
      * @param _issuerCN Common name of the issuer.
-     * @param _batchDesc Description of the certificate batch.
-     * @param _rootChallenge challenge to add.
+     * @param _batchDesc Description of the credential batch.
+     * @param _rootChallenge Root challenge to add.
      */
     constructor(
         string memory _issuerCN,
@@ -77,8 +77,8 @@ contract CertsCommitment {
     }
 
     /**
-     * @notice Revoke a certificate by its hash.
-     * @param _hash Unique hash identifying the certificate.
+     * @notice Revoke a credential by its hash.
+     * @param _hash Unique hash identifying the credential.
      * @param _reason Reason for revocation.
      */
     function revoke(
@@ -89,7 +89,7 @@ contract CertsCommitment {
     }
 
     /**
-     * @notice Returns the challenge for a given index.
+     * @notice Returns the root challenge.
      * @return index Challenge index.
      * @return value Challenge value.
      * @return proofX X-coordinate of the proof point.
