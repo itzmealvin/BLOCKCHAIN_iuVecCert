@@ -10,7 +10,7 @@
 <p align="center">
 <a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues/new?labels=bug&template=bug-report---.md"         target="_blank"
           rel="noopener noreferrer">Report Bug</a>
-- <a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues/new?labels=enhancement&template=feature-request---.md"         target="_blank"
+· <a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues/new?labels=enhancement&template=feature-request---.md"         target="_blank"
           rel="noopener noreferrer">Request Feature</a>
 </p>
 
@@ -22,10 +22,12 @@
 
 [![Product Name Screen Shot][product-screenshot]]()
 
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
+### Verified smart contract address:
 
-## Built With
+[CONSTANTS](https://sepolia.etherscan.io/address/0xab8591067f6f97297ba9151fc21a0b2384e0e06e)
+·
+[PAIRING](https://sepolia.etherscan.io/address/0x1E2577574d12DAb53c5a7432d191AdA98e9F5F6c)
+·[VERIFIER](https://sepolia.etherscan.io/address/0xF98cbFAf6C804cD3928d4B575C050B1E72314c3D)
 
 ### CLIENT
 

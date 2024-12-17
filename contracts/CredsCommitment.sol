@@ -76,6 +76,7 @@ contract CredsCommitment {
         rootChallenge = _rootChallenge;
     }
 
+    // Functions
     /**
      * @notice Revoke a credential by its hash.
      * @param _hash Unique hash identifying the credential.
