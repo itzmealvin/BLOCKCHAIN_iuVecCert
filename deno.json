@@ -6,7 +6,9 @@
     "compile": "deno run -A --node-modules-dir npm:hardhat compile && cp ./packages/compiled/contracts/CredsCommitment.sol/CredsCommitment.json  ./packages/issuer/static/CredsCommitment.json",
     "copy": "cp ./packages/issuer/README.md ./packages/client/public/markdown/using-issuer.md && cp ./packages/client/README.md ./packages/client/public/markdown/using-client.md"
   },
-  "workspace": ["./packages/issuer"],
+  "workspace": [
+    "./packages/issuer"
+  ],
   "nodeModulesDir": "auto",
   "imports": {
     "hardhat": "npm:hardhat@^2.22.16"
