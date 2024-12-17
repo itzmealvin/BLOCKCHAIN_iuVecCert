@@ -357,7 +357,7 @@ program
 program
   .command("embed")
   .description(
-    "Embed credentials securely from a Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)",
+    "Embed credentials securely from a Vector Commitment Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)",
   )
   .option(
     "-p, --permission [file]",
@@ -377,11 +377,7 @@ program
     "output ZIP result directory path",
     "../../embedded/",
   )
-  .option(
-    "-d, --delete",
-    "delete the VCDRe and SVCD files for security",
-    true,
-  )
+  .option("-d, --delete", "delete the VCDRe and SVCD files for security", true)
   .action(async (options) => {
     try {
       if (!options.permission.endsWith(".pdf")) {
@@ -485,12 +481,12 @@ program
 
       if (options.delete) {
         oraSpinner.start(
-          "DELETING: Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)",
+          "DELETING: Vector Commitment Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)",
         );
         unlinkSync(vcdreFile);
         unlinkSync(svcdFile);
         oraSpinner.succeed(
-          "DELETED: Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)",
+          "DELETED: Vector Commitment Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)",
         );
       }
       Deno.exit(0);
