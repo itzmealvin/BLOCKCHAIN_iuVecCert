@@ -18,7 +18,7 @@ import type {
 } from "../models/VCDR.ts";
 import type { Vector } from "../models/Vector.ts";
 import { calculateContractAddress } from "./contract.ts";
-import { cores, detectProofObject, getHash } from "./cred.ts";
+import { cores, detectProofObject, getHash } from "./creds.ts";
 
 const concurrencyLimit = Math.max(1, cores * 5);
 

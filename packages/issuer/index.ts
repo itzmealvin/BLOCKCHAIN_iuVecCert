@@ -20,7 +20,7 @@ import {
 import { resolve } from "node:path";
 import { extractAddress, verifyPermission } from "./helper/config.ts";
 import { encodeChallenge } from "./helper/contract.ts";
-import { buildVectorCommitment } from "./helper/cred.ts";
+import { buildVectorCommitment } from "./helper/creds.ts";
 import {
   loadCertFolder,
   loadCertFolderFromSVCD,
