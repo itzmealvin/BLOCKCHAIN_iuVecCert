@@ -27,12 +27,12 @@ const tiles = [
     title: "Vector Commitment",
     description:
       "IUVecCert leverages vector commitments to keep the proof storage constant, while dealing with reasonable computational efficiency. This ensures secure, fast, and scalable issuance and verification of credentials",
-    colSpan: 2,
+    colSpan: 3,
     rowSpan: 1,
   },
   {
     title: "IUVecCert",
-    colSpan: 5,
+    colSpan: 4,
     rowSpan: 1,
   },
   {

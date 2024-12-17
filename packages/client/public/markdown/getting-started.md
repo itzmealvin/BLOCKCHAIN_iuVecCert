@@ -1,7 +1,3 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url]
-[![License][license-shield]][license-url]
-
 # @iuveccert
 
 > The all-in-one tooling for scalable credentials issuance using Vector
@@ -19,13 +15,6 @@
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]]()
-
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
-
-## Built With
 
 ### CLIENT
 
@@ -138,12 +127,6 @@ appreciated**.
 respective IUVecCert components**
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
-
-### Top contributors:
-
-<a href="https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/graphs/contributors" target="_blank" rel="noopener noreferrer">
-  <img src="https://contrib.rocks/image?repo=itzmealvin/BLOCKCHAIN_iuVecCert" alt="contrib.rocks image" />
-</a>
 
 <!-- LICENSE -->
 

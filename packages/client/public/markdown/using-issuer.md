@@ -172,6 +172,7 @@ _Options:_
   from the `requests` folder.
 - `-o, —-output [directory]`: The path to the output ZIP result directory
   (default: "../../embedded/")
+- `-d, --delete`: Delete the VCDRe and SVCD files for security (default: true)
 - `-h, —-help`: Displays help information for the command.
 
 _Example usage:_
@@ -180,12 +181,13 @@ _Example usage:_
 deno run force-embed -v 1734401217_S1AY2223.vcdr -s 1734401217_S1AY2223.svcd
 ```
 
-This will perform checks on the Vector Commitment Deployment Response (VCDR)
+This will perform checks on the Vector Commitment Deployment Response (VCDRe)
 file `/requests/1734401217_S1AY2223.vcdr` together with `issuerPermission.pdf`
 permission file, then reload the PDF credential group(s) from the Saved Vector
 Commitment Data (SVCD) file `/requests/1734401217_S1AY2223.svcd`, then embed the
 information to each PDF credentials and appendix(s), saves the output ZIP file
-to the `embedded/embedded_100_0x58b6C0c2BAbBd1c6926B26C5E8e4636d476CEdD4.zip`.
+to the `embedded/embedded_100_0x58b6C0c2BAbBd1c6926B26C5E8e4636d476CEdD4.zip`
+and then delete the VCDRe and SVCD files.
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 

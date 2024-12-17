@@ -4,7 +4,7 @@ import type { ChallengeParams, Vector } from "./Vector.ts";
 export interface SavedVectorCommitmentData {
   vectorData: Vector;
   details: OmitFileDetails[];
-  credDirectory: string;
+  credDir: string;
 }
 
 export interface VectorCommitmentDeploymentRequest {
