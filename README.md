@@ -52,7 +52,7 @@
 ## Getting Started
 
 **For more details on how to installation/usage/examples, please refer to the
-`README.md` of each respective IUVecCert components**
+`README.md` of each respective IUVecCert components**.
 
 <p align="right">(<a href="#readme-top"         target="_blank"
           rel="noopener noreferrer">back to top</a>)</p>
@@ -96,7 +96,7 @@
 - [x] **Constant size proof**: IUVecCert delivers constant-size proofs
       regardless of the number of credentials issued, ensuring minimal overhead
       for issuers and seamless verification for users. This approach enhances
-      scalability and performance
+      scalability and performance.
 - [x] **Revocation**: Enables revoking invalid credentials, ensuring reliability
       and control over credentials.
 - [x] **Vector Commitment**: IUVecCert leverages Verkle Tree-based vector
@@ -137,7 +137,7 @@ learn, inspire, and create. Any contributions you make are **greatly
 appreciated**.
 
 **For more details on how to contribute, please refer to the `README.md` of each
-respective IUVecCert components**
+respective IUVecCert components**.
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
@@ -173,7 +173,7 @@ Project Link:
 
 ## Acknowledgments
 
-- [Dr. Tran Thanh Tung](mailto:tttung@hcmiu.edu.vn) for his support
+- [Dr. Tran Thanh Tung](mailto:tttung@hcmiu.edu.vn) for his support.
 - [Wei Jie Koh's KZG library](https://github.com/weijiekoh/libkzg) for the
   ground-up tool.
 
