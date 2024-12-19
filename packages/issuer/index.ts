@@ -246,10 +246,7 @@ program
 
       if (vcdr.lastOperation !== "built") {
         oraSpinner.fail("CHECKED: This VCDR file has been deployed");
-        const continueAction = await waitForUserDecision();
-        if (!continueAction) {
-          throw new Error("Operation aborted by the user");
-        }
+        await waitForUserDecision();
       }
 
       app.get("/params", (_req, res) => {
