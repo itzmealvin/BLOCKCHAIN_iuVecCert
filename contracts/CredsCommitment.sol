@@ -62,6 +62,7 @@ contract CredsCommitment {
     /**
      * @notice Initializes the contract with issuer information and pre-allocates challenge slots.
      * @param _issuerCN Common name of the issuer.
+     * @param _issuerOG Organization name of the issuer.
      * @param _batchDesc Description of the credential batch.
      * @param _rootChallenge Root challenge to add.
      */
