@@ -9,9 +9,12 @@ export interface SavedVectorCommitmentData {
 
 export interface VectorCommitmentDeploymentRequest {
   issuerCN: string;
+  issuerOG: string;
   description: string;
   challenge: ChallengeParams;
   grantedAddress: string;
+  numberOfCreds: number;
+  lastModified: string;
   lastOperation: "built" | "deployed";
 }
 

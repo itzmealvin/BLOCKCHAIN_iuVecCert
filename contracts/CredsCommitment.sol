@@ -11,6 +11,7 @@ contract CredsCommitment {
     uint256 public issueTime;
     address public issuer;
     string public issuerCN;
+    string public issuerOG;
     string public batchDesc;
 
     // Structs
@@ -66,12 +67,14 @@ contract CredsCommitment {
      */
     constructor(
         string memory _issuerCN,
+        string memory _issuerOG,
         string memory _batchDesc,
         Challenge memory _rootChallenge
     ) {
         issueTime = block.timestamp;
         issuer = msg.sender;
         issuerCN = _issuerCN;
+        issuerOG = _issuerOG;
         batchDesc = _batchDesc;
         rootChallenge = _rootChallenge;
     }

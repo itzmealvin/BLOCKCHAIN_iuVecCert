@@ -140,6 +140,7 @@ deployContractButton.addEventListener("click", async () => {
     );
     const contractInstance = await contractFactory.deploy(
       parameters.result.issuerCN,
+      parameters.result.issuerOG,
       parameters.result.description,
       challenge,
     );

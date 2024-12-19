@@ -44,8 +44,7 @@
 - [![TypeScript][TypeScript]][TypeScript-url]
 - [![Express][Express]][Express-url]
 
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
+<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 
@@ -54,8 +53,7 @@
 **For more details on how to installation/usage/examples, please refer to the
 `README.md` of each respective IUVecCert components**.
 
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
+<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- INSTALLATION -->
 
@@ -125,8 +123,7 @@
 See the [open issues](https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues)
 for a full list of proposed features (and known issues).
 
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
+<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 
@@ -153,8 +150,7 @@ respective IUVecCert components**.
 
 Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
+<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- CONTACT -->
 
@@ -166,8 +162,7 @@ Quang-Dieu Nguyen (@itzmealvin) -
 Project Link:
 [https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert](https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert)
 
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
+<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
 
@@ -177,8 +172,7 @@ Project Link:
 - [Wei Jie Koh's KZG library](https://github.com/weijiekoh/libkzg) for the
   ground-up tool.
 
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
+<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- PUBLISHED PAPER -->
 
@@ -192,8 +186,7 @@ Project Link:
   > Communications in Computer and Information Science, vol 2309. Springer,
   > Singapore. https://doi.org/10.1007/978-981-96-0434-0_8
 
-<p align="right">(<a href="#readme-top"         target="_blank"
-          rel="noopener noreferrer">back to top</a>)</p>
+<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

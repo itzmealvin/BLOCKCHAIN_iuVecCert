@@ -46,19 +46,16 @@ const ContractList = ({ contract, fileResult, handleClick }: Props) => {
 
   useEffect(() => {
     if (contractData.length > 0) {
-      const initialCheckedState = contractData.reduce(
-        (acc, data) => {
-          if (data.passed !== true) {
-            Object.entries(data).forEach(([key]) => {
-              if (key === "found" || key === "extracted") {
-                acc[`${data.field}_${key}`] = false;
-              }
-            });
-          }
-          return acc;
-        },
-        {} as Record<string, boolean>,
-      );
+      const initialCheckedState = contractData.reduce((acc, data) => {
+        if (data.passed !== true) {
+          Object.entries(data).forEach(([key]) => {
+            if (key === "found" || key === "extracted") {
+              acc[`${data.field}_${key}`] = false;
+            }
+          });
+        }
+        return acc;
+      }, {} as Record<string, boolean>);
       setCheckedItems(initialCheckedState);
     }
   }, [contractData]);
@@ -66,9 +63,10 @@ const ContractList = ({ contract, fileResult, handleClick }: Props) => {
   useEffect(() => {
     const loadContractData = async () => {
       try {
-        const [issueTime, issuerCN, batchDesc] = await Promise.all([
+        const [issueTime, issuerCN, issuerOG, batchDesc] = await Promise.all([
           contract.issueTime(),
           contract.issuerCN(),
+          contract.issuerOG(),
           contract.batchDesc(),
         ]);
 
@@ -110,6 +108,19 @@ const ContractList = ({ contract, fileResult, handleClick }: Props) => {
               renderAsUTF8(
                 fileResult.fileDetail.permissionResult.lastCert.issuedTo
                   .commonName,
+              ),
+          },
+          {
+            field: "Issuer OG",
+            extracted: renderAsUTF8(
+              fileResult.fileDetail.permissionResult.lastCert.issuedTo
+                .organizationName,
+            ),
+            found: issuerOG,
+            passed: issuerOG ===
+              renderAsUTF8(
+                fileResult.fileDetail.permissionResult.lastCert.issuedTo
+                  .organizationName,
               ),
           },
           {

@@ -9,10 +9,12 @@ import type { Certificate } from "../models/Certificate.ts";
 const { getDocument } = await getResolvedPDFJS();
 
 /**
- * Verify the digital signature and extract subject common name field from a signed PDF
+ * Verify the digital signature and extract subject common name, organization name field from a signed PDF
  * @param fileBuffer The signed PDF buffer to be checked
  */
-export const verifyPermission = async (fileBuffer: Buffer): Promise<string> => {
+export const verifyPermission = async (
+  fileBuffer: Buffer,
+): Promise<string[]> => {
   const { authenticity, expired, integrity } = verifyPDF(fileBuffer);
 
   const certs = getCertificatesInfoFromPDF(fileBuffer).flat() as Certificate[];
@@ -20,6 +22,10 @@ export const verifyPermission = async (fileBuffer: Buffer): Promise<string> => {
   const issuerCN = Buffer.from(lastCert.issuedTo.commonName, "binary").toString(
     "utf-8",
   );
+  const issuerOG = Buffer.from(
+    lastCert.issuedTo.organizationName,
+    "binary",
+  ).toString("utf-8");
 
   if (!authenticity || expired || !integrity) {
     oraSpinner.fail("CHECKED: Some check(s) didn't pass");
@@ -63,7 +69,7 @@ export const verifyPermission = async (fileBuffer: Buffer): Promise<string> => {
       throw new Error("Operation aborted by the user");
     }
   }
-  return issuerCN;
+  return [issuerCN, issuerOG];
 };
 
 /**

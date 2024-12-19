@@ -13,15 +13,11 @@ credentials utilizing the vector commitment structure. This tool facilitates the
 efficient generation and organization of credentials while integrating smart
 contract compatibility with CertCommitment descriptions.
 
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
-
 ## Built with
 
 - [![Deno][Deno]][Deno-url]
 - [![TypeScript][TypeScript]][TypeScript-url]
 - [![Express][Express]][Express-url]
-
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- INSTALLATION -->
 
@@ -49,8 +45,6 @@ contract compatibility with CertCommitment descriptions.
    git fetch
    git reset --hard @{u}
    ```
-
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- USAGE -->
 
@@ -103,8 +97,6 @@ file that containing smart contract parameters to the
 **NOTICE:** You must ensure the input **field** is presented on the PDF
 credential form, otherwise the command will throw field not found error.
 
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
-
 ### Deploy using Vector Commitment Deployment Request (VCDR) file for later embedment
 
 **NOTICE:** You must have a **GUI BROWSER** with an **EVM-compatible wallet
@@ -143,8 +135,6 @@ checking, expose an internal server to transmit between the wallet extension and
 the program to receive the smart contract deployment receipt, and append it to
 the original `requests/1734401217_S1AY2223.vcdr` Vector Commitment Deployment
 Request (VCDR) file.
-
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 ### Embed credentials securely from a Vector Commitment Deployment Response (VCDRe) file and Saved Vector Commitment Data (SVCD)
 
@@ -189,8 +179,6 @@ information to each PDF credentials and appendix(s), saves the output ZIP file
 to the `embedded/embedded_100_0x58b6C0c2BAbBd1c6926B26C5E8e4636d476CEdD4.zip`
 and then delete the VCDRe and SVCD files.
 
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
-
 <!-- FEATURES -->
 
 ## Features
@@ -209,8 +197,6 @@ and then delete the VCDRe and SVCD files.
 
 See the [open issues](https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues)
 for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 
@@ -262,21 +248,15 @@ git push origin @iuveccert/issuer-your-feature
 - Clearly articulate the nature of your addition, its purpose, and provide any
   pertinent usage instructions (installed packages, etc…).
 
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
-
 ### Additional Guidelines
 
 - Please ensure that your contributions are thoroughly documented.
 - Feel free to engage in discussions within the **Discussions** tab prior to
   commencing substantial work.
 
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
-
 ## License
 
 Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
