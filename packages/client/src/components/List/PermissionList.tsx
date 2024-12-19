@@ -112,7 +112,7 @@ const PermissionList = ({ fileResult, handleClick }: Props) => {
             label={`${field}: ${
               condition ? `${errorMsg} (click to view more)` : "PASSED"
             }`}
-            bgColor={condition ? "red" : "green"}
+            bgColor={condition ? "red.500" : "green"}
             content={condition
               ? (
                 <>

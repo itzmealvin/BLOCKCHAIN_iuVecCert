@@ -1,7 +1,9 @@
-import { Box, Heading, VStack } from "@chakra-ui/react";
+import { Box, Heading, useColorMode, VStack } from "@chakra-ui/react";
+import MarkdownPreview from "@uiw/react-markdown-preview";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import MDRenderer from "../components/MDRenderer.tsx";
+import rehypeHighlight from "rehype-highlight";
+import rehypeSanitize from "rehype-sanitize";
 
 interface Heading {
   title: string;
@@ -14,6 +16,7 @@ interface HeadingCollection extends Heading {
 }
 
 const DocsPage = () => {
+  const { colorMode } = useColorMode();
   const headings: HeadingCollection[] = [
     {
       title: "Getting Started",
@@ -107,8 +110,16 @@ const DocsPage = () => {
           </Box>
         ))}
       </VStack>
-      <Box flex={1} p={4}>
-        <MDRenderer content={currentContent} />
+      <Box flex={1} p={4} maxH="75vh" overflowY="auto">
+        {" "}
+        <MarkdownPreview
+          source={currentContent}
+          rehypePlugins={[rehypeSanitize, rehypeHighlight]}
+          style={{ padding: 16 }}
+          wrapperElement={{
+            "data-color-mode": colorMode,
+          }}
+        />
       </Box>
     </Box>
   );

@@ -12,8 +12,6 @@
 organizations to verify and revoke with precision and scalability, all at
 zero-cost with an intuitive UI for the end users.
 
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
-
 ## Built with
 
 - [![React][React.js]][React-url]
@@ -22,8 +20,6 @@ zero-cost with an intuitive UI for the end users.
 - [![Vite][Vite]][Vite-url]
 - [![ChakraUI][ChakraUI]][ChakraUI-url]
 - [![TypeScript][TypeScript]][TypeScript-url]
-
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- INSTALLATION -->
 
@@ -63,8 +59,6 @@ zero-cost with an intuitive UI for the end users.
    git reset --hard @{u}
    ```
 
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
-
 <!-- USAGE -->
 
 ## Usage
@@ -94,8 +88,6 @@ The client website is publicly accessible on
 
 See the [open issues](https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert/issues)
 for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 
@@ -148,21 +140,15 @@ git push origin @iuveccert/client-your-feature
 - Clearly articulate the nature of your addition, its purpose, and provide any
   pertinent usage instructions (installed packages, etc…).
 
-  <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
-
 ## Additional Guidelines
 
 - Please ensure that your contributions are thoroughly documented.
 - Feel free to engage in discussions within the **Discussions** tab prior to
   commencing substantial work.
 
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
-
 ## License
 
 Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

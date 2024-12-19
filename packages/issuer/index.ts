@@ -22,6 +22,7 @@ import { extractAddress, verifyPermission } from "./helper/config.ts";
 import { encodeChallenge } from "./helper/contract.ts";
 import { buildVectorCommitment } from "./helper/creds.ts";
 import {
+  formatToday,
   loadCertFolder,
   loadCertFolderFromSVCD,
   readBinAsJson,
@@ -123,8 +124,10 @@ program
       );
 
       oraSpinner.start("VERIFYING: Permission data");
-      const issuerCN = await verifyPermission(permission);
-      oraSpinner.succeed(`VERIFIED: Permission data, ISSUER CN: ${issuerCN}`);
+      const [issuerCN, issuerOG] = await verifyPermission(permission);
+      oraSpinner.succeed(
+        `VERIFIED: Permission data, ISSUER CN: ${issuerCN}, ISSUER OG: ${issuerOG}`,
+      );
 
       oraSpinner.start("EXTRACTING: Issuer address");
       const grantedAddress = await extractAddress(permission);
@@ -144,8 +147,8 @@ program
       oraSpinner.succeed(
         "TRANSFORMED: Result challenge to smart contract parameters",
       );
-
-      const timestamp = Math.floor(Date.now() / 1000);
+      const currentDate = new Date();
+      const timestamp = Math.floor(currentDate.getTime() / 1000);
       const outputVCDRFile = outputDir +
         `${timestamp}_${options.description}.vcdr`;
       oraSpinner.start(
@@ -153,9 +156,12 @@ program
       );
       const vcdr: VectorCommitmentDeploymentRequest = {
         issuerCN,
+        issuerOG,
         description: options.description,
         challenge,
         grantedAddress,
+        numberOfCreds: loader.fileHashes.length,
+        lastModified: formatToday(currentDate),
         lastOperation: "built",
       };
       saveJsonAsBin(vcdr, outputVCDRFile);
@@ -233,6 +239,11 @@ program
       const vcdr = readBinAsJson(vcdrFile) as VectorCommitmentDeploymentRequest;
       oraSpinner.succeed(`READ: Input VCDR file from ${vcdrFile}`);
 
+      // deno-lint-ignore no-unused-vars
+      const { challenge, ...logVCDR } = vcdr;
+      console.log(logVCDR);
+      await waitForUserDecision();
+
       if (vcdr.lastOperation !== "built") {
         oraSpinner.fail("CHECKED: This VCDR file has been deployed");
         const continueAction = await waitForUserDecision();
@@ -246,6 +257,7 @@ program
           status: "sent",
           result: {
             issuerCN: vcdr.issuerCN,
+            issuerOG: vcdr.issuerOG,
             description: vcdr.description,
             challenge: vcdr.challenge,
           },
@@ -337,6 +349,7 @@ program
       const result: VectorCommitmentDeploymentResponse = {
         ...vcdr,
         deploymentReceipt,
+        lastModified: formatToday(new Date()),
         lastOperation: "deployed",
       };
 
@@ -445,6 +458,11 @@ program
       if (vcdre.lastOperation !== "deployed" && !vcdre.deploymentReceipt) {
         throw new Error("This VCDRe file has not been deployed");
       }
+
+      // deno-lint-ignore no-unused-vars
+      const { challenge, deploymentReceipt, ...logVCDRE } = vcdre;
+      console.log(logVCDRE);
+      await waitForUserDecision();
 
       await validateDeployment(vcdre.deploymentReceipt, grantedAddress);
 

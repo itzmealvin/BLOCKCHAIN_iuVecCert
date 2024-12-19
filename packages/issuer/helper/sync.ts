@@ -153,6 +153,27 @@ export const loadCertFolder = async (
 };
 
 /**
+ * Format the current Date object to YYYY-MM-DD{T}HH:mm:ss{GMT+XX:XX}
+ * @param specificDate The Date object to be formatted
+ */
+export const formatToday = (specificDate: Date) => {
+  const timezoneOffset = -specificDate.getTimezoneOffset();
+  const offsetHours = String(
+    Math.floor(Math.abs(timezoneOffset) / 60),
+  ).padStart(2, "0");
+  const offsetMinutes = String(Math.abs(timezoneOffset) % 60).padStart(2, "0");
+  const offsetSign = timezoneOffset >= 0 ? "+" : "-";
+  const timezoneFormatted = `GMT${offsetSign}${offsetHours}:${offsetMinutes}`;
+  const year = specificDate.getFullYear();
+  const month = String(specificDate.getMonth() + 1).padStart(2, "0");
+  const day = String(specificDate.getDate()).padStart(2, "0");
+  const hours = String(specificDate.getHours()).padStart(2, "0");
+  const minutes = String(specificDate.getMinutes()).padStart(2, "0");
+  const seconds = String(specificDate.getSeconds()).padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${timezoneFormatted}`;
+};
+
+/**
  * Save the JSON object as a binary file
  * @param jsonObj The JSON object to be saved
  * @param fileName The file name for the JSON object
@@ -207,7 +228,7 @@ export const validateDeployment = async (
         const diffHours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
         const diffMinutes = Math.floor((diffMs / (1000 * 60)) % 60);
 
-        return `USER DECISION NEED: Deployed ${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes ago`;
+        return `USER DECISION NEED? Deployed ${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes ago`;
       })()
     }`,
     status: `${receipt.status} => ${
