@@ -20,8 +20,8 @@ export const waitForUserDecision = (): Promise<boolean> => {
           rl.close();
           resolve(true);
         } else if (answer.toLowerCase() === "n") {
-          rl.close();
-          resolve(false);
+          oraSpinner.fail("Operation aborted by the user");
+          Deno.exit(1);
         } else {
           askQuestion();
         }

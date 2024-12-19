@@ -63,11 +63,7 @@ export const verifyPermission = async (
     if (!integrity) {
       oraSpinner.fail("This certificate was modified");
     }
-    const continueAction = await waitForUserDecision();
-
-    if (!continueAction) {
-      throw new Error("Operation aborted by the user");
-    }
+    await waitForUserDecision();
   }
   return [issuerCN, issuerOG];
 };
