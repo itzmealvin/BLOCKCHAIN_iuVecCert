@@ -1,4 +1,4 @@
-import type { Proof } from "../models/Vector.ts";
+import type { Challenge } from "../models/Vector.ts";
 import {
   dataSlice,
   encodeRlp,
@@ -21,7 +21,7 @@ const encodeGPoint = (rawPoint: string[] | bigint[]) => {
  * Encode the Challenge to be uploaded to the smart contract
  * @param rawChallenge The raw challenge format to be encoded
  */
-export const encodeChallenge = (rawChallenge: Proof) => {
+export const encodeChallenge = (rawChallenge: Challenge) => {
   return {
     index: BigInt(rawChallenge.index).toString(),
     value: BigInt(rawChallenge.value).toString(),

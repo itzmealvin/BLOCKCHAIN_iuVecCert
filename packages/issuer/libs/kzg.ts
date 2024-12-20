@@ -21,10 +21,12 @@ const FIELD_SIZE = BigInt(
 const srsG1 = (depth: number): G1Point[] => {
   assert(depth > 0 && depth <= 65536, "Depth must be between 1 and 65536.");
 
-  return srsg1DataRaw
-    .slice(0, depth)
-    // @ts-ignore: Working library implementation
-    .map(([x, y]: [string, string]) => [BigInt(x), BigInt(y), BigInt(1)]);
+  return (
+    srsg1DataRaw
+      .slice(0, depth)
+      // @ts-ignore: Working library implementation
+      .map(([x, y]: [string, string]) => [BigInt(x), BigInt(y), BigInt(1)])
+  );
 };
 
 // Load SRS G2 points from the ceremony data
@@ -158,19 +160,11 @@ const verify = (
   const aCommit = commit([BigInt(value)]);
 
   const lhs = ffjavascript.bn128.pairing(
-    G1.affine(
-      G1.add(
-        G1.mulScalar(proof, index),
-        G1.sub(commitment, aCommit),
-      ),
-    ),
+    G1.affine(G1.add(G1.mulScalar(proof, index), G1.sub(commitment, aCommit))),
     G2.g,
   );
 
-  const rhs = ffjavascript.bn128.pairing(
-    G1.affine(proof),
-    srs[1],
-  );
+  const rhs = ffjavascript.bn128.pairing(G1.affine(proof), srs[1]);
 
   return ffjavascript.bn128.F12.eq(lhs, rhs);
 };

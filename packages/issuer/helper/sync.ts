@@ -344,7 +344,7 @@ export const zipAndEmbed = async (
         };
         const keywords = [JSON.stringify(proof)];
         await credDoc.attach(permission, "SIGNED.pdf");
-        await credDoc.attach(detail.credBuffer, "CERT.pdf");
+        await credDoc.attach(detail.credBuffer, "CRED.pdf");
         credDoc.setKeywords(keywords);
         const pdfBytes = await credDoc.save();
         zipper.file(`EMBEDDED_${detail.credFile}`, pdfBytes);

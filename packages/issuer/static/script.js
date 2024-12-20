@@ -4,8 +4,8 @@ import { ethers } from "./ethers.min.js";
 const tooltipTriggerList = document.querySelectorAll(
   '[data-bs-toggle="tooltip"]',
 );
-const _tooltipList = [...tooltipTriggerList].map((tooltipTriggerEl) =>
-  new bootstrap.Tooltip(tooltipTriggerEl)
+const _tooltipList = [...tooltipTriggerList].map(
+  (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl),
 );
 
 const spinner = document.getElementById("spinner");
@@ -26,7 +26,9 @@ try {
   }
 } catch (error) {
   appStatus.textContent = `Failed to fetch the emojis. Error message: ${
-    truncatedMessage(error.message)
+    truncatedMessage(
+      error.message,
+    )
   }`;
   appStatus.style.color = "#dc3545";
 }
@@ -86,7 +88,9 @@ connectWalletButton.addEventListener("click", async () => {
     } catch (error) {
       console.log(error);
       appStatus.textContent = `Failed to connect wallet. Error message: ${
-        truncatedMessage(error.message)
+        truncatedMessage(
+          error.message,
+        )
       }`;
       appStatus.style.color = "#dc3545";
     }
@@ -101,27 +105,25 @@ connectWalletButton.addEventListener("click", async () => {
  * Poll the contract parameters to be deployed
  */
 function pollForResult() {
-  const interval = setInterval(
-    async () => {
-      try {
-        const response = await fetch("http://localhost:3000/params");
-        if (response.ok) {
-          clearInterval(interval);
-          parameters = await response.json();
-          spinner.classList.add("d-none");
-          appStatus.textContent = "Deploy the CredsCommitment contract now";
-          deployContractButton.disabled = false;
-        }
-      } catch (error) {
-        appStatus.textContent =
-          `Failed to fetch the parameters. Error message: ${
-            truncatedMessage(error.message)
-          }`;
-        appStatus.style.color = "#dc3545";
+  const interval = setInterval(async () => {
+    try {
+      const response = await fetch("http://localhost:3000/params");
+      if (response.ok) {
+        clearInterval(interval);
+        parameters = await response.json();
+        spinner.classList.add("d-none");
+        appStatus.textContent = "Deploy the CredsCommitment contract now";
+        deployContractButton.disabled = false;
       }
-    },
-    5 * 1000,
-  );
+    } catch (error) {
+      appStatus.textContent = `Failed to fetch the parameters. Error message: ${
+        truncatedMessage(
+          error.message,
+        )
+      }`;
+      appStatus.style.color = "#dc3545";
+    }
+  }, 5 * 1000);
 }
 
 deployContractButton.addEventListener("click", async () => {
@@ -145,7 +147,8 @@ deployContractButton.addEventListener("click", async () => {
       challenge,
     );
 
-    const deployedContract = await contractInstance.deploymentTransaction()
+    const deployedContract = await contractInstance
+      .deploymentTransaction()
       .wait(1); // 1 is number of confirmation needed
 
     const txnReceipt = await deployedContract.getTransaction();
@@ -186,7 +189,9 @@ deployContractButton.addEventListener("click", async () => {
     spinner.classList.add("d-none");
     appStatus.textContent =
       `Failed to deploy CredsCommitment contract. Error message: ${
-        truncatedMessage(error.message)
+        truncatedMessage(
+          error.message,
+        )
       }`;
     appStatus.style.color = "#dc3545";
     deployContractButton.disabled = false;
