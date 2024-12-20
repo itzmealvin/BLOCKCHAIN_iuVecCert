@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from "node:crypto";
+import { createHash } from "node:crypto";
 import {
   genProof,
   genVerifierContractParams,
@@ -26,13 +26,21 @@ export const chunkArray = <T>(array: T[], numberOfChunks: number): T[][] => {
 
 /**
  * Generate a random challenge index using Fiat-Shamir heuristics
+ * @param coeffs The coefficients of the committed polynomial
  * @param commitment The commitment for this vector commitment
  */
-export const genChallengeIndex = (commitment: bigint[]): bigint => {
-  const hash = createHash("sha224");
-  const randomPart = randomBytes(16).toString("hex");
-  hash.update(commitment.join(",") + randomPart);
-  return BigInt("0x" + hash.digest("hex"));
+export const genChallengeIndex = (
+  coeffs: bigint[],
+  commitment: bigint[],
+): bigint => {
+  const commitmentHash = createHash("sha224")
+    .update(commitment.join(","))
+    .digest("hex");
+  const commitHash = BigInt("0x" + commitmentHash);
+  const polyCommit = genProof(coeffs, commitHash);
+  const combinedInput = commitment.join(",") + polyCommit.join(",");
+  const finalHash = createHash("sha224").update(combinedInput).digest("hex");
+  return BigInt("0x" + finalHash);
 };
 
 /**
