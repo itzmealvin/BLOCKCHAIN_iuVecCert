@@ -147,6 +147,7 @@ program
       oraSpinner.succeed(
         "TRANSFORMED: Result challenge to smart contract parameters",
       );
+
       const currentDate = new Date();
       const timestamp = Math.floor(currentDate.getTime() / 1000);
       const outputVCDRFile = outputDir +
@@ -239,15 +240,15 @@ program
       const vcdr = readBinAsJson(vcdrFile) as VectorCommitmentDeploymentRequest;
       oraSpinner.succeed(`READ: Input VCDR file from ${vcdrFile}`);
 
-      // deno-lint-ignore no-unused-vars
-      const { challenge, ...logVCDR } = vcdr;
-      console.log(logVCDR);
-      await waitForUserDecision();
-
       if (vcdr.lastOperation !== "built") {
         oraSpinner.fail("CHECKED: This VCDR file has been deployed");
         await waitForUserDecision();
       }
+
+      // deno-lint-ignore no-unused-vars
+      const { challenge, ...logVCDR } = vcdr;
+      console.log(logVCDR);
+      await waitForUserDecision();
 
       app.get("/params", (_req, res) => {
         res.status(200).send({

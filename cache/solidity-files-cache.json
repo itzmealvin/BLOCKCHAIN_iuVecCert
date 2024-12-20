@@ -22,14 +22,23 @@
                 "evm.methodIdentifiers",
                 "metadata"
               ],
-              "": ["ast"]
+              "": [
+                "ast"
+              ]
             }
           }
         }
       },
-      "imports": ["./Constants.sol", "./Pairing.sol"],
-      "versionPragmas": ["^0.8.0"],
-      "artifacts": ["Verifier"]
+      "imports": [
+        "./Constants.sol",
+        "./Pairing.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Verifier"
+      ]
     },
     "/Users/itzmealvin/Documents/GitHub/BLOCKCHAIN_iuVecCert/contracts/Constants.sol": {
       "lastModificationDate": 1734585553000,
@@ -52,14 +61,22 @@
                 "evm.methodIdentifiers",
                 "metadata"
               ],
-              "": ["ast"]
+              "": [
+                "ast"
+              ]
             }
           }
         }
       },
-      "imports": ["./Pairing.sol"],
-      "versionPragmas": ["^0.8.0"],
-      "artifacts": ["Constants"]
+      "imports": [
+        "./Pairing.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Constants"
+      ]
     },
     "/Users/itzmealvin/Documents/GitHub/BLOCKCHAIN_iuVecCert/contracts/Pairing.sol": {
       "lastModificationDate": 1734585418000,
@@ -82,14 +99,20 @@
                 "evm.methodIdentifiers",
                 "metadata"
               ],
-              "": ["ast"]
+              "": [
+                "ast"
+              ]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": ["^0.8.0"],
-      "artifacts": ["Pairing"]
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Pairing"
+      ]
     },
     "/Users/itzmealvin/Documents/GitHub/BLOCKCHAIN_iuVecCert/contracts/CredsCommitment.sol": {
       "lastModificationDate": 1734688022000,
@@ -112,14 +135,20 @@
                 "evm.methodIdentifiers",
                 "metadata"
               ],
-              "": ["ast"]
+              "": [
+                "ast"
+              ]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": ["^0.8.0"],
-      "artifacts": ["CredsCommitment"]
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "CredsCommitment"
+      ]
     }
   }
 }
