@@ -29,19 +29,19 @@ const extractAttachments = async (
   }
 
   const hasConfig = !!attachments["SIGNED.pdf"];
-  const hasCert = !!attachments["CERT.pdf"];
+  const hasCert = !!attachments["CRED.pdf"];
   const hasAppendix = !!attachments["APPENDIX.pdf"];
 
   if (!(hasConfig && hasCert) && !hasAppendix) {
     throw new Error(
-      "Either both SIGNED.pdf and CERT.pdf must be present, or APPENDIX.pdf must be present alone",
+      "Either both SIGNED.pdf and CRED.pdf must be present, or APPENDIX.pdf must be present alone",
     );
   }
 
   if (hasCert && hasConfig) {
     return [
       new Uint8Array(attachments["SIGNED.pdf"].content),
-      new Uint8Array(attachments["CERT.pdf"].content),
+      new Uint8Array(attachments["CRED.pdf"].content),
     ];
   } else if (hasAppendix) {
     return [new Uint8Array(attachments["APPENDIX.pdf"].content)];

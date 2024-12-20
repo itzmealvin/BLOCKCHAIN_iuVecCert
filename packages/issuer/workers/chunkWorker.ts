@@ -25,10 +25,10 @@ export const chunkArray = <T>(array: T[], numberOfChunks: number): T[][] => {
 };
 
 /**
- * Generate a random challenge value using Fiat-Shamir heuristics
+ * Generate a random challenge index using Fiat-Shamir heuristics
  * @param commitment The commitment for this vector commitment
  */
-export const genChallengeValue = (commitment: bigint[]): bigint => {
+export const genChallengeIndex = (commitment: bigint[]): bigint => {
   const hash = createHash("sha224");
   const randomPart = randomBytes(16).toString("hex");
   hash.update(commitment.join(",") + randomPart);

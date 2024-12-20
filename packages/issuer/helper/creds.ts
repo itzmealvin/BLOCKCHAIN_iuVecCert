@@ -15,7 +15,7 @@ import {
 import { oraSpinner } from "../libs/logger.ts";
 import type { FileHashes } from "../models/File.ts";
 import type { Proof, Vector } from "../models/Vector.ts";
-import { chunkArray, genChallengeValue } from "../workers/chunkWorker.ts";
+import { chunkArray, genChallengeIndex } from "../workers/chunkWorker.ts";
 import { runChunkWorker } from "../workers/wrapper.ts";
 
 export const cores = cpus().length;
@@ -32,7 +32,7 @@ const hasAttachments = async (fileBuffer: Uint8Array): Promise<boolean> => {
   const attachments = await pdfDoc.getAttachments();
   return (
     !!attachments?.["SIGNED.pdf"] ||
-    !!attachments?.["CERT.pdf"] ||
+    !!attachments?.["CRED.pdf"] ||
     !!attachments?.["APPENDIX.pdf"]
   );
 };
@@ -145,7 +145,7 @@ export const buildVectorCommitment = async (
   );
   await Promise.all(chunkPromises);
 
-  const challengeIndex = genChallengeValue(commitValue);
+  const challengeIndex = genChallengeIndex(commitValue);
   const challengeValue = evaluateAt(coeffValues, challengeIndex);
   const challengeProof = genProof(coeffValues, challengeIndex);
   const challengeParams = genVerifierContractParams(

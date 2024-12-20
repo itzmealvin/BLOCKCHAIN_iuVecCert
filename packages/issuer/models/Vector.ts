@@ -2,11 +2,15 @@ export interface Proof {
   proof: string[];
   index: string;
   value: string;
-  commitment?: string[];
+}
+
+export interface Challenge extends Proof {
+  commitment: string[];
 }
 
 export interface Vector {
-  challenge: Proof;
+  challenge: Challenge;
+  requiredLeading: number;
   leafs: Proof[];
 }
 

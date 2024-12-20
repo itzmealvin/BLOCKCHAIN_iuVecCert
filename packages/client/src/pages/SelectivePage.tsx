@@ -109,7 +109,7 @@ const SelectivePage = () => {
         fileResult.fileDetail.permissionBuffer,
         "SIGNED.pdf",
       );
-      await credDoc.attach(fileResult.fileDetail.credBuffer, "CERT.pdf");
+      await credDoc.attach(fileResult.fileDetail.credBuffer, "CRED.pdf");
 
       const pdfBytes = await credDoc.save();
       setStep(2);
