@@ -145,7 +145,7 @@ export const buildVectorCommitment = async (
   );
   await Promise.all(chunkPromises);
 
-  const challengeIndex = genChallengeIndex(commitValue);
+  const challengeIndex = genChallengeIndex(coeffValues, commitValue);
   const challengeValue = evaluateAt(coeffValues, challengeIndex);
   const challengeProof = genProof(coeffValues, challengeIndex);
   const challengeParams = genVerifierContractParams(

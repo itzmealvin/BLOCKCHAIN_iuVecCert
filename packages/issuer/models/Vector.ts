@@ -10,7 +10,6 @@ export interface Challenge extends Proof {
 
 export interface Vector {
   challenge: Challenge;
-  requiredLeading: number;
   leafs: Proof[];
 }
 
@@ -21,7 +20,7 @@ export interface ChallengeParams {
     X: string;
     Y: string;
   };
-  commitment?: {
+  commitment: {
     X: string;
     Y: string;
   };
