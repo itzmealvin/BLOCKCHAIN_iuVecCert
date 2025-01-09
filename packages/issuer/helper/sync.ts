@@ -295,13 +295,13 @@ const getProofByIndex = (
 };
 
 /**
- * Perform zipping and embedding the data to form PDFs
+ * Perform embedding then zipping the data to form PDFs
  * @param vectorData The full vector commitment data to be embedded
  * @param details The CertCommitment contract description detail
  * @param permission The PDF permission buffer to be attached
  * @param contractAddress The CertCommitment contract address
  */
-export const zipAndEmbed = async (
+export const embedAndZip = async (
   vectorData: Vector,
   details: FileDetails[],
   permission: Buffer,

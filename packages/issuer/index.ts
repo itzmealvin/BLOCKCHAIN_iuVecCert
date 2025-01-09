@@ -22,13 +22,13 @@ import { extractAddress, verifyPermission } from "./helper/config.ts";
 import { encodeChallenge } from "./helper/contract.ts";
 import { buildVectorCommitment } from "./helper/creds.ts";
 import {
+  embedAndZip,
   formatToday,
   loadCertFolder,
   loadCertFolderFromSVCD,
   readBinAsJson,
   saveJsonAsBin,
   validateDeployment,
-  zipAndEmbed,
 } from "./helper/sync.ts";
 import { oraSpinner, waitForUserDecision } from "./libs/logger.ts";
 
@@ -476,7 +476,7 @@ program
         `READ: ${loader.length} PDF credential groups from directory ${svcd.credDir}`,
       );
 
-      const zippedData = await zipAndEmbed(
+      const zippedData = await embedAndZip(
         svcd.vectorData,
         loader,
         permission,

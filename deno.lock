@@ -4,6 +4,7 @@
     "npm:@guildofweavers/galois@~0.4.22": "0.4.22",
     "npm:@types/cors@^2.8.17": "2.8.17",
     "npm:@types/express@5": "5.0.0",
+    "npm:@types/node@*": "22.5.4",
     "npm:commander@^12.1.0": "12.1.0",
     "npm:cors@^2.8.5": "2.8.5",
     "npm:elliptic@^6.6.1": "6.6.1",
