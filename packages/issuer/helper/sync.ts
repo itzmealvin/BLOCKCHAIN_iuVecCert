@@ -315,7 +315,7 @@ export const embedAndZip = async (
 
   try {
     const embedTask = async (detail: FileDetails, index: number) => {
-      const credDoc = await PDFDocument.load(detail.credBuffer);
+      const credDoc = await PDFDocument.load(new Uint8Array(detail.credBuffer));
       const trueCertProof = getProofByIndex(index, vectorData);
 
       if (trueCertProof) {
@@ -343,8 +343,8 @@ export const embedAndZip = async (
           },
         };
         const keywords = [JSON.stringify(proof)];
-        await credDoc.attach(permission, "SIGNED.pdf");
-        await credDoc.attach(detail.credBuffer, "CRED.pdf");
+        await credDoc.attach(new Uint8Array(permission), "SIGNED.pdf");
+        await credDoc.attach(new Uint8Array(detail.credBuffer), "CRED.pdf");
         credDoc.setKeywords(keywords);
         const pdfBytes = await credDoc.save();
         zipper.file(`EMBEDDED_${detail.credFile}`, pdfBytes);
@@ -353,7 +353,9 @@ export const embedAndZip = async (
       for (let i = 0; i < detail.appendixBuffers.length; i++) {
         const appendixBuffer = detail.appendixBuffers[i];
         const appendixFile = detail.appendixFiles[i];
-        const appendixDoc = await PDFDocument.load(appendixBuffer);
+        const appendixDoc = await PDFDocument.load(
+          new Uint8Array(appendixBuffer),
+        );
         const trueAppendixProof = getProofByIndex(index + 1, vectorData);
         if (trueAppendixProof) {
           const proof: FileKeywords = {
@@ -366,7 +368,10 @@ export const embedAndZip = async (
           };
 
           const keywords = [JSON.stringify(proof)];
-          await appendixDoc.attach(appendixBuffer, "APPENDIX.pdf");
+          await appendixDoc.attach(
+            new Uint8Array(appendixBuffer),
+            "APPENDIX.pdf",
+          );
           appendixDoc.setKeywords(keywords);
           const pdfBytes = await appendixDoc.save();
           zipper.file(`EMBEDDED_${appendixFile}`, pdfBytes);
