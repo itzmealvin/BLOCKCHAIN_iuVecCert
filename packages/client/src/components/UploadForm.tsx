@@ -144,7 +144,7 @@ const UploadForm = ({ mode, setStep }: Props) => {
               id="credentials"
               type="file"
               accept=".pdf"
-              multiple={true}
+              multiple
             />
             <FormErrorMessage>{errors.credentials?.message}</FormErrorMessage>
           </FormControl>
