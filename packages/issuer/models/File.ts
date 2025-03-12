@@ -1,3 +1,4 @@
+import type { Buffer } from "node:buffer";
 import type { Proof } from "./Vector.ts";
 
 export interface OmitFileDetails {
@@ -8,8 +9,8 @@ export interface OmitFileDetails {
 }
 
 export interface FileDetails extends OmitFileDetails {
-  credBuffer: Uint8Array;
-  appendixBuffers: Uint8Array[];
+  credBuffer: Buffer<ArrayBufferLike>;
+  appendixBuffers: Buffer<ArrayBufferLike>[];
 }
 
 export interface FileHashes {

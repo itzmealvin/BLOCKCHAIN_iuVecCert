@@ -46,7 +46,7 @@ export const detectProofObject = async (
   fileBuffer: Buffer,
   fields?: string[],
 ): Promise<[boolean, string]> => {
-  const credDoc = await PDFDocument.load(fileBuffer);
+  const credDoc = await PDFDocument.load(new Uint8Array(fileBuffer));
   const keywordField = credDoc.getKeywords();
   const form = credDoc.getForm();
   const credID = fields
@@ -57,7 +57,7 @@ export const detectProofObject = async (
       })
       .join("_")
     : "";
-  const hasAttachmentsFlag = await hasAttachments(fileBuffer);
+  const hasAttachmentsFlag = await hasAttachments(new Uint8Array(fileBuffer));
 
   return [
     Boolean(
@@ -83,10 +83,10 @@ export const getHash = (
   salt: string,
 ): string => {
   const contentWithSalt = Buffer.concat([
-    Buffer.from(credID, "utf-8"),
-    Buffer.from(type, "utf-8"),
-    bufferContent,
-    Buffer.from(salt, "utf-8"),
+    new Uint8Array(Buffer.from(credID, "utf-8")),
+    new Uint8Array(Buffer.from(type, "utf-8")),
+    new Uint8Array(bufferContent),
+    new Uint8Array(Buffer.from(salt, "utf-8")),
   ]);
   return "0x" + createHash("sha224").update(contentWithSalt).digest("hex");
 };
