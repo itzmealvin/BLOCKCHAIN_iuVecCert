@@ -17,7 +17,7 @@ const Footer = () => {
     <HStack p="10px" justifyContent="space-between">
       <HStack>
         <Heading as="h1" size="md">
-          © 2024 IUVecCert. All rights reserved. Proudly made in 🇻🇳 by
+          © 2025 IUVecCert. All rights reserved. Proudly made in 🇻🇳 by
           itzmealvin
         </Heading>
       </HStack>
