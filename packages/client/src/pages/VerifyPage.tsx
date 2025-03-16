@@ -59,7 +59,7 @@ const VerifierPage = () => {
             { title: "Step 1", description: "Upload Credential(s)" },
             { title: "Step 2", description: "Confirm Issuer Permission" },
             { title: "Step 3", description: "Confirm Contract Information" },
-            { title: "Step 4", description: "Check Verkle Proof" },
+            { title: "Step 4", description: "Check Technical Proof" },
             { title: "Step 5", description: "View Valid Credential Group" },
           ]}
           currentStep={step}

@@ -111,7 +111,6 @@ const DocsPage = () => {
         ))}
       </VStack>
       <Box flex={1} p={4} maxH="75vh" overflowY="auto">
-        {" "}
         <MarkdownPreview
           source={currentContent}
           rehypePlugins={[rehypeSanitize, rehypeHighlight]}
