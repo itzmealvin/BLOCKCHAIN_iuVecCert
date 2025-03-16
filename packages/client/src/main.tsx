@@ -21,13 +21,13 @@ import theme from "./theme.ts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url,
+  import.meta.url
 ).toString();
 
 const queryClient = new QueryClient();
 
 const config = getDefaultConfig({
-  appName: "IU-VerCert",
+  appName: "IUVecCert",
   projectId: "354c7833e78527ae3f90794a8d0c4506",
   chains: [sepolia],
 });
@@ -46,5 +46,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </QueryClientProvider>
       </WagmiProvider>
     </ChakraProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
