@@ -3,6 +3,7 @@ import {
   Center,
   Heading,
   HStack,
+  Link,
   Tab,
   TabList,
   TabPanel,
@@ -25,7 +26,7 @@ const VerifierPage = () => {
 
   const hasFileResult = useMemo(
     () => Object.keys(fileResult).length !== 0,
-    [fileResult],
+    [fileResult]
   );
 
   const credFile = useMemo(
@@ -33,17 +34,17 @@ const VerifierPage = () => {
       hasFileResult && fileResult.fileDetail.credBuffer
         ? { data: fileResult.fileDetail.credBuffer.slice() }
         : null,
-    [hasFileResult, fileResult?.fileDetail?.credBuffer],
+    [hasFileResult, fileResult?.fileDetail?.credBuffer]
   );
 
   const appendixFiles = useMemo(
     () =>
       hasFileResult && fileResult?.fileDetail?.appendixBuffers
         ? fileResult.fileDetail.appendixBuffers.map((buffer) => ({
-          data: buffer.slice(),
-        }))
+            data: buffer.slice(),
+          }))
         : [],
-    [hasFileResult, fileResult?.fileDetail?.appendixBuffers],
+    [hasFileResult, fileResult?.fileDetail?.appendixBuffers]
   );
 
   return (
@@ -67,10 +68,7 @@ const VerifierPage = () => {
         <Center>
           <VStack spacing={5} align="center">
             {!hasFileResult && (
-              <UploadForm
-                mode="VERIFY"
-                setStep={() => setStep(1)}
-              />
+              <UploadForm mode="VERIFY" setStep={() => setStep(1)} />
             )}
             {step >= 1 && (
               <HStack spacing={20}>
@@ -87,7 +85,7 @@ const VerifierPage = () => {
                           <Tab key={index} isDisabled={step !== 5}>
                             {appendixFile}
                           </Tab>
-                        ),
+                        )
                       )}
                     </TabList>
                     <TabPanels>
@@ -143,7 +141,16 @@ const VerifierPage = () => {
                         Confirm the smart contract validity
                       </Heading>
                       <Heading as="h3" size="md">
-                        The deployed smart contract stored these information
+                        The deployed{" "}
+                        <Link
+                          href={`https://sepolia.etherscan.io/address/${fileResult.fileDetail.commitAddress}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          color="blue.500"
+                        >
+                          smart contract
+                        </Link>{" "}
+                        stored this information.
                       </Heading>
                       <ContractList
                         contract={fileResult.fileDetail.contractInstance}
