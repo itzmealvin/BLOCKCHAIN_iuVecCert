@@ -111,7 +111,7 @@ program
 
       if (!existsSync(outputDir)) {
         oraSpinner.start(`CREATING: Output directory at ${outputDir}`);
-        mkdirSync(options.output, { recursive: true });
+        mkdirSync(outputDir, { recursive: true });
         oraSpinner.succeed(`CREATED: Output directory at ${outputDir}`);
       }
 
