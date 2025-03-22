@@ -72,12 +72,14 @@ const processGroup = async (
   );
 
   const [hasCertProof, credID] = await detectProofObject(credBuffer, fields);
-  const hasAppendixProof = await Promise.any(
-    appendixBuffers.map(async (buffer) => {
-      const [hasProof] = await detectProofObject(buffer);
-      return hasProof;
-    }),
-  );
+  const hasAppendixProof = appendixBuffers.length === 0
+    ? false
+    : await Promise.any(
+      appendixBuffers.map(async (buffer) => {
+        const [hasProof] = await detectProofObject(buffer);
+        return hasProof;
+      }),
+    );
 
   if (hasCertProof || hasAppendixProof) {
     throw new Error("This directory contains an IUVecCert embedded credential");

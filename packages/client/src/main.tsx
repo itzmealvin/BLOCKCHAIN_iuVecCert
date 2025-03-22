@@ -21,7 +21,7 @@ import theme from "./theme.ts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url
+  import.meta.url,
 ).toString();
 
 const queryClient = new QueryClient();
@@ -46,5 +46,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </QueryClientProvider>
       </WagmiProvider>
     </ChakraProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
