@@ -27,7 +27,7 @@
 [CONSTANTS](https://sepolia.etherscan.io/address/0xab8591067f6f97297ba9151fc21a0b2384e0e06e)
 ·
 [PAIRING](https://sepolia.etherscan.io/address/0x1E2577574d12DAb53c5a7432d191AdA98e9F5F6c)
-·[VERIFIER](https://sepolia.etherscan.io/address/0xF98cbFAf6C804cD3928d4B575C050B1E72314c3D)
+· [VERIFIER](https://sepolia.etherscan.io/address/0xF98cbFAf6C804cD3928d4B575C050B1E72314c3D)
 
 ### CLIENT
 
