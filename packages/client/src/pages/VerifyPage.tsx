@@ -26,7 +26,7 @@ const VerifierPage = () => {
 
   const hasFileResult = useMemo(
     () => Object.keys(fileResult).length !== 0,
-    [fileResult]
+    [fileResult],
   );
 
   const credFile = useMemo(
@@ -34,17 +34,17 @@ const VerifierPage = () => {
       hasFileResult && fileResult.fileDetail.credBuffer
         ? { data: fileResult.fileDetail.credBuffer.slice() }
         : null,
-    [hasFileResult, fileResult?.fileDetail?.credBuffer]
+    [hasFileResult, fileResult?.fileDetail?.credBuffer],
   );
 
   const appendixFiles = useMemo(
     () =>
       hasFileResult && fileResult?.fileDetail?.appendixBuffers
         ? fileResult.fileDetail.appendixBuffers.map((buffer) => ({
-            data: buffer.slice(),
-          }))
+          data: buffer.slice(),
+        }))
         : [],
-    [hasFileResult, fileResult?.fileDetail?.appendixBuffers]
+    [hasFileResult, fileResult?.fileDetail?.appendixBuffers],
   );
 
   return (
@@ -68,7 +68,10 @@ const VerifierPage = () => {
         <Center>
           <VStack spacing={5} align="center">
             {!hasFileResult && (
-              <UploadForm mode="VERIFY" setStep={() => setStep(1)} />
+              <UploadForm
+                mode="VERIFY"
+                setStep={() => setStep(1)}
+              />
             )}
             {step >= 1 && (
               <HStack spacing={20}>
@@ -85,7 +88,7 @@ const VerifierPage = () => {
                           <Tab key={index} isDisabled={step !== 5}>
                             {appendixFile}
                           </Tab>
-                        )
+                        ),
                       )}
                     </TabList>
                     <TabPanels>
