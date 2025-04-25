@@ -1,9 +1,9 @@
 {
-  "name": "@iuveccert/issuer",
+  "name": "@iuveccert+/issuer",
   "version": "1.0.0",
   "license": "GPL-3.0-or-later",
   "exports": "./index.ts",
-  "description": "IUVecCert ISSUER: CLI to issue embedded credentials securely by vector commitment written in TypeScript + Deno",
+  "description": "IU-VecCert+ ISSUER: CLI to issue embedded credentials securely by vector commitment written in TypeScript + Deno",
   "publish": {
     "exclude": ["./credentials/5000"]
   },

@@ -102,7 +102,7 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
         );
       } catch (error) {
         console.error(error);
-        toast.error("IUVecCert Error: Can't verify the given PDF credential");
+        toast.error("IU-VecCert+ Error: Can't verify the given PDF credential");
       }
     };
 
@@ -119,11 +119,11 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
         );
 
         setDone(true);
-        toast.success("IUVecCert: Success verification");
+        toast.success("IU-VecCert+: Success verification");
       } catch (error) {
         console.error(error);
         toast.error(
-          "IUVecCert Error: Can't verify the given PDF credential/appendix(s)",
+          "IU-VecCert+ Error: Can't verify the given PDF credential/appendix(s)",
         );
       }
     };

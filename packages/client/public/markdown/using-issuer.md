@@ -1,4 +1,4 @@
-# @iuveccert/issuer (v1.0.0)
+# @iuveccert+/issuer (v1.0.0)
 
 > CLI to issue embedded credentials securely by vector commitment.
 
@@ -8,7 +8,7 @@
 
 ## About The Project
 
-**@iuveccert/issuer** is a Command-Line Interface (CLI) tool designed to issue
+**@iuveccert+/issuer** is a Command-Line Interface (CLI) tool designed to issue
 credentials utilizing the vector commitment structure. This tool facilitates the
 efficient generation and organization of credentials while integrating smart
 contract compatibility with CertCommitment descriptions.
@@ -31,7 +31,7 @@ contract compatibility with CertCommitment descriptions.
 
 2. Clone the repo:
    ```bash
-   git clone --branch @iuveccert/issuer https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert.git
+   git clone --branch @iuveccert+/issuer https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert.git
    cd BLOCKCHAIN_iuVecCert
    ```
 3. Change git remote url to avoid accidental pushes to base project:
@@ -214,10 +214,10 @@ Here are the steps to contribute:
 GitHub account.
 
 **2. Create a Feature Branch**: Generate a descriptive name for your branch, for
-instance, `@iuveccert/issuer-your-feature`.
+instance, `@iuveccert+/issuer-your-feature`.
 
 ```bash
-git checkout -b @iuveccert/issuer-your-feature
+git checkout -b @iuveccert+/issuer-your-feature
 ```
 
 **3. Develop your Contribution**
@@ -239,7 +239,7 @@ git commit -m "add: New feature"
 **6. Push to Your Branch**: Merge your branch into your forked repository:
 
 ```bash
-git push origin @iuveccert/issuer-your-feature
+git push origin @iuveccert+/issuer-your-feature
 ```
 
 **7. Submit a Pull Request**:

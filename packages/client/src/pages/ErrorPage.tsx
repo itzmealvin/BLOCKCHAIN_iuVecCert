@@ -6,14 +6,14 @@ const ErrorPage = () => {
   const errorMessage = isRouteErrorResponse(error)
     ? (
       <>
-        IUVecCert ERROR:
+        IU-VecCert+ ERROR:
         <br />
         URL not found!
       </>
     )
     : (
       <>
-        IUVecCert ERROR:
+        IU-VecCert+ ERROR:
         <br />
         An unexpected error occurred!
       </>

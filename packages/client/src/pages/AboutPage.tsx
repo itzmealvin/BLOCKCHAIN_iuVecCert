@@ -12,7 +12,7 @@ const tiles = [
   {
     title: "Constant size proof",
     description:
-      "IUVecCert delivers constant-size proofs regardless of the number of credentials issued, ensuring minimal overhead for issuers and seamless verification for users. This approach enhances scalability and performance",
+      "IU-VecCert+ delivers constant-size proofs regardless of the number of credentials issued, ensuring minimal overhead for issuers and seamless verification for users. This approach enhances scalability and performance",
     colSpan: 3,
     rowSpan: 1,
   },
@@ -26,12 +26,12 @@ const tiles = [
   {
     title: "Vector Commitment",
     description:
-      "IUVecCert leverages vector commitments to keep the proof storage constant, while dealing with reasonable computational efficiency. This ensures secure, fast, and scalable issuance and verification of credentials",
+      "IU-VecCert+ leverages vector commitments to keep the proof storage constant, while dealing with reasonable computational efficiency. This ensures secure, fast, and scalable issuance and verification of credentials",
     colSpan: 3,
     rowSpan: 1,
   },
   {
-    title: "IUVecCert",
+    title: "IU-VecCert+",
     colSpan: 4,
     rowSpan: 1,
   },
@@ -54,7 +54,7 @@ const tiles = [
     title: "Scientifically proven",
     description: (
       <>
-        The technology behind IUVecCert has been scientifically proven by
+        The technology behind IU-VecCert+ has been scientifically proven by
         prestigious conference(s){" "}
         <a
           href="https://doi.org/10.1007/978-981-96-0434-0_8"
@@ -92,7 +92,7 @@ const tiles = [
   {
     title: "Easy to use",
     description:
-      "IUVecCert simplifies the credentials issuance process, ensuring that issuers and users can interact seamlessly without requiring extensive technical knowledge. The intuitive design guarantees ease of use for all end users",
+      "IU-VecCert+ simplifies the credentials issuance process, ensuring that issuers and users can interact seamlessly without requiring extensive technical knowledge. The intuitive design guarantees ease of use for all end users",
     colSpan: 2,
     rowSpan: 1,
   },

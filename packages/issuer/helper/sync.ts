@@ -82,7 +82,9 @@ const processGroup = async (
     );
 
   if (hasCertProof || hasAppendixProof) {
-    throw new Error("This directory contains an IUVecCert embedded credential");
+    throw new Error(
+      "This directory contains an IU-VecCert+ embedded credential",
+    );
   }
 
   const salt = randomBytes(16).toString("hex");

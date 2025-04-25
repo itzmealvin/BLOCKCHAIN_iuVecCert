@@ -12,7 +12,7 @@ const NavBar = () => {
         <Flex align="center" gap="10px">
           <Image src={logo} boxSize="50px" mr={2} />
           <Heading as="h1" size="lg">
-            IUVecCert
+            IU-VecCert+
           </Heading>
         </Flex>
       </Link>

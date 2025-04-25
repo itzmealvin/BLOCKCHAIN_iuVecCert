@@ -36,7 +36,7 @@ const LandingPage = () => {
     },
     {
       path: "about",
-      name: "About IUVecCert",
+      name: "About IU-VecCert+",
     },
   ];
 
@@ -52,7 +52,7 @@ const LandingPage = () => {
           bgClip="text"
         >
           A Scalable Credential Issuance Protocol <br />
-          Make {currentWord} with IUVecCert
+          Make {currentWord} with IU-VecCert+
         </Heading>
       </CardHeader>
       <CardBody>

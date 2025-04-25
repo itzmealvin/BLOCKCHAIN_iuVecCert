@@ -27,7 +27,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 const queryClient = new QueryClient();
 
 const config = getDefaultConfig({
-  appName: "IUVecCert",
+  appName: "IU-VecCert+",
   projectId: "354c7833e78527ae3f90794a8d0c4506",
   chains: [sepolia],
 });

@@ -1,6 +1,6 @@
-# @iuveccert/client (v1.0.0)
+# @iuveccert+/client (v1.0.0)
 
-> The client website for IUVecCert scalable credentials issuance protocol.
+> The client website for IU-VecCert+ scalable credentials issuance protocol.
 
 <a id="readme-top"></a>
 
@@ -8,7 +8,7 @@
 
 ## About The Project
 
-**@iuveccert/client** is the client for IUVecCert protocol. It enables
+**@iuveccert+/client** is the client for IU-VecCert+ protocol. It enables
 organizations to verify and revoke with precision and scalability, all at
 zero-cost with an intuitive UI for the end users.
 
@@ -35,7 +35,7 @@ zero-cost with an intuitive UI for the end users.
 
 2. Clone the repo:
    ```bash
-   git clone --branch @iuveccert/client https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert.git
+   git clone --branch @iuveccert+/client https://github.com/itzmealvin/BLOCKCHAIN_iuVecCert.git
    cd BLOCKCHAIN_iuVecCert
    ```
 3. Change git remote url to avoid accidental pushes to base project:
@@ -64,7 +64,7 @@ zero-cost with an intuitive UI for the end users.
 ## Usage
 
 The client website is publicly accessible on
-[https://iuveccert.vercel.app](https://iuveccert.vercel.com).
+[https://iuveccert+.vercel.app](https://iuveccert+.vercel.com).
 
 <!-- FEATURES -->
 
@@ -105,10 +105,10 @@ Here are the steps to contribute:
 GitHub account.
 
 **2. Create a Feature Branch**: Generate a descriptive name for your branch, for
-instance, `@iuveccert/client-your-feature`:
+instance, `@iuveccert+/client-your-feature`:
 
 ```bash
-git checkout -b @iuveccert/client-your-feature
+git checkout -b @iuveccert+/client-your-feature
 ```
 
 **3. Develop your Contribution**
@@ -131,7 +131,7 @@ git commit -m "add: New feature"
 **6. Push to Your Branch**: Merge your branch into your forked repository:
 
 ```bash
-git push origin @iuveccert/client-your-feature
+git push origin @iuveccert+/client-your-feature
 ```
 
 **7. Submit a Pull Request**:
