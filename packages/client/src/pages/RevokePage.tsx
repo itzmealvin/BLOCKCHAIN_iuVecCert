@@ -158,8 +158,8 @@ const RevokePage = () => {
           .promise(res.wait(1), {
             pending: "Waiting for confirmation",
             success:
-              "IUVecCert: Success revocation, will redirect to main page in 5 seconds",
-            error: "IUVecCert Error: Cannot revoke",
+              "IU-VecCert+: Success revocation, will redirect to main page in 5 seconds",
+            error: "IU-VecCert+ Error: Cannot revoke",
           })
           .finally(() => {
             setStep(3);
@@ -168,7 +168,7 @@ const RevokePage = () => {
       })
       .catch((_error) => {
         setLoading(false);
-        toast.error("IUVecCert Error: User denied transaction");
+        toast.error("IU-VecCert+ Error: User denied transaction");
       });
   };
 
@@ -178,7 +178,7 @@ const RevokePage = () => {
         <Heading as="h1" size="2xl" textAlign="center" pb={10}>
           {!signer
             ? "Connect your wallet to revoke credential securely"
-            : "IUVecCert CLIENT - Revoke Credential"}
+            : "IU-VecCert+ CLIENT - Revoke Credential"}
         </Heading>
       </Box>
       <VStack justifyContent="center" spacing={10}>

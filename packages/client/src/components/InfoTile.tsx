@@ -32,7 +32,7 @@ const InfoTile = ({ title, description }: TileProps) => {
       h="18vh"
       onClick={onOpen}
     >
-      {title === "IUVecCert"
+      {title === "IU-VecCert+"
         ? (
           <Text fontSize="6xl" fontWeight="extrabold">
             {title}

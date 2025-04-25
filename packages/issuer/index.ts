@@ -33,9 +33,9 @@ import {
 import { oraSpinner, waitForUserDecision } from "./libs/logger.ts";
 
 program
-  .name("iuveccert")
+  .name("iuveccert+")
   .description(
-    "IUVecCert ISSUER: CLI to issue embedded credentials securely by vector commitment",
+    "IU-VecCert+ ISSUER: CLI to issue embedded credentials securely by vector commitment",
   )
   .version("1.0.0");
 
@@ -191,7 +191,7 @@ program
       Deno.exit(0);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        oraSpinner.fail(`IUVecCert ISSUER Error: ${error.message}`);
+        oraSpinner.fail(`IU-VecCert+ ISSUER Error: ${error.message}`);
       }
       Deno.exit(1);
     }
@@ -281,7 +281,7 @@ program
           res
             .status(400)
             .send(
-              "IUVecCert ISSUER Error: Missing type, and either address or receipt",
+              "IU-VecCert+ ISSUER Error: Missing type, and either address or receipt",
             );
         }
 
@@ -294,9 +294,9 @@ program
 
           oraSpinner.succeed("RECEIVED: Smart contract deployment receipt");
         } else {
-          res.status(400).send("IUVecCert ISSUER Error: Invalid type");
+          res.status(400).send("IU-VecCert+ ISSUER Error: Invalid type");
         }
-        res.status(200).send("IUVecCert ISSUER Info: Success");
+        res.status(200).send("IU-VecCert+ ISSUER Info: Success");
       });
 
       oraSpinner.start(
@@ -359,7 +359,7 @@ program
       Deno.exit(0);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        oraSpinner.fail(`IUVecCert ISSUER Error: ${error.message}`);
+        oraSpinner.fail(`IU-VecCert+ ISSUER Error: ${error.message}`);
       }
       Deno.exit(1);
     }
@@ -508,7 +508,7 @@ program
       Deno.exit(0);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        oraSpinner.fail(`IUVecCert ISSUER Error: ${error.message}`);
+        oraSpinner.fail(`IU-VecCert+ ISSUER Error: ${error.message}`);
       }
       Deno.exit(1);
     }

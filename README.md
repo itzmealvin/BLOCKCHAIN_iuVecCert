@@ -2,7 +2,7 @@
 [![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url]
 [![License][license-shield]][license-url]
 
-# @iuveccert
+# @iuveccert+
 
 > The all-in-one tooling for scalable credentials issuance using Vector
 > Commitment.
@@ -27,7 +27,8 @@
 [CONSTANTS](https://sepolia.etherscan.io/address/0xab8591067f6f97297ba9151fc21a0b2384e0e06e)
 ·
 [PAIRING](https://sepolia.etherscan.io/address/0x1E2577574d12DAb53c5a7432d191AdA98e9F5F6c)
-· [VERIFIER](https://sepolia.etherscan.io/address/0xF98cbFAf6C804cD3928d4B575C050B1E72314c3D)
+·
+[VERIFIER](https://sepolia.etherscan.io/address/0xF98cbFAf6C804cD3928d4B575C050B1E72314c3D)
 
 ### CLIENT
 
@@ -51,7 +52,7 @@
 ## Getting Started
 
 **For more details on how to installation/usage/examples, please refer to the
-`README.md` of each respective IUVecCert components**.
+`README.md` of each respective IU-VecCert+ components**.
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 
@@ -91,13 +92,13 @@
 - [x] **All-in-one tooling for credentials issuance**: A unified platform for
       generating, issuing, and verifying credentials, streamlining the process
       and reducing manual effort.
-- [x] **Constant size proof**: IUVecCert delivers constant-size proofs
+- [x] **Constant size proof**: IU-VecCert+ delivers constant-size proofs
       regardless of the number of credentials issued, ensuring minimal overhead
       for issuers and seamless verification for users. This approach enhances
       scalability and performance.
 - [x] **Revocation**: Enables revoking invalid credentials, ensuring reliability
       and control over credentials.
-- [x] **Vector Commitment**: IUVecCert leverages Verkle Tree-based vector
+- [x] **Vector Commitment**: IU-VecCert+ leverages Verkle Tree-based vector
       commitments to optimize proof storage and computational efficiency. This
       ensures secure, fast, and scalable issuance and verification of
       credentials.
@@ -113,7 +114,7 @@
       additional costs through efficient cryptographic techniques.
 - [x] **Scalable design**: Ensures smooth performance even with a growing number
       of users and credentials.
-- [x] **Easy to use**: IUVecCert simplifies the credentials issuance process,
+- [x] **Easy to use**: IU-VecCert+ simplifies the credentials issuance process,
       ensuring that issuers and users can interact seamlessly without requiring
       extensive technical knowledge. The intuitive design guarantees ease of use
       for all end users.
@@ -134,7 +135,7 @@ learn, inspire, and create. Any contributions you make are **greatly
 appreciated**.
 
 **For more details on how to contribute, please refer to the `README.md` of each
-respective IUVecCert components**.
+respective IU-VecCert+ components**.
 
 <p align="right">(<a href="#readme-top" target="_blank" rel="noopener noreferrer">back to top</a>)</p>
 

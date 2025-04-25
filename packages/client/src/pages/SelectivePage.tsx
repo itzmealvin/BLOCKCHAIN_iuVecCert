@@ -118,11 +118,11 @@ const SelectivePage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        "IUVecCert Error: Cannot generate requested embedded credential",
+        "IU-VecCert+ Error: Cannot generate requested embedded credential",
       );
     } finally {
       toast.success(
-        "IUVecCert: Success disclosure, will redirect to main page in 5 seconds",
+        "IU-VecCert+: Success disclosure, will redirect to main page in 5 seconds",
       );
       handleClose();
     }
@@ -132,7 +132,7 @@ const SelectivePage = () => {
     <>
       <Box pt={10}>
         <Heading as="h1" size="2xl" textAlign="center" pb={10}>
-          IUVecCert CLIENT - Selective Disclosure
+          IU-VecCert+ CLIENT - Selective Disclosure
         </Heading>
       </Box>
       <VStack justifyContent="center" spacing={10}>

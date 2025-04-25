@@ -1,11 +1,10 @@
 .DS_Store
-.idea
-node_modules
-credentials
-embedded
-dist
+node_modules/
+credentials/
+embedded/
+dist/
 .env
 packages/issuer/credentials/5000/
 !packages/issuer/credentials/
-template.docx
 packages/issuer/requests/
+cache/

@@ -19,7 +19,7 @@ const Maintenance = () => {
         bgGradient="linear(to-r, red, orange, yellow.400)"
         bgClip="text"
       >
-        IUVecCert Maintenance Mode! <br />
+        IU-VecCert+ Maintenance Mode! <br />
         This website is currently down for maintenance purposes <br />
         Please comeback in
       </Heading>

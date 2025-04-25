@@ -25,13 +25,13 @@ const DocsPage = () => {
       lastUpdate: "December 17th, 2024",
     },
     {
-      title: "Using @iuveccert/issuer",
+      title: "Using @iuveccert+/issuer",
       file: "using-issuer.md",
       subheadings: [],
       lastUpdate: "December 17th, 2024",
     },
     {
-      title: "Using @iuveccert/client",
+      title: "Using @iuveccert+/client",
       file: "using-client.md",
       subheadings: [],
       lastUpdate: "December 17th, 2024",
@@ -69,7 +69,7 @@ const DocsPage = () => {
       setCurrentContent(content);
     } catch (error) {
       console.error(error);
-      toast.error("IUVecCert Error: Can't retrieve the documentation file");
+      toast.error("IU-VecCert+ Error: Can't retrieve the documentation file");
     }
   };
 

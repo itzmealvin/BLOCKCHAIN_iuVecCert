@@ -25,7 +25,7 @@ const Layout = () => {
           bgGradient="linear(to-r, red, purple, blue)"
           bgClip="text"
         >
-          IUVecCert WARNING! <br />
+          IU-VecCert+ WARNING! <br />
           Please visit this site on desktop for the best experience
         </Heading>
       </VStack>

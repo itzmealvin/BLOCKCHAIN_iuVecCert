@@ -66,7 +66,7 @@ const UploadForm = ({ mode, setStep }: Props) => {
         try {
           if (!result.fileDetail.commitAddress) {
             throw new Error(
-              "IUVecCert Error: Cannot retrieve CredsCommitment contract address from this file",
+              "IU-VecCert+ Error: Cannot retrieve CredsCommitment contract address from this file",
             );
           }
           const contract = getContractInstance(
@@ -84,7 +84,7 @@ const UploadForm = ({ mode, setStep }: Props) => {
             result.fileDetail.deployerAddress !== (await signer.getAddress())
           ) {
             toast.error(
-              "IUVecCert Error: Connected address and deployer address not match",
+              "IU-VecCert+ Error: Connected address and deployer address not match",
             );
             setLoading(false);
             return;
@@ -95,7 +95,7 @@ const UploadForm = ({ mode, setStep }: Props) => {
 
           if (isRevoked) {
             toast.error(
-              `IUVecCert Error: This PDF credential has already been revoked. Reason: ${reason}`,
+              `IU-VecCert+ Error: This PDF credential has already been revoked. Reason: ${reason}`,
             );
             setLoading(false);
             return;
@@ -105,7 +105,7 @@ const UploadForm = ({ mode, setStep }: Props) => {
           setStep();
           reset();
         } catch (error) {
-          toast.error(`IUVecCert Error: ${error}`);
+          toast.error(`IU-VecCert+ Error: ${error}`);
           console.error(error);
         } finally {
           setLoading(false);
@@ -113,7 +113,7 @@ const UploadForm = ({ mode, setStep }: Props) => {
         }
       })
       .catch((error) => {
-        toast.error(`IUVecCert ${error}`);
+        toast.error(`IU-VecCert+ ${error}`);
         console.error(error);
         setLoading(false);
         reset();
