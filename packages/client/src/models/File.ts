@@ -27,7 +27,7 @@ export interface FileDetails {
   contractInstance: Contract;
   deployerAddress?: string;
   commitAddress: string;
-  requiredAppendixNames: string[];
+  requiredAppendixFiles: string[];
   requiredAppendixHashes: string[];
   credName: string;
   credHash: string;

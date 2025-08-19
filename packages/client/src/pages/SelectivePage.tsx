@@ -101,7 +101,7 @@ const SelectivePage = () => {
       credDoc.setKeywords([
         JSON.stringify({
           ...fileResult.credKeywords,
-          appendixNames: newNames,
+          appendixFiles: newNames,
           appendixHashes: newHashes,
         }),
       ]);

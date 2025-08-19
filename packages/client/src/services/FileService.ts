@@ -91,7 +91,7 @@ export const getProofObject = async (
       credHash: "",
       credBuffer: new Uint8Array(),
       credFileProof: {} as Proof,
-      requiredAppendixNames: [],
+      requiredAppendixFiles: [],
       requiredAppendixHashes: [],
       appendixFiles: [],
       appendixHashes: [],
@@ -141,7 +141,7 @@ export const getProofObject = async (
       savedCredID = credParsedObject.credID;
       savedSalt = credParsedObject.salt;
       result.fileDetail.commitAddress = credParsedObject.commitAddress;
-      result.fileDetail.requiredAppendixNames = credParsedObject.appendixFiles;
+      result.fileDetail.requiredAppendixFiles = credParsedObject.appendixFiles;
       result.fileDetail.requiredAppendixHashes =
         credParsedObject.appendixHashes;
       result.fileDetail.credName = file.name;
@@ -174,13 +174,13 @@ export const getProofObject = async (
   });
 
   if (mode === "VERIFY") {
-    const mismatchedNames = result.fileDetail.requiredAppendixNames.filter(
+    const mismatchedNames = result.fileDetail.requiredAppendixFiles.filter(
       (name) => !result.fileDetail.appendixFiles.includes(name),
     );
     const mismatchedHashes = result.fileDetail.requiredAppendixHashes.filter(
       (hash) => !result.fileDetail.appendixHashes.includes(hash),
     );
-    const requiredLength = result.fileDetail.requiredAppendixNames.length;
+    const requiredLength = result.fileDetail.requiredAppendixFiles.length;
     const foundLength = result.fileDetail.appendixFiles.length;
 
     if (mismatchedNames.length > 0 || mismatchedHashes.length > 0) {
