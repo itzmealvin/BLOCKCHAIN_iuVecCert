@@ -25,7 +25,8 @@ const NavBar = () => {
         zIndex="banner"
       >
         <Text whiteSpace="normal" fontSize="sm" textAlign="center">
-          <strong>PHISHING WARNING:</strong> please make sure you're visiting{" "}
+          <strong>PHISHING WARNING:</strong> please make sure you're visiting
+          {" "}
           <Link
             as={NavLink}
             to="https://iuveccert.vercel.app"

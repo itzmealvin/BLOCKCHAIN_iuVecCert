@@ -9,6 +9,6 @@
   "workspace": ["./packages/issuer"],
   "nodeModulesDir": "auto",
   "imports": {
-    "hardhat": "npm:hardhat@^2.22.16"
+    "hardhat": "npm:hardhat@^2.26.5"
   }
 }
