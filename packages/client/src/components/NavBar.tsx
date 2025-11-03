@@ -10,7 +10,6 @@ import {
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import { NavLink } from "react-router-dom";
-import logo from "../assets/iu.png";
 import { tabs } from "../route.tsx";
 
 const NavBar = () => {
@@ -50,7 +49,7 @@ const NavBar = () => {
       <HStack p="10px" justifyContent="space-between" borderRadius={30}>
         <Link as={NavLink} to="/" _hover={{ textDecoration: "none" }}>
           <Flex align="center" gap="10px">
-            <Image src={logo} boxSize="50px" mr={2} />
+            <Image src="/logo.png" boxSize="50px" />
             <Heading as="h1" size="lg">
               IUVecCert
             </Heading>
