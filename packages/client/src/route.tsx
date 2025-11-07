@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import LandingPage from "./pages/LandingPage.tsx";
 
+import React from "react";
 import RouteChangeHandler from "./components/RouteChangeHandler.tsx";
 import AboutPage from "./pages/AboutPage.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
@@ -11,7 +12,6 @@ import Maintenance from "./pages/Maintenance.tsx";
 import RevokePage from "./pages/RevokePage.tsx";
 import SelectivePage from "./pages/SelectivePage.tsx";
 import VerifierPage from "./pages/VerifyPage.tsx";
-import React from "react";
 
 interface Tab {
   path: string;
@@ -22,7 +22,7 @@ interface Tab {
 export const tabs = [
   { path: "verifier", element: <VerifierPage />, name: "Verify" },
   { path: "revoke", element: <RevokePage />, name: "Revoke" },
-  import.meta.env.VITE_ENABLE_SELECTIVE === "true" && {
+  import.meta.env.VITE_PUBLIC_SELECTIVE_FLAG === "true" && {
     path: "selective",
     element: <SelectivePage />,
     name: "Selective Disclosure",
@@ -50,7 +50,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <RouteChangeHandler />
-        {import.meta.env.VITE_ENABLE_MAINTENANCE === "true"
+        {import.meta.env.VITE_PUBLIC_MAINTENANCE_MODE === "true"
           ? <Maintenance />
           : <Layout />}
       </>

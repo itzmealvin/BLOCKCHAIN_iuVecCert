@@ -7,7 +7,7 @@ import {
 } from "ethers";
 
 export const provider = new JsonRpcProvider(
-  "https://eth-sepolia.public.blastapi.io",
+  import.meta.env.VITE_PUBLIC_ETHEREUM_RPC_URL,
   "sepolia",
 );
 
