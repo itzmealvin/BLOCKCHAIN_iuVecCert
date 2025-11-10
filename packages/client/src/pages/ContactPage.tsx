@@ -51,7 +51,7 @@ const ContactPage = () => {
   const [isLoading, setLoading] = useState(false);
   const onSubmit = (data: FieldValues) => {
     setLoading(true);
-    console.log("Submitting the form", data);
+    alert(JSON.stringify(data, null, 2));
     setLoading(false);
   };
 

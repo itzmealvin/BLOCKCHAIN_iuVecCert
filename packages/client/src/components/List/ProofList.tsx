@@ -1,6 +1,7 @@
 import {
   Button,
   Flex,
+  Link,
   Spinner,
   Table,
   TableContainer,
@@ -12,16 +13,22 @@ import {
 } from "@chakra-ui/react";
 import Confetti from "confetti-react";
 import { Contract } from "ethers";
-import { useEffect, useMemo, useState } from "react";
-import { FaCheckCircle } from "react-icons/fa";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Verifier } from "../../../../compiled/index.ts";
-import { FileResult, Proof } from "../../models/File.ts";
+import { FileResult } from "../../models/File.ts";
 import {
   decodeChallenge,
   getContractInstance,
   provider,
 } from "../../services/BlockchainService.ts";
+
+interface ProofItem {
+  label: string;
+  status: boolean;
+}
 
 interface Props {
   contract: Contract;
@@ -30,8 +37,12 @@ interface Props {
 }
 
 const ProofList = ({ contract, fileResult, handleClick }: Props) => {
-  const [proofData, setProofData] = useState<string[]>([]);
+  const [proofData, setProofData] = useState<ProofItem[]>([]);
   const [isDone, setDone] = useState(false);
+  const [isValid, setValid] = useState(false);
+
+  const hasRun = useRef(false);
+
   const verifyContract = useMemo(
     () =>
       getContractInstance(
@@ -43,85 +54,97 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
   );
 
   useEffect(() => {
-    const verifyProof = async (fileProof: Proof, name: string) => {
+    if (hasRun.current) return;
+    hasRun.current = true;
+
+    const verifyOne = async (
+      label: string,
+      args: {
+        commitment: string[];
+        proof: string[];
+        index: string;
+        value: string;
+      },
+    ): Promise<{ label: string; status: boolean }> => {
       try {
-        const proofData: string[] = [];
-        const verifyChallengesResult: (boolean | undefined)[] = [];
-        const verifyPointsResult: (boolean | undefined)[] = [];
-
-        const rootChallenge = await contract.getRootChallenge();
-        const decodedChallenge = decodeChallenge(rootChallenge);
-
-        if (rootChallenge) {
-          try {
-            const result = await verifyContract.verify(
-              rootChallenge.commitment,
-              rootChallenge.proof,
-              rootChallenge.index,
-              rootChallenge.value,
-            );
-            verifyChallengesResult.push(result);
-          } catch (error) {
-            console.error("Verification failed for a challenge:", error);
-            verifyChallengesResult.push(undefined);
-          }
-        }
-
-        proofData.push(`${name}/Root Challenge`);
-        setProofData((prevProofData) =>
-          [...prevProofData, ...proofData].filter(
-            (item, index, self) => self.indexOf(item) === index,
-          )
+        const status = await verifyContract.verify(
+          args.commitment,
+          args.proof,
+          args.index,
+          args.value,
         );
-
-        const pointChallenge = {
-          ...fileProof,
-          commitment: decodedChallenge.commitment,
-        };
-
-        if (pointChallenge) {
-          try {
-            const result = await verifyContract.verify(
-              pointChallenge.commitment,
-              pointChallenge.proof,
-              pointChallenge.index,
-              pointChallenge.value,
-            );
-            verifyPointsResult.push(result);
-          } catch (error) {
-            console.error("Verification failed for a challenge:", error);
-            verifyPointsResult.push(undefined);
-          }
+        if (!status) {
+          throw new Error("IUVecCert+: On-chain verifier returned false");
         }
-
-        proofData.push(`${name}/Leaf Point`);
-        setProofData((prevProofData) =>
-          [...prevProofData, ...proofData].filter(
-            (item, index, self) => self.indexOf(item) === index,
-          )
-        );
-      } catch (error) {
-        console.error(error);
-        toast.error("IU-VecCert+ Error: Can't verify the given PDF credential");
+        return { label, status };
+      } catch {
+        return { label, status: false };
       }
     };
 
     const performVerification = async () => {
       try {
-        await verifyProof(
-          fileResult.fileDetail.credFileProof,
-          fileResult.fileDetail.credName,
-        );
-        await Promise.all(
-          fileResult.fileDetail.appendixFileProofs.map((proof, index) =>
-            verifyProof(proof, fileResult.fileDetail.appendixFiles[index])
-          ),
-        );
+        const rawRoot = await contract.getRootChallenge();
+        const decoded = decodeChallenge(rawRoot);
 
+        const labels: string[] = [];
+        const jobs: Promise<{ label: string; status: boolean }>[] = [];
+
+        {
+          labels.push("/Root Challenge");
+          jobs.push(
+            verifyOne("/Root Challenge", {
+              commitment: decoded.commitment,
+              proof: decoded.proof,
+              index: decoded.index,
+              value: decoded.value,
+            }),
+          );
+        }
+
+        {
+          const credProof = fileResult.fileDetail.credFileProof;
+          const leafLabel = `${fileResult.fileDetail.credName}/Leaf Point`;
+          labels.push(leafLabel);
+          jobs.push(
+            verifyOne(leafLabel, {
+              commitment: decoded.commitment,
+              proof: credProof.proof,
+              index: credProof.index,
+              value: credProof.value,
+            }),
+          );
+        }
+
+        fileResult.fileDetail.appendixFileProofs.forEach((appendixProof, i) => {
+          const name = fileResult.fileDetail.appendixFiles[i];
+          const lbl = `${name}/Leaf Point`;
+          labels.push(lbl);
+          jobs.push(
+            verifyOne(lbl, {
+              commitment: decoded.commitment,
+              proof: appendixProof.proof,
+              index: appendixProof.index,
+              value: appendixProof.value,
+            }),
+          );
+        });
+
+        const results = await Promise.all(jobs);
+        setProofData(results);
+
+        const anyFail = results.some((r) => !r.status);
+        if (anyFail) {
+          toast.error(
+            "IU-VecCert+: Some proofs failed verification. Check the result table for details",
+          );
+          setValid(false);
+        } else {
+          toast.success("IU-VecCert+: Success verification");
+          setValid(true);
+        }
         setDone(true);
-        toast.success("IU-VecCert+: Success verification");
-      } catch (error) {
-        console.error(error);
+      } catch {
         toast.error(
           "IU-VecCert+ Error: Can't verify the given PDF credential/appendix(s)",
         );
@@ -148,14 +171,25 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
               return (
                 <Tr>
                   <Td>{index + 1}</Td>
-                  <Td>{data.split("/")[0]}</Td>
-                  <Td>{data.split("/")[1]}</Td>
-                  <Td bgColor="green.500" textStyle="bold">
-                    <Flex align="center" gap="10px">
-                      <FaCheckCircle />
-                      PASS
-                    </Flex>
-                  </Td>
+                  <Td>{data.label.split("/")[0]}</Td>
+                  <Td>{data.label.split("/")[1]}</Td>
+                  {data.status
+                    ? (
+                      <Td bgColor="green.500" textStyle="bold">
+                        <Flex align="center" gap="10px">
+                          <FaCheckCircle />
+                          PASS
+                        </Flex>
+                      </Td>
+                    )
+                    : (
+                      <Td bgColor="red.500" textStyle="bold">
+                        <Flex align="center" gap="10px">
+                          <FaTimesCircle />
+                          FAIL
+                        </Flex>
+                      </Td>
+                    )}
                 </Tr>
               );
             })}
@@ -164,21 +198,37 @@ const ProofList = ({ contract, fileResult, handleClick }: Props) => {
       </TableContainer>
       {isDone
         ? (
-          <>
-            <Confetti
-              width={globalThis.innerWidth}
-              height={globalThis.innerHeight}
-            />
-            <Button
-              colorScheme="green"
-              variant="solid"
-              onClick={handleClick}
-              mt={3}
-              isDisabled={!isDone}
-            >
-              CONTINUE
-            </Button>
-          </>
+          isValid
+            ? (
+              <>
+                <Confetti
+                  width={globalThis.innerWidth}
+                  height={globalThis.innerHeight}
+                />
+                <Button
+                  colorScheme="green"
+                  variant="solid"
+                  onClick={handleClick}
+                  mt={3}
+                  isDisabled={!isDone}
+                >
+                  CONTINUE
+                </Button>
+              </>
+            )
+            : (
+              <Button
+                colorScheme="red"
+                variant="solid"
+                onClick={handleClick}
+                mt={3}
+                isDisabled={!isDone}
+              >
+                <Link as={NavLink} to="/" _hover={{ textDecoration: "none" }}>
+                  Return to Homepage
+                </Link>
+              </Button>
+            )
         )
         : (
           <Spinner

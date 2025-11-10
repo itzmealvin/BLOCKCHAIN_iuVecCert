@@ -129,8 +129,7 @@ const ContractList = ({ contract, fileResult, handleClick }: Props) => {
           },
         ];
         setContractData(newContractData);
-      } catch (error) {
-        console.error(error);
+      } catch {
         toast.error("IU-VecCert+ Error: Can't retrieve contract data");
       }
     };
