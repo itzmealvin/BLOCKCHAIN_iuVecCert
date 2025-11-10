@@ -67,8 +67,7 @@ const DocsPage = () => {
 
       const content = await response.text();
       setCurrentContent(content);
-    } catch (error) {
-      console.error(error);
+    } catch {
       toast.error("IUVecCert Error: Can't retrieve the documentation file");
     }
   };

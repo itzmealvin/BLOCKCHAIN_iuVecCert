@@ -132,8 +132,7 @@ const ContractList = ({ contract, fileResult, handleClick }: Props) => {
           },
         ];
         setContractData(newContractData);
-      } catch (error) {
-        console.error(error);
+      } catch {
         toast.error("IUVecCert Error: Can't retrieve contract data");
       }
     };

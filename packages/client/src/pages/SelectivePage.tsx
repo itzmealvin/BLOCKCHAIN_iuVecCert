@@ -115,8 +115,7 @@ const SelectivePage = () => {
       setStep(2);
       fileDownload(pdfBytes, `${fileResult.fileDetail.credName}`);
       setStep(3);
-    } catch (error) {
-      console.error(error);
+    } catch {
       toast.error(
         "IUVecCert Error: Cannot generate requested embedded credential",
       );

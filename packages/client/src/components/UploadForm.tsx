@@ -106,7 +106,6 @@ const UploadForm = ({ mode, setStep }: Props) => {
           reset();
         } catch (error) {
           toast.error(`IUVecCert Error: ${error}`);
-          console.error(error);
         } finally {
           setLoading(false);
           reset();
@@ -114,7 +113,6 @@ const UploadForm = ({ mode, setStep }: Props) => {
       })
       .catch((error) => {
         toast.error(`IUVecCert ${error}`);
-        console.error(error);
         setLoading(false);
         reset();
       });

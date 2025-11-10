@@ -80,6 +80,21 @@ const VerifierPage = () => {
                     Credential {step === 5 ? "Group" : ""} preview
                   </Heading>
 
+                  {step === 5 && (
+                    <Box
+                      bgColor="yellow.200"
+                      p={3}
+                      borderRadius="md"
+                      fontWeight="semibold"
+                      display="flex"
+                      alignItems="center"
+                    >
+                      <strong>Integrity Warning:</strong>IUVecCert only verifies
+                      the below PDF(s) content. Beware of other unrightful
+                      modifications.
+                    </Box>
+                  )}
+
                   <Tabs variant="soft-rounded" colorScheme="green">
                     <TabList>
                       <Tab>CREDENTIAL</Tab>
